@@ -81,11 +81,11 @@ Key reference for the malaria temperature thresholds (13°C refuge limit, reduce
 
 Claude Code should create these exact files and fields. If a step needs to change them, update this section first.
 
-**`stations.geojson`**: Point features, one per sampling station.
-Properties: `site`, `station`, `transect`, `elevation_m`
+**`stations.geojson`**: Point features, one per sampling point (site + station + transect; 405 total).
+Properties: `site`, `station`, `transect`, `elevation_m`, `has_mosquito_traps` (true/false), `has_bird_counts` (true/false)
 
 **`sites.geojson`**: Point features, one per site (the centroid of its stations).
-Properties: `site`, `site_name` (if known), `elevation_m` (mean of stations), `n_stations`
+Properties: `site`, `site_name` (from the XML metadata, or `null` if not found), `elevation_m` (mean of stations), `elevation_min_m`, `elevation_max_m`, `n_stations`
 
 **`site_summary.json`**: Measures per site per time period.
 ```json
@@ -146,11 +146,22 @@ Each script reads from `raw/`, writes to `public/data/` or `reports/`, and can b
 **Goal:** map-ready station and site points.
 
 **Prompt:**
-> Read PLAN.md. Do Step 1.2 only. Write `scripts/02_sites.py`. From the sampling station spatial coordinates CSV, create `public/data/stations.geojson` with the properties in the Data contract. Confirm the coordinates are WGS84 lat/long; if they are UTM, convert from UTM Zone 5N. Then create `public/data/sites.geojson` with one point per site at the mean of its stations' coordinates, with mean elevation and station count. Print a table of sites sorted by elevation.
+> Read PLAN.md and data-pipeline/reports/data_notes.md. Do Step 1.2 only. Write `scripts/02_sites.py`. The sampling station spatial coordinates CSV is already in WGS84 decimal degrees (`x_long`, `y_lat`), so no coordinate conversion is needed.
+>
+> 1. Create `public/data/stations.geojson` with one point per site + station + transect (405 points). Properties: `site`, `station`, `transect`, `elevation_m`, plus `has_mosquito_traps` and `has_bird_counts` (true/false), based on whether that site + station + transect appears in the mosquito capture file and the bird count file.
+> 2. Check the bird count rows at station 200 (25 rows): which sites, transects, and dates they come from, and whether they look like data entry errors. Write findings to `reports/station200_check.md`. Do not change or drop them yet.
+> 3. Look in the two XML metadata files for full site names matching the nine site codes.
+> 4. Create `public/data/sites.geojson` with one point per site at the mean of its stations' coordinates. Properties: `site`, `site_name` (from the metadata, or null if not found), `elevation_m` (mean), `elevation_min_m`, `elevation_max_m`, `n_stations`.
+> 5. Print a table of sites sorted by mean elevation.
+>
+> Update the Data contract in PLAN.md to include the new properties.
 
 **Done when:**
-- [ ] Both files exist and open in https://geojson.io with points on Hawaiʻi Island's east side
-- [ ] Nine sites (or however many the inspection found), elevations roughly 25–1,800 m
+- [ ] `stations.geojson` has 405 points and `sites.geojson` has 9, both on Hawaiʻi Island's east side in https://geojson.io
+- [ ] Site elevations roughly 25–1,800 m
+- [ ] `has_bird_counts` is true only at stations 100, 300, 500, 700, 900 (plus wherever the station 200 rows fall)
+- [ ] `reports/station200_check.md` exists. **You** decide what to do with those rows and record it in data_notes.md
+- [ ] Site names filled in, or noted as not found
 
 ### Step 1.3: Species lookup
 **Goal:** a table marking native vs. non-native and honeycreeper species.
