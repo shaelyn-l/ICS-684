@@ -93,14 +93,39 @@ Properties: `site`, `site_name` (from the XML metadata, or `null` if not found),
   {
     "site": "COO",
     "period": "2002-Summer",
-    "mosquito_per_trap_night": 1.4,   "mosquito_trap_nights": 52,
-    "mosq_midgut_pct": 4.2,           "mosq_salivary_pct": 1.1,   "mosq_dissected_n": 95,
-    "bird_prevalence_pct": 22.0,      "bird_sampled_n": 41,
-    "native_birds_per_count": 3.1,    "nonnative_birds_per_count": 5.2,   "bird_counts_n": 30
+    "mosquito_per_trap_night": 1.4,      "mosquito_trap_nights": 52,
+    "mosq_midgut_pct": 4.2,              "mosq_midgut_n": 95,
+    "mosq_salivary_pct": 1.1,            "mosq_salivary_n": 93,
+    "bird_prevalence_pct": 22.0,         "bird_sampled_n": 41,
+    "honeycreeper_prevalence_pct": 18.5, "honeycreeper_sampled_n": 27,
+    "honeycreepers_per_count": 3.1,      "nonnative_birds_per_count": 5.2,   "bird_counts_n": 30
   }
 ]
 ```
-Missing data is `null`, never `0`. Every percentage has its sample size next to it.
+
+| Field | Definition |
+|---|---|
+| `site` | Site code, one of the nine in `sites.geojson`. |
+| `period` | Time period label, using the period type chosen in Step 1.4 (Decisions log). Data ends 2004-12; start year TBD (see data_notes.md). |
+| `mosquito_per_trap_night` | *Culex* caught ÷ `mosquito_trap_nights`. Uses the `culex` column only (the only malaria vector). How to handle the two trap types (`co2`, `gravid`) is TBD; don't mix them without noting it. |
+| `mosquito_trap_nights` | Rows in the mosquito capture file for this site-period (one row = one trap set for one night). |
+| `mosq_midgut_pct` | % of dissected *Culex* with `midgut_infection` = yes. Period assigned by `date_collected`. |
+| `mosq_midgut_n` | Dissected mosquitoes with a recorded `midgut_infection`. Blank = not examined, excluded. |
+| `mosq_salivary_pct` | % of dissected *Culex* with `salivary_infection` = yes. Period assigned by `date_collected`. |
+| `mosq_salivary_n` | Dissected mosquitoes with a recorded `salivary_infection`. Blank = not examined, excluded. |
+| `bird_prevalence_pct` | % of sampled birds (all species) infected, from `INFECTION_STATUS`. |
+| `bird_sampled_n` | Unique birds (`BANDNUMBER`) sampled in this site-period, counting each bird once. Birds with a "not determined" result are excluded, not counted as negative. Meaning of each `INFECTION_STATUS` value and the rule for a bird with mixed results within one period: TBD (check XML metadata). |
+| `honeycreeper_prevalence_pct` | Same as `bird_prevalence_pct`, restricted to species with `honeycreeper = true` in `species_lookup.csv`. |
+| `honeycreeper_sampled_n` | Same as `bird_sampled_n`, restricted to honeycreepers. |
+| `honeycreepers_per_count` | Honeycreeper detections ÷ `bird_counts_n`. This is the app's "native bird abundance" measure. Native non-honeycreepers (ʻŌmaʻo, ʻElepaio, ʻIo) are in neither abundance field. |
+| `nonnative_birds_per_count` | Detections of species with `native = false` ÷ `bird_counts_n`. |
+| `bird_counts_n` | Counting events: unique site + station + transect + date in the bird count file. Stations 100, 300, 500, 700, 900 only (station 200 rows dropped). Events recorded as `NOBI` (no birds detected) are included. |
+
+Rules:
+- Missing data is `null`, never `0`. A measure is `null` when its sample size is 0. A true zero (counts or dissections done, nothing found) is `0`.
+- Every percentage has its own sample size next to it.
+- Species are matched through `canonical_code` in `species_lookup.csv`, never the raw code.
+- Minimum sample size for showing a percentage: TBD (data_notes.md, "Small samples").
 
 **`landcover.geojson`** (or `.pmtiles` if too large): simplified polygons clipped to Hawaiʻi Island.
 Property: `class` (one of a small set, e.g. `wet_forest`, `dry_forest`, `shrub_grass`, `bare_lava`, `developed_ag`), plus `native_status` if using Habitat Status.
@@ -108,7 +133,9 @@ Property: `class` (one of a small set, e.g. `wet_forest`, `dry_forest`, `shrub_g
 **`malaria_zones.geojson`**: polygons clipped to Hawaiʻi Island.
 Property: `zone` = `high_risk` (>21°C), `episodic` (13–21°C), `refuge` (<13°C).
 
-**`species_lookup.csv`** (in `data-pipeline/`): `code`, `common_name`, `scientific_name`, `native` (true/false), `honeycreeper` (true/false).
+**`species_lookup.csv`** (in `data-pipeline/`): one row per species code found in either bird file.
+Columns: `code`, `canonical_code` (one code per species, merging codes for the same bird across files), `common_name`, `scientific_name`, `native` (true/false), `honeycreeper` (true/false), `in_counts` (true/false), `in_blood` (true/false), `count_guild` (the bird count file's `guild` value, blank if none), `notes` (`CHECK` marks rows needing review).
+`NOBI` ("no birds detected") is included with blank `canonical_code`, `native` and `honeycreeper`: it is a zero-detection count, not a species.
 
 ---
 
@@ -164,14 +191,26 @@ Each script reads from `raw/`, writes to `public/data/` or `reports/`, and can b
 - [ ] Site names filled in, or noted as not found
 
 ### Step 1.3: Species lookup
-**Goal:** a table marking native vs. non-native and honeycreeper species.
+**Goal:** one table that defines every species code in both bird files, merges codes that mean the same bird, and marks native vs. non-native and honeycreeper species.
 
 **Prompt:**
-> Read PLAN.md. Do Step 1.3 only. Using the unique species values from `reports/inspection.md`, create `data-pipeline/species_lookup.csv` with the columns in the Data contract. Fill in common and scientific names and whether each species is native to Hawaiʻi and whether it is a Hawaiian honeycreeper. Mark anything you are unsure about with `CHECK` in a notes column rather than guessing.
+> Read PLAN.md and data-pipeline/reports/data_notes.md. Do Step 1.3 only. Write `scripts/03_species.py` that builds `data-pipeline/species_lookup.csv` covering every species code in the bird count file (`alphacode`) and the bird blood file (`SPECIES`).
+>
+> 1. Look up each code's meaning in the two XML metadata files first. Only use outside knowledge when a code isn't defined there, and say so in the notes.
+> 2. Columns: `code`, `canonical_code`, `common_name`, `scientific_name`, `native` (true/false), `honeycreeper` (true/false), `in_counts` (true/false), `in_blood` (true/false), `count_guild` (the `guild` value from the bird count file, if any), `notes`.
+> 3. `canonical_code` merges codes for the same species across files. Known candidates from data_notes.md: JAWE/WAWE (white-eye), AKIP/AKIA (ʻAkiapōlāʻau). HWAH, HWAM, and HAWH are unresolved: merge them only if the metadata confirms they are the same species.
+> 4. Report the three `guild` values and what they mean (from the metadata), and flag any species where `guild` disagrees with the `native` column.
+> 5. Mark anything uncertain with `CHECK` in `notes` rather than guessing.
+> 6. Write a short summary to `reports/species_check.md`: merged codes, unresolved codes, guild meanings, and any disagreements.
+>
+> Update the `species_lookup.csv` entry in the Data contract in PLAN.md to match the new columns.
 
 **Done when:**
-- [ ] Every species code in the data appears in the lookup
-- [ ] **You** review rows marked `CHECK`
+- [ ] Every code from both files appears in the lookup (23 from counts, 20 from blood, with overlaps)
+- [ ] JAWE/WAWE and AKIP/AKIA resolved, with the source of the decision noted
+- [ ] HWAH/HWAM/HAWH either resolved from the metadata or marked `CHECK`
+- [ ] Guild meanings reported, with no unexplained disagreements with `native`
+- [ ] **You** review rows marked `CHECK` and record decisions in data_notes.md
 
 ### Step 1.4: Choose time periods
 **Goal:** decide whether the slider uses months, seasons, or years, based on how much data each period has.

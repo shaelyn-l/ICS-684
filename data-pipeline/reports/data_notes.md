@@ -60,12 +60,21 @@ Read this before any data-pipeline step. Items marked **TBD** still need a decis
 - `INFECTION_STATUS` appears to be the final combined result (`P` = positive in sample rows). It has three values. **Check the XML metadata** to confirm what each means; treat "not determined" as missing, not negative.
 - Many birds were caught more than once: 12,880 rows, 8,774 unique `BANDNUMBER`s. `RECAPTURE STATUS` marks recaptures. **Count each bird once per time period.**
 
-## Species codes (resolve in Step 1.3 using the XML metadata)
+## Species codes (resolved in Step 1.3)
 
-- `JAWE` (counts) vs `WAWE` (blood): very likely the same bird. Japanese White-eye was reclassified as Warbling White-eye.
-- `AKIP` (counts, 31 rows) vs `AKIA` (blood, 13 rows): likely both ʻAkiapōlāʻau.
-- `HWAH` (counts, 20 rows), `HWAM` (blood, 19 rows), `HAWH` (blood, 10 rows): unclear. `HWAH` and `HWAM` may both be Hwamei; `HAWH` may be a different species. **Do not merge until verified.**
-- Usual Hawaiʻi ʻAmakihi code is `HAAM` (present in both files).
+- Lookup: `species_lookup.csv`. Summary: `reports/species_check.md`. 30 codes, 24 distinct species after merging.
+- All codes resolved from the two XML metadata files. Merged codes (same scientific name in both files):
+  - AKIA → AKIP (ʻAkiapōlāʻau)
+  - HWAH → HAWH (ʻIo, Hawaiian Hawk)
+  - JAWE → WAWE (Warbling White-eye)
+  - MELT → HWAM (Hwamei)
+  - NUMA → SBMU (Scaly-breasted Munia)
+- Always group by `canonical_code`, never by raw `code`.
+- **Decision:** HCRE displayed as "Hawaiʻi Creeper (ʻAlawī)", *Loxops mana* (files disagree on the name; same species).
+- Honeycreepers: APAP, HAAM, IIWI, HAAK, HCRE, AKIP. Native non-honeycreepers: OMAO, HAEL, HAWH (ʻIo).
+- Guild `NA` must be read as a text value, not missing (REJU, NOBI). Native status follows guild: ENDM = native; XNTV and GAME = non-native.
+- `NOBI` = "no birds detected." Not a species, but a real counting event with zero birds. **Keep these events in birds-per-count denominators** (Step 1.5).
+- **Decision:** the app's "native bird abundance" measure = **honeycreepers only** (`honeycreeper = true`). Non-native abundance = all `native = false` species.
 
 ## Date ranges
 
