@@ -34,6 +34,7 @@ Read this before any data-pipeline step. Items marked **TBD** still need a decis
 - Columns `culex`, `aedes`, `wyeomyia` are counts per trap. Only *Culex* carries avian malaria. **Use `culex` for mosquito abundance.**
 - Two trap types (`co2`, `gravid`) catch differently. May 2002–Oct 2004: CO2 averaged 0.59 *Culex* per trap night and gravid 0.13, with similar effort per site, but the ratio varies widely by site (PUU 2.02 vs. 0.06; CRA 0.05 vs. 0.19).
 - **Decision:** mosquito abundance uses **CO2 traps only** (host-seeking females, the ones that bite birds). Infection rates use every dissected mosquito, whichever trap caught it.
+- **Decision (reviewed after Step 1.5):** keep both trap types for infection rates, to keep sample sizes up. Caveat: gravid-trap mosquitoes are salivary-positive far more often (31.6% vs. 7.8% for CO2, May 2002–Oct 2004) because they have already blood-fed. So a site's infection rate partly reflects its trap mix. CRA is the clearest case: 75% of its dissections came from gravid traps, giving 32.5% salivary overall, though by trap type it matches COO (CO2 9.5% vs. 9.3%; gravid 40.2% vs. 40.3%). PUU's 6.3% is pulled down the other way (98% CO2). **State this caveat in the app's "About the data" panel (Step 7.2).**
 - 72 rows repeat another row's site, station, transect, date and trap type, usually with different catches, so likely a second trap. Each row counts as one trap night.
 
 ## Mosquito dissections

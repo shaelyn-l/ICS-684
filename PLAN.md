@@ -455,6 +455,7 @@ Record choices here as you make them so every session and teammate stays in sync
 | 2026-11-04 | Start date: 2002, five full seasons only (`2002-dry` to `2004-dry`); Jan–Apr 2002 and Nov–Dec 2004 dropped | Mosquito trapping and bird counts start in early 2002, and partial seasons aren't comparable to full ones |
 | 2026-11-04 | Minimum sample size: 20 for percentages only; below 20 the value is `null` and the app shows "too few samples". Abundance shown whenever n > 0 | At n = 20 one sample moves a percentage by 5 points; abundance doesn't swing the same way |
 | 2026-11-04 | Mosquito abundance uses CO2 traps only; gravid traps are ignored for abundance. Infection uses all dissected mosquitoes | CO2 traps catch host-seeking females (the ones that bite birds) at ~4.5× the gravid rate, and the gravid/CO2 ratio varies a lot by site, so pooling would mix two methods |
+| 2026-11-04 | Mosquito infection keeps both trap types (reviewed after Step 1.5) | Keeps sample sizes up (CO2-only would blank CJR entirely and most CRA seasons). Trap-mix caveat, which inflates CRA, goes in the About panel; see data_notes.md |
 | 2026-11-04 | Time steps in the app are season buttons: one per season plus `all`, `wet` and `dry` | Five seasons plus three combined periods suit a small set of labeled buttons |
 | | Malaria zone temperature source: _(Step 3.3)_ | |
 | | Refuge area figures: _(Step 3.3)_ | |
