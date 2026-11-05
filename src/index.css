@@ -11,3 +11,12 @@ body,
   position: absolute;
   inset: 0;
 }
+
+.maplibregl-popup-content {
+  font: 13px/1.45 system-ui, -apple-system, 'Segoe UI', sans-serif;
+  color: #1a1a1a;
+}
+
+.maplibregl-popup-content strong {
+  font-size: 15px;
+}

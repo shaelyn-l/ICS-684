@@ -301,11 +301,20 @@ Each script reads from `raw/`, writes to `public/data/` or `reports/`, and can b
 
 ### Step 2.3: Sites and stations
 **Prompt:**
-> Read PLAN.md. Do Step 2.3 only. Load `stations.geojson` as small grey dots and `sites.geojson` as larger labeled markers. Clicking a site opens a popup with its code, elevation, and number of stations.
+> Read PLAN.md. Do Step 2.3 only. Add `stations.geojson` and `sites.geojson` as GeoJSON sources with MapLibre layers (not HTML markers), so later steps can restyle and animate the site markers from data (Steps 4.1, 4.2, 5.3). Load `sites.geojson` once and reuse it for the starting camera from Step 2.2. Add these layers on top of all basemap layers.
+>
+> - Stations: small, semi-transparent grey circles with a thin white outline, shown from about zoom 11 so they don't crowd the starting view.
+> - Sites: larger circles with a white outline, plus a label with the site code (white text halo so it stays readable over the elevation tint and hillshade).
+> - Clicking a site opens a popup with its code, full `site_name`, mean elevation with its range (e.g. "1,786 m (1,742–1,836 m)"), and "45 sampling points (9 stations × 5 transects)". All values come from `sites.geojson`. Show a pointer cursor when hovering over a site.
+>
+> Put marker sizes, colors, and the station zoom threshold in `src/config/map.js`.
 
 **Done when:**
-- [ ] Points sit on the terrain in the right places
-- [ ] Popups show correct values
+- [ ] All nine sites appear as labeled circles in the starting view, sitting on the terrain at the right places
+- [ ] Stations appear when zoomed in to a site and sit on the terrain along their transects
+- [ ] Site labels and markers stay readable over the elevation tint and hillshade
+- [ ] Popups show the correct name, elevation, elevation range, and sampling points for each site
+- [ ] Sanity check: low sites (MAL, NAN, BRY) sit on green tint, high sites (CJR, SOL) on tan/brown
 
 ### Step 2.4: Collapsible side panel
 **Goal:** a side panel for controls, legends, and info that users can open and close, so the map can use the full screen when the panel isn't needed.

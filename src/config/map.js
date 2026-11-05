@@ -56,6 +56,7 @@ export const ELEVATION_TINT = {
 // Bearing 270 looks west: upslope from the ocean side, low sites in the
 // foreground and Mauna Loa rising behind the high sites.
 export const SITES_URL = `${import.meta.env.BASE_URL}data/sites.geojson`
+export const STATIONS_URL = `${import.meta.env.BASE_URL}data/stations.geojson`
 export const START_CAMERA = {
   pitch: 60,
   bearing: 270,
@@ -64,6 +65,32 @@ export const START_CAMERA = {
   padding: { top: 120, bottom: 80, left: 80, right: 430 },
   maxZoom: 11,
 }
+// Site and station markers, drawn above all basemap layers.
+export const SITE_MARKER = {
+  radius: 9,
+  color: '#1f4e79',
+  strokeColor: '#ffffff',
+  strokeWidth: 2,
+  labelFont: ['Noto Sans Bold'],
+  labelSize: 13,
+  labelColor: '#1a1a1a',
+  labelHaloColor: '#ffffff',
+  labelHaloWidth: 2,
+  // Labels sit to the right of each circle, except where sites are close
+  // together (CJR is just west of SOL, CRA just west of COO).
+  labelSide: { CJR: 'left', CRA: 'left' },
+}
+
+export const STATION_MARKER = {
+  // Each site's 45 stations fit in about 1 km², so they only appear zoomed in.
+  minZoom: 11,
+  radius: 3,
+  color: '#555555',
+  opacity: 0.7,
+  strokeColor: '#ffffff',
+  strokeWidth: 0.75,
+}
+
 // How far the camera can tilt toward the horizon (MapLibre's default is 60).
 export const MAX_PITCH = 80
 
