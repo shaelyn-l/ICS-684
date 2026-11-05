@@ -287,10 +287,16 @@ Each script reads from `raw/`, writes to `public/data/` or `reports/`, and can b
 
 ### Step 2.2: 3D terrain
 **Prompt:**
-> Read PLAN.md. Do Step 2.2 only. Add 3D terrain using the free AWS Terrain Tiles (Terrarium encoding) as a raster-dem source, with a hillshade layer. Set a moderate terrain exaggeration and start the camera pitched and angled toward the east flank of Mauna Loa and Kīlauea. Put exaggeration and camera settings in `src/config/map.js`.
+> Read PLAN.md. Do Step 2.2 only. Add 3D terrain from the free AWS Terrain Tiles (`https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png`, `encoding: "terrarium"`, tileSize 256, maxzoom 15) as a raster-dem source, added after the basemap style loads. Add a hillshade layer from the same data, placed above the basemap's land layers but below its roads and labels; record that insertion layer in `src/config/map.js` so later draped layers (land cover, malaria zones) use it too. Add the terrain data's attribution.
+>
+> Set terrain exaggeration to about 3× so the 28–1,836 m study gradient stands out clearly. Make the hillshade pronounced (darker shadows, light highlights), and add a semi-transparent elevation color tint (`color-relief` layer from the same terrain data) below the hillshade, with most of its color change in 0–2,000 m where the sites are (green lowlands → tan/brown uplands → grey/white summits). Allow the camera to tilt to about 80°. Set the starting camera from `sites.geojson`: centered on the nine sites, pitched about 60°, looking upslope roughly west so the low sites are in the foreground and Mauna Loa rises behind the high sites. Leave right-side padding for the side panel (Step 2.4). Put exaggeration, hillshade, tint, tilt, camera, and padding settings in `src/config/map.js`. Terrain is visual only: any elevation shown to users comes from the data, not the terrain.
 
 **Done when:**
-- [ ] Mountains appear in 3D and you can tilt and rotate
+- [ ] Mountains appear in 3D and you can tilt (to about 80°) and rotate
+- [ ] Elevation differences are easy to see: low, mid, and high sites fall on clearly different tint colors
+- [ ] The starting view shows all nine site locations, looking upslope from the ocean side, clear of the side panel's area
+- [ ] Hillshade sits under roads and labels; place names stay readable
+- [ ] Terrain attribution is shown
 - [ ] Performance is acceptable on a normal laptop
 
 ### Step 2.3: Sites and stations
