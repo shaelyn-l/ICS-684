@@ -52,7 +52,7 @@ This plan is written to be fed to Claude Code **one step at a time**. Each step 
 ├── public/
 │   └── data/                ← processed, web-ready files the app loads
 └── src/                     ← React app
-    ├── components/          ← Map, LayerControls, TimeSlider, FlatChart, Story...
+    ├── components/          ← Map, LayerControls, SeasonButtons, FlatChart, Story...
     ├── config/              ← colors, layer settings, chapter definitions
     └── App.jsx
 ```
@@ -92,7 +92,7 @@ Properties: `site`, `site_name` (from the XML metadata, or `null` if not found),
 [
   {
     "site": "COO",
-    "period": "2002-Summer",
+    "period": "2002-dry",
     "mosquito_per_trap_night": 1.4,      "mosquito_trap_nights": 52,
     "mosq_midgut_pct": 4.2,              "mosq_midgut_n": 95,
     "mosq_salivary_pct": 1.1,            "mosq_salivary_n": 93,
@@ -106,15 +106,15 @@ Properties: `site`, `site_name` (from the XML metadata, or `null` if not found),
 | Field | Definition |
 |---|---|
 | `site` | Site code, one of the nine in `sites.geojson`. |
-| `period` | Time period label, using the period type chosen in Step 1.4 (Decisions log). Data ends 2004-12; start year TBD (see data_notes.md). |
-| `mosquito_per_trap_night` | *Culex* caught ÷ `mosquito_trap_nights`. Uses the `culex` column only (the only malaria vector). How to handle the two trap types (`co2`, `gravid`) is TBD; don't mix them without noting it. |
-| `mosquito_trap_nights` | Rows in the mosquito capture file for this site-period (one row = one trap set for one night). |
+| `period` | One of eight values. Five Hawaiian seasons (wet Nov–Apr, dry May–Oct; wet seasons labeled by start year, so `2002-wet` = Nov 2002–Apr 2003): `2002-dry`, `2002-wet`, `2003-dry`, `2003-wet`, `2004-dry`. Three combined periods: `all` (all five seasons together), `dry` (the three dry seasons), `wet` (the two wet seasons). Samples from Jan–Apr 2002 and Nov–Dec 2004 are dropped from every period, including the combined ones. |
+| `mosquito_per_trap_night` | *Culex* caught in CO2 traps ÷ `mosquito_trap_nights`. Uses the `culex` column only (the only malaria vector). Gravid traps are not used for abundance. |
+| `mosquito_trap_nights` | CO2 trap rows in the mosquito capture file for this site-period (one row = one trap set for one night). |
 | `mosq_midgut_pct` | % of dissected *Culex* with `midgut_infection` = yes. Period assigned by `date_collected`. |
 | `mosq_midgut_n` | Dissected mosquitoes with a recorded `midgut_infection`. Blank = not examined, excluded. |
 | `mosq_salivary_pct` | % of dissected *Culex* with `salivary_infection` = yes. Period assigned by `date_collected`. |
 | `mosq_salivary_n` | Dissected mosquitoes with a recorded `salivary_infection`. Blank = not examined, excluded. |
 | `bird_prevalence_pct` | % of sampled birds (all species) infected, from `INFECTION_STATUS`. |
-| `bird_sampled_n` | Unique birds (`BANDNUMBER`) sampled in this site-period, counting each bird once. Birds with a "not determined" result are excluded, not counted as negative. Meaning of each `INFECTION_STATUS` value and the rule for a bird with mixed results within one period: TBD (check XML metadata). |
+| `bird_sampled_n` | Unique birds (`BANDNUMBER`) sampled in this site-period, counting each bird once. A bird is a unique site + period + band number + species; unbanded (`NB`) rows count as one bird each. A bird with several results in the period is positive if any is `P`, negative if any is `N` and none `P`, and excluded if all are `U` (see data_notes.md). |
 | `honeycreeper_prevalence_pct` | Same as `bird_prevalence_pct`, restricted to species with `honeycreeper = true` in `species_lookup.csv`. |
 | `honeycreeper_sampled_n` | Same as `bird_sampled_n`, restricted to honeycreepers. |
 | `honeycreepers_per_count` | Honeycreeper detections ÷ `bird_counts_n`. This is the app's "native bird abundance" measure. Native non-honeycreepers (ʻŌmaʻo, ʻElepaio, ʻIo) are in neither abundance field. |
@@ -124,8 +124,9 @@ Properties: `site`, `site_name` (from the XML metadata, or `null` if not found),
 Rules:
 - Missing data is `null`, never `0`. A measure is `null` when its sample size is 0. A true zero (counts or dissections done, nothing found) is `0`.
 - Every percentage has its own sample size next to it.
+- Percentages (`mosq_midgut_pct`, `mosq_salivary_pct`, `bird_prevalence_pct`, `honeycreeper_prevalence_pct`) are `null` when their sample size is below 20. The sample size is still filled in, and the app shows "too few samples".
+- Abundance measures (`mosquito_per_trap_night`, `honeycreepers_per_count`, `nonnative_birds_per_count`) are shown whenever their sample size is above 0.
 - Species are matched through `canonical_code` in `species_lookup.csv`, never the raw code.
-- Minimum sample size for showing a percentage: TBD (data_notes.md, "Small samples").
 
 **`landcover.geojson`** (or `.pmtiles` if too large): simplified polygons clipped to Hawaiʻi Island.
 Property: `class` (one of a small set, e.g. `wet_forest`, `dry_forest`, `shrub_grass`, `bare_lava`, `developed_ag`), plus `native_status` if using Habitat Status.
@@ -213,24 +214,63 @@ Each script reads from `raw/`, writes to `public/data/` or `reports/`, and can b
 - [ ] **You** review rows marked `CHECK` and record decisions in data_notes.md
 
 ### Step 1.4: Choose time periods
-**Goal:** decide whether the slider uses months, seasons, or years, based on how much data each period has.
+**Goal:** decide the time periods the season buttons will step through and the start date, based on how much usable data each site has per period. Also set the minimum sample sizes.
 
 **Prompt:**
-> Read PLAN.md. Do Step 1.4 only. Write `scripts/03_coverage.py`. For each dataset (mosquito captures, mosquito dissections, bird blood samples, bird counts), count samples per site per month, per season (define seasons as Dec–Feb, Mar–May, Jun–Aug, Sep–Nov), and per year. Write the tables to `reports/coverage.md` and recommend the finest time period where most site-period cells have at least 10 samples. Do not choose for me; present the recommendation.
+> Read PLAN.md and data-pipeline/reports/data_notes.md. Do Step 1.4 only. Write `scripts/04_coverage.py`. Apply the rules in data_notes.md so the counts match what Step 1.5 will actually use:
+> - Mosquito captures: count trap nights (one trap on one night), using the `culex` column.
+> - Mosquito dissections: count examined mosquitoes only (exclude blank `midgut_infection` / `salivary_infection`), dated by `date_collected`.
+> - Bird blood samples: count unique birds (`BANDNUMBER`) per period with a determined `INFECTION_STATUS`. Report all birds and honeycreepers separately.
+> - Bird counts: count counting events (site + station + transect + date), including NOBI events and excluding station 200.
+> - Parse each file's dates with its own format. Trim everything after 2004-12-31.
+>
+> For each dataset, count samples per site for each of these period options:
+> 1. Month
+> 2. Hawaiian season: wet (Nov–Apr) and dry (May–Oct). Label wet seasons by start year, e.g. `2002-wet` = Nov 2002–Apr 2003.
+> 3. Four seasons (Dec–Feb, Mar–May, Jun–Aug, Sep–Nov). Assign December to the following year's Dec–Feb season.
+> 4. Year
+>
+> For each option, report the % of site-period cells with at least 10, 20, and 30 samples, and list cells with zero samples. Show results twice: starting 2001, and starting 2002.
+>
+> Write everything to `reports/coverage.md`, ending with a recommendation for: (a) the period option, (b) the start date, (c) a minimum sample size for showing a percentage. Do not choose for me; present the recommendation and the trade-offs.
 
 **Done when:**
-- [ ] **You** pick the time period and record it in PLAN.md under "Decisions log" at the bottom
+- [ ] `reports/coverage.md` exists with tables for all four datasets and all four period options
+- [ ] **You** decide the period option, start date, and minimum sample sizes
+- [ ] Decisions recorded in the Decisions log in PLAN.md and in data_notes.md
+- [ ] Data contract's `period` format updated to match the chosen option
 
 ### Step 1.5: Site summaries
-**Goal:** the main data file the app reads.
+**Goal:** the main data file the app reads: one record per site per period, every value with its sample size.
 
 **Prompt:**
-> Read PLAN.md. Do Step 1.5 only. Write `scripts/04_site_summary.py` producing `public/data/site_summary.json` exactly as described in the Data contract, using the time period in the Decisions log. Mosquito abundance = mosquitoes caught per trap night. Mosquito infection = % of dissected mosquitoes with midgut infection and % with salivary infection. Bird prevalence = % of birds positive, counting each band number once per period. Bird counts split native vs. non-native using `species_lookup.csv`. Use `null` for site-periods with no data. Also write `reports/site_summary_check.md` with per-site totals across all periods.
+> Read PLAN.md and data-pipeline/reports/data_notes.md. Do Step 1.5 only. Write `scripts/05_site_summary.py` that produces `public/data/site_summary.json` exactly as described in the Data contract, and `reports/site_summary_check.md`.
+>
+> **Periods.** Assign every sample to a Hawaiian season by its date (wet Nov–Apr, dry May–Oct; `2002-wet` = Nov 2002–Apr 2003). Keep only May 2002–Oct 2004, the five full seasons. Build `all`, `dry` and `wet` by pooling the underlying samples, not by averaging seasonal values. Output one record per site per period (9 sites × 8 periods = 72), sorted by site elevation and then period (`2002-dry` … `2004-dry`, `all`, `dry`, `wet`). Every record has every contract field.
+>
+> **Mosquito abundance.** CO2 trap rows only. `mosquito_trap_nights` = CO2 rows; `mosquito_per_trap_night` = sum of `culex` ÷ trap nights. Count each row as a trap night, including the 72 repeated rows.
+>
+> **Mosquito infection.** Every dissected mosquito, whatever trap caught it, dated by `date_collected`. Midgut and salivary are computed separately, each over the mosquitoes with a recorded (non-blank) result for that test.
+>
+> **Bird prevalence.** From the bird blood file. A bird is a unique site + period + `BANDNUMBER` + `canonical_code`; each `NB` row is its own bird. Combine a bird's results within the period: any `P` → positive; else any `N` → negative; all `U` → excluded. In combined periods, a bird sampled in several seasons counts once. Honeycreeper fields use `honeycreeper = true` in `species_lookup.csv`, matched through `canonical_code`.
+>
+> **Bird abundance.** From the bird count file, read with `keep_default_na=False` so guild `NA` stays text. Drop station 200. A counting event is a unique site + station + transect + date, NOBI events included. Detections are rows, excluding NOBI. `honeycreepers_per_count` = honeycreeper detections ÷ events; `nonnative_birds_per_count` = `native = false` detections ÷ events. Native non-honeycreepers are in neither.
+>
+> **Nulls and rounding.** Apply the Data contract rules: percentages `null` below 20 samples (sample size still filled in), abundance `null` only when its sample size is 0, a true zero stays `0`. Round percentages to 1 decimal, per-count values to 2, per-trap-night values to 3. Before writing, assert the contract holds: 72 records, exact field set, every percentage `null` exactly when its n < 20.
+>
+> **Check report** (`reports/site_summary_check.md`):
+> 1. Per-site raw totals for `all`: Culex caught, CO2 trap nights, mosquitoes examined and infected (midgut, salivary), birds sampled and positive (all, honeycreepers), counting events, honeycreeper and non-native detections.
+> 2. Sum checks: for trap nights, mosquitoes examined and counting events, the five seasons add up to `all`, and `dry` + `wet` = `all`. (Bird sample sizes don't have to add up, since a bird can appear in more than one season.)
+> 3. Every cell where a percentage is `null` because n < 20, by site and period.
+> 4. Whether the Known gaps in data_notes.md still hold (SOL, CJR mosquito infection; WAI honeycreeper prevalence). Flag any difference.
+>
+> Do not change data_notes.md or the Data contract. If something in the data contradicts them, report it in the check file instead.
 
 **Done when:**
-- [ ] JSON matches the contract
-- [ ] Overall pattern looks plausible: more mosquitoes and infection at low elevation, less at high
-- [ ] No percentages without a matching sample size
+- [ ] `site_summary.json` has 72 records with exactly the contract's fields, and the script's contract checks pass
+- [ ] Sum checks in `site_summary_check.md` pass
+- [ ] Known gaps match data_notes.md, or differences are explained
+- [ ] **You** review the per-site table for plausibility: *Culex* near zero at CJR and SOL and highest at the mid-elevation sites (PUU, WAI, COO), matching `reports/coverage.md`
 
 ---
 
@@ -305,13 +345,25 @@ Each script reads from `raw/`, writes to `public/data/` or `reports/`, and can b
 - [ ] Switching measures updates markers correctly
 - [ ] No-data sites are visually distinct
 
-### Step 4.2: Time slider
+### Step 4.2: Season buttons
+**Goal:** let users switch between the five survey seasons, plus combined views, with smooth animated transitions.
+
 **Prompt:**
-> Read PLAN.md. Do Step 4.2 only. Add a time slider along the bottom of the map using the periods in `site_summary.json`, plus an "All periods" option and a play button. Markers update for the selected period. No-data site-periods show as grey outlines.
+> Read PLAN.md. Do Step 4.2 only. Add a row of season buttons along the bottom of the map, in time order: Dry 2002, Wet 2002–03, Dry 2003, Wet 2003–04, Dry 2004 (matching the `period` values in site_summary.json). Also add:
+> - an "All seasons" button (period `all`), selected by default;
+> - a "Wet vs. Dry" toggle that switches between the combined `wet` and `dry` periods;
+> - a play button that steps through the five seasons in order, pausing about 2 seconds on each, with a pause/stop control.
+>
+> When a button is pressed, site markers animate smoothly (size and color) from their current values to the new period's values rather than jumping. The selected button is clearly highlighted, and a label shows the season's months (e.g. "Wet season: Nov 2003 – Apr 2004").
+>
+> Site-periods with no data show as grey outlines. Percentages below the minimum sample size show "too few samples" in the popup; SOL and CJR mosquito infection shows "too few mosquitoes to test." Respect reduced-motion preferences by switching instantly instead of animating.
 
 **Done when:**
-- [ ] Slider steps through periods and markers update
-- [ ] Play/pause works
+- [ ] Each button shows the right period's values, and markers animate between them
+- [ ] "All seasons" is selected on load
+- [ ] Wet vs. Dry toggle switches between the two combined views
+- [ ] Play steps through all five seasons and can be paused
+- [ ] No-data and too-few-samples cases display correctly
 
 ---
 
@@ -319,7 +371,7 @@ Each script reads from `raw/`, writes to `public/data/` or `reports/`, and can b
 
 ### Step 5.1: Flat bar chart
 **Prompt:**
-> Read PLAN.md. Do Step 5.1 only. Create a `FlatChart` component with D3: one bar per site for the selected measure and period, sorted by elevation, with light background bands for elevation zones, bar labels showing site, elevation, and sample size, and no-data sites shown as empty outlines. Same measure selector and time slider as the map.
+> Read PLAN.md. Do Step 5.1 only. Create a `FlatChart` component with D3: one bar per site for the selected measure and period, sorted by elevation, with light background bands for elevation zones, bar labels showing site, elevation, and sample size, and no-data sites shown as empty outlines. Same measure selector and season buttons as the map.
 
 **Done when:**
 - [ ] Chart matches the map for the same measure and period
@@ -399,6 +451,10 @@ Record choices here as you make them so every session and teammate stays in sync
 |---|---|---|
 | | Stack: React + Vite, MapLibre GL, D3, Python pipeline, GitHub Pages | Free, shareable, no API keys |
 | | Scope: core story first | Build incrementally |
-| | Time period for slider: _(Step 1.4)_ | |
+| 2026-11-04 | Time period: Hawaiian season (wet Nov–Apr, dry May–Oct) | Every site-season gets two bird count rounds, and it has the most samples per cell short of whole years (`reports/coverage.md`) |
+| 2026-11-04 | Start date: 2002, five full seasons only (`2002-dry` to `2004-dry`); Jan–Apr 2002 and Nov–Dec 2004 dropped | Mosquito trapping and bird counts start in early 2002, and partial seasons aren't comparable to full ones |
+| 2026-11-04 | Minimum sample size: 20 for percentages only; below 20 the value is `null` and the app shows "too few samples". Abundance shown whenever n > 0 | At n = 20 one sample moves a percentage by 5 points; abundance doesn't swing the same way |
+| 2026-11-04 | Mosquito abundance uses CO2 traps only; gravid traps are ignored for abundance. Infection uses all dissected mosquitoes | CO2 traps catch host-seeking females (the ones that bite birds) at ~4.5× the gravid rate, and the gravid/CO2 ratio varies a lot by site, so pooling would mix two methods |
+| 2026-11-04 | Time steps in the app are season buttons: one per season plus `all`, `wet` and `dry` | Five seasons plus three combined periods suit a small set of labeled buttons |
 | | Malaria zone temperature source: _(Step 3.3)_ | |
 | | Refuge area figures: _(Step 3.3)_ | |
