@@ -278,10 +278,12 @@ Each script reads from `raw/`, writes to `public/data/` or `reports/`, and can b
 
 ### Step 2.1: Flat map of Hawaiʻi Island
 **Prompt:**
-> Read PLAN.md. Do Step 2.1 only. Add MapLibre GL JS. Create a `Map` component showing Hawaiʻi Island, filling the left ~65% of the screen, using a free basemap style that needs no API key (e.g. OpenFreeMap). Include navigation controls. The right ~35% is an empty panel for now.
+> Read PLAN.md. Do Step 2.1 only. Add MapLibre GL JS. Create a `Map` component showing Hawaiʻi Island that fills the whole browser window (full width and height, no scrollbars), using a free basemap style that needs no API key (e.g. OpenFreeMap). Include navigation controls. The map should resize correctly when the browser window is resized.
 
 **Done when:**
+- [ ] Map fills the entire window, with no scrollbars or gaps
 - [ ] Map loads centered on Hawaiʻi Island, pans and zooms
+- [ ] Map resizes correctly when the window is resized
 
 ### Step 2.2: 3D terrain
 **Prompt:**
@@ -298,6 +300,25 @@ Each script reads from `raw/`, writes to `public/data/` or `reports/`, and can b
 **Done when:**
 - [ ] Points sit on the terrain in the right places
 - [ ] Popups show correct values
+
+### Step 2.4: Collapsible side panel
+**Goal:** a side panel for controls, legends, and info that users can open and close, so the map can use the full screen when the panel isn't needed.
+
+**Prompt:**
+> Read PLAN.md. Do Step 2.4 only. Add a `SidePanel` component on the right side of the screen that slides over the full-screen map. It should:
+> - open and close with a clearly visible toggle button (e.g. a tab on the panel's edge), with a smooth slide animation;
+> - be about 350px wide on desktop when open, and resizable by dragging its left edge (minimum ~280px, maximum ~50% of the window);
+> - remember whether it was open or closed and its width while the page is open;
+> - start open, with placeholder text for now;
+> - on screens narrower than 768px, become a bottom sheet that slides up instead.
+>
+> The map stays full screen underneath. When the panel opens or closes, keep the map's navigation controls visible and not hidden behind the panel. Respect reduced-motion preferences by opening and closing instantly instead of sliding.
+
+**Done when:**
+- [ ] Panel opens and closes smoothly with the toggle button
+- [ ] Panel can be resized by dragging its edge, within the min and max widths
+- [ ] Map stays usable and full screen underneath; navigation controls are never hidden
+- [ ] On a narrow window, the panel becomes a bottom sheet
 
 ---
 
