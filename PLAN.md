@@ -52,7 +52,7 @@ This plan is written to be fed to Claude Code **one step at a time**. Each step 
 ├── public/
 │   └── data/                ← processed, web-ready files the app loads
 └── src/                     ← React app
-    ├── components/          ← Map, LayerControls, SeasonButtons, FlatChart, Story...
+    ├── components/          ← Map, LayerControls, SeasonButtons, SitePicker, StationTooltip, FlatChart, Story...
     ├── config/              ← colors, layer settings, chapter definitions
     └── App.jsx
 ```
@@ -127,6 +127,38 @@ Rules:
 - Percentages (`mosq_midgut_pct`, `mosq_salivary_pct`, `bird_prevalence_pct`, `honeycreeper_prevalence_pct`) are `null` when their sample size is below 20. The sample size is still filled in, and the app shows "too few samples".
 - Abundance measures (`mosquito_per_trap_night`, `honeycreepers_per_count`, `nonnative_birds_per_count`) are shown whenever their sample size is above 0.
 - Species are matched through `canonical_code` in `species_lookup.csv`, never the raw code.
+
+**`station_summary.json`**: Measures per sampling point, totaled across all five seasons combined (May 2002 – Oct 2004, the same `all` period as `site_summary.json`). One record per site + station + transect (405 records).
+```json
+[
+  {
+    "site": "COO", "station": 300, "transect": 400,
+    "culex_per_trap_night": 0.84,   "trap_nights": 64,
+    "mosq_midgut_n": 31,            "mosq_midgut_infected": 2,
+    "mosq_salivary_n": 31,          "mosq_salivary_infected": 1,
+    "honeycreepers_per_count": 4.2, "nonnative_birds_per_count": 3.6,   "bird_counts_n": 10
+  }
+]
+```
+
+| Field | Definition |
+|---|---|
+| `site`, `station`, `transect` | The sampling point; matches `stations.geojson`. |
+| `culex_per_trap_night` | *Culex* caught in CO2 traps ÷ `trap_nights`. Same rules as `mosquito_per_trap_night` in `site_summary.json`. |
+| `trap_nights` | CO2 trap rows for this sampling point (one row = one trap set for one night). |
+| `mosq_midgut_n` | Dissected mosquitoes from this point with a recorded `midgut_infection` (all trap types, dated by `date_collected`). |
+| `mosq_midgut_infected` | How many of those were midgut-positive. |
+| `mosq_salivary_n` | Dissected mosquitoes from this point with a recorded `salivary_infection`. |
+| `mosq_salivary_infected` | How many of those were salivary-positive. |
+| `honeycreepers_per_count` | Honeycreeper detections ÷ `bird_counts_n`. Same rules as `site_summary.json`. |
+| `nonnative_birds_per_count` | Detections of species with `native = false` ÷ `bird_counts_n`. Same rules as `site_summary.json`. |
+| `bird_counts_n` | Counting events at this point (site + station + transect + date), NOBI events included. |
+
+Rules:
+- Infection is stored as counts, never percentages, because station sample sizes are small. The 20-sample minimum does not apply, since no percentages are stored.
+- Missing data is `null`; a true zero stays `0`. When a mosquito sample size is 0, its `_infected` count is `null`.
+- Stations without bird counts (station 200 and the even-numbered stations) have `honeycreepers_per_count` and `nonnative_birds_per_count` = `null` and `bird_counts_n` = 0.
+- Per-site sums of `trap_nights`, `mosq_midgut_n`, `mosq_salivary_n` and `bird_counts_n` equal the `all` values for that site in `site_summary.json`.
 
 **`landcover.geojson`** (or `.pmtiles` if too large): simplified polygons clipped to Hawaiʻi Island.
 Property: `class` (one of a small set, e.g. `wet_forest`, `dry_forest`, `shrub_grass`, `bare_lava`, `developed_ag`), plus `native_status` if using Habitat Status.
@@ -272,6 +304,20 @@ Each script reads from `raw/`, writes to `public/data/` or `reports/`, and can b
 - [ ] Known gaps match data_notes.md, or differences are explained
 - [ ] **You** review the per-site table for plausibility: *Culex* near zero at CJR and SOL and highest at the mid-elevation sites (PUU, WAI, COO), matching `reports/coverage.md`
 
+### Step 1.6: Station summaries
+**Goal:** per-station totals for the station hover tooltips. **Must be done before Step 2.6.**
+
+**Prompt:**
+> Read PLAN.md and data-pipeline/reports/data_notes.md. Do Step 1.6 only. Write `scripts/05b_station_summary.py` producing `public/data/station_summary.json` exactly as described in the Data contract, reusing the same rules and helper logic as `scripts/05_site_summary.py`: May 2002 – Oct 2004 only, CO2 traps for abundance, all dissected mosquitoes for infection, station 200 dropped from bird counts, NOBI events included, and `keep_default_na=False` for the bird count file.
+>
+> Also write `reports/station_summary_check.md` with:
+> 1. Per-site sums of station trap nights, mosquitoes examined (midgut and salivary), and counting events, compared with the `all` values in `site_summary.json`. They must be equal.
+> 2. The stations with the highest *Culex* per trap night at each site.
+
+**Done when:**
+- [ ] `station_summary.json` has 405 records with exactly the contract's fields
+- [ ] Sum checks in `station_summary_check.md` pass
+
 ---
 
 # Phase 2: The base map
@@ -324,7 +370,7 @@ Each script reads from `raw/`, writes to `public/data/` or `reports/`, and can b
 > - open and close with a clearly visible toggle button (e.g. a tab on the panel's edge), with a smooth slide animation;
 > - be about 350px wide on desktop when open, and resizable by dragging its left edge (minimum ~280px, maximum ~50% of the window);
 > - remember whether it was open or closed and its width while the page is open;
-> - start open, with placeholder text for now;
+> - start open, with two sections for later steps: "Sites" (for Step 2.5) and "Layers" (for Phase 3 and 4 controls), each with placeholder content only;
 > - on screens narrower than 768px, become a bottom sheet that slides up instead.
 >
 > The map stays full screen underneath. When the panel opens or closes, keep the map's navigation controls visible and not hidden behind the panel. Respect reduced-motion preferences by opening and closing instantly instead of sliding.
@@ -334,6 +380,48 @@ Each script reads from `raw/`, writes to `public/data/` or `reports/`, and can b
 - [ ] Panel can be resized by dragging its edge, within the min and max widths
 - [ ] Map stays usable and full screen underneath; navigation controls are never hidden
 - [ ] On a narrow window, the panel becomes a bottom sheet
+- [ ] Panel shows "Sites" and "Layers" sections with placeholder content
+
+### Step 2.5: Site navigation
+**Goal:** let users jump between the nine sites from the side panel or the map, and get back to the overview. The panel holds navigation buttons only; site information stays in the map popup from Step 2.3.
+
+**Prompt:**
+> Read PLAN.md. Do Step 2.5 only. Add a `SitePicker` component in the side panel's "Sites" section.
+>
+> - One button per site, sorted by mean elevation (lowest first), showing only the site code (e.g. "SOL"). The buttons are navigation only: they show no site information in the panel.
+> - Clicking a site button smoothly flies the camera to that site: centered on the site's stations, zoomed in so all 45 stations are visible, tilted to show the slope. It does not open the popup. Store the per-site zoom, pitch, and fly duration in `src/config/map.js`.
+> - Clicking a site's marker on the map flies the camera to that site the same way **and** opens its popup (the Step 2.3 popup: code, full name, mean elevation with range, sampling points). The popup remains the only place site information is shown.
+> - The focused site's button and marker are highlighted and the other site markers are dimmed, whether the site was focused from a button or a marker. Step 2.6 uses this selection to decide which site's stations to color.
+> - Add an "Overview" button at the top of the "Sites" section, and a home-icon control next to the map's navigation controls. Both fly back to the exact starting camera from Step 2.2, clear the site selection, and close any open popup. Pressing Escape does the same.
+> - Respect reduced-motion preferences: jump to the new view instead of flying.
+
+**Done when:**
+- [ ] Every site button flies to the right site with all its stations visible, without opening a popup or showing info in the panel
+- [ ] Clicking a site marker flies to the site and opens its popup with the correct information
+- [ ] The focused site's button and marker are clearly highlighted and the other markers dimmed
+- [ ] Overview, the home control, and Escape all return to the starting view, clear the selection, and close the popup
+
+### Step 2.6: Station hover
+**Goal:** show what was found at each sampling point when the user hovers a station. **Requires Step 1.6** (`station_summary.json`).
+
+**Prompt:**
+> Read PLAN.md. Do Step 2.6 only. Add a `StationTooltip` component.
+>
+> - Load `station_summary.json` and join it to `stations.geojson` by site + station + transect.
+> - Hovering a station (tapping on touch screens) shows a tooltip that opens with a clear heading: **"All seasons combined (May 2002 – Oct 2004)"**. Below it: station and transect number and elevation; *Culex* per trap night with the site's average beside it, labeled "site average, all seasons" (from `site_summary.json`, period `all`); mosquito infection as counts ("2 of 31 mosquitoes carried malaria; 1 could transmit it"); honeycreepers and non-native birds per count, with site averages (also labeled "all seasons"), only at stations with bird counts. Stations with no mosquito dissections say "no mosquitoes tested here." Every number shows its sample size.
+> - When a site is selected (Step 2.5), color its stations by *Culex* per trap night on a light-to-dark scale, with a small legend in the panel titled "*Culex* per trap night, all seasons". Stations with no data stay grey. When no site is selected, stations keep their Step 2.3 style.
+> - Make hover targets slightly larger than the visible dots so they're easy to hit, and highlight the hovered station.
+> - Build the tooltip so it can show one extra line of text supplied by a later step (Step 4.2 uses this for the "doesn't change by season" note).
+>
+> **Why station data is fixed and labeled this way:** station sample sizes are too small to split by season (on average about 13 CO2 trap nights, a handful of dissected mosquitoes, and 2 bird counts per station per season), so stations show all-seasons totals only, while the nine site markers change with the season buttons (Step 4.2). Without clear labels, a user who switches to a single season would see site markers change but station values stay the same, and could misread the station values as belonging to that season. The heading, the "all seasons" labels on site averages and the legend, and the Step 4.2 note make the difference explicit. Station values are always compared with the site's all-seasons average, never a seasonal one.
+
+**Done when:**
+- [ ] Hovering any station shows correct values matching `station_summary.json`
+- [ ] The tooltip heading says "All seasons combined (May 2002 – Oct 2004)", and site averages and the legend are labeled "all seasons"
+- [ ] Site averages match `site_summary.json` (period `all`)
+- [ ] Stations without bird counts or dissections show the right messages
+- [ ] Station coloring appears only for the selected site
+- [ ] Tooltips work on touch screens
 
 ---
 
@@ -375,11 +463,13 @@ Each script reads from `raw/`, writes to `public/data/` or `reports/`, and can b
 
 ### Step 4.1: Layer selector
 **Prompt:**
-> Read PLAN.md. Do Step 4.1 only. Load `site_summary.json`. Add a selector in the right panel with four measures: mosquito abundance, infectious mosquitoes (% salivary), bird malaria prevalence, native bird abundance. Color and size site markers by the selected measure, aggregated across all periods for now. Show sample size in each site's popup. Sites with no data for a measure appear as grey outlines, not zero.
+> Read PLAN.md. Do Step 4.1 only. Load `site_summary.json`. Add a selector in the side panel's "Layers" section with four measures: mosquito abundance (`mosquito_per_trap_night`), infectious mosquitoes (`mosq_salivary_pct`), bird malaria prevalence (`bird_prevalence_pct`), and native bird abundance, which means honeycreepers only (`honeycreepers_per_count`; label it "Honeycreeper abundance" in the app). Color and size site markers by the selected measure using the `all` period for now (Step 4.2 adds the other periods). Add the selected measure's value and its sample size to each site's popup (the Step 2.3 popup, which stays the only place site information is shown). Sites with no data for a measure appear as grey outlines, not zero; percentages below the 20-sample minimum show "too few samples" in the popup. Keep the Step 2.5 highlight and dimming working on top of the measure styling.
 
 **Done when:**
 - [ ] Switching measures updates markers correctly
 - [ ] No-data sites are visually distinct
+- [ ] Each site's popup shows the selected measure's value and sample size, or "too few samples"
+- [ ] Native bird abundance uses honeycreepers only and is labeled "Honeycreeper abundance"
 
 ### Step 4.2: Season buttons
 **Goal:** let users switch between the five survey seasons, plus combined views, with smooth animated transitions.
@@ -393,6 +483,8 @@ Each script reads from `raw/`, writes to `public/data/` or `reports/`, and can b
 > When a button is pressed, site markers animate smoothly (size and color) from their current values to the new period's values rather than jumping. The selected button is clearly highlighted, and a label shows the season's months (e.g. "Wet season: Nov 2003 – Apr 2004").
 >
 > Site-periods with no data show as grey outlines. Percentages below the minimum sample size show "too few samples" in the popup; SOL and CJR mosquito infection shows "too few mosquitoes to test." Respect reduced-motion preferences by switching instantly instead of animating.
+>
+> Station data does not change with these buttons (stations show all-seasons totals only; see Step 2.6). When any period other than "All seasons" is selected, add a note to the station tooltip: "Station totals don't change by season." Station values, the station coloring, and the site averages in the station tooltip stay on the `all` period.
 
 **Done when:**
 - [ ] Each button shows the right period's values, and markers animate between them
@@ -400,6 +492,7 @@ Each script reads from `raw/`, writes to `public/data/` or `reports/`, and can b
 - [ ] Wet vs. Dry toggle switches between the two combined views
 - [ ] Play steps through all five seasons and can be paused
 - [ ] No-data and too-few-samples cases display correctly
+- [ ] With a single season or wet/dry selected, station tooltips show "Station totals don't change by season", and station values and coloring stay the same
 
 ---
 
@@ -493,5 +586,7 @@ Record choices here as you make them so every session and teammate stays in sync
 | 2026-11-04 | Mosquito abundance uses CO2 traps only; gravid traps are ignored for abundance. Infection uses all dissected mosquitoes | CO2 traps catch host-seeking females (the ones that bite birds) at ~4.5× the gravid rate, and the gravid/CO2 ratio varies a lot by site, so pooling would mix two methods |
 | 2026-11-04 | Mosquito infection keeps both trap types (reviewed after Step 1.5) | Keeps sample sizes up (CO2-only would blank CJR entirely and most CRA seasons). Trap-mix caveat, which inflates CRA, goes in the About panel; see data_notes.md |
 | 2026-11-04 | Time steps in the app are season buttons: one per season plus `all`, `wet` and `dry` | Five seasons plus three combined periods suit a small set of labeled buttons |
+| 2026-11-05 | Station hover shows all-seasons totals, with infection as counts not percentages | Station sample sizes are small |
+| 2026-11-05 | Station data stays fixed at all seasons and is labeled as such: tooltip heading "All seasons combined (May 2002 – Oct 2004)", "all seasons" labels on site averages and the legend, and a "Station totals don't change by season" note when another period is selected (Steps 2.6, 4.2) | Site markers change by season but stations can't (too little data per station per season). Clear labels stop users from reading station values as belonging to the selected season, while keeping the within-site detail |
 | | Malaria zone temperature source: _(Step 3.3)_ | |
 | | Refuge area figures: _(Step 3.3)_ | |
