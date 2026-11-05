@@ -7,9 +7,39 @@ body,
   overflow: hidden;
 }
 
+/* Contain the closed (off-screen) side panel so it never makes the page scrollable. */
+#root {
+  position: relative;
+  overflow: clip;
+}
+
 .map {
   position: absolute;
   inset: 0;
+}
+
+/* Keep the map's controls clear of the side panel (desktop) or bottom sheet
+   (narrow screens). SidePanel sets these variables. */
+.maplibregl-ctrl-top-right,
+.maplibregl-ctrl-bottom-right {
+  /* SidePanel sets --panel-transition to none while the panel is being dragged. */
+  transition: var(--panel-transition, right 250ms ease, bottom 250ms ease);
+}
+
+.maplibregl-ctrl-top-right {
+  right: var(--panel-offset, 0px);
+}
+
+.maplibregl-ctrl-bottom-right {
+  right: var(--panel-offset, 0px);
+  bottom: var(--sheet-offset, 0px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .maplibregl-ctrl-top-right,
+  .maplibregl-ctrl-bottom-right {
+    transition: none;
+  }
 }
 
 .maplibregl-popup-content {
