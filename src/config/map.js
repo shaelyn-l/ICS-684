@@ -79,6 +79,21 @@ export const SITE_MARKER = {
   // Labels sit to the right of each circle, except where sites are close
   // together (CJR is just west of SOL, CRA just west of COO).
   labelSide: { CJR: 'left', CRA: 'left' },
+  // Focused site (Step 2.5): larger, with a gold outline. Other sites dim.
+  selected: { radius: 12, strokeColor: '#f5b700', strokeWidth: 3.5 },
+  dimmedOpacity: 0.35,
+}
+
+// Camera when a site is focused (Step 2.5). The zoom is fitted to the site's 45
+// stations so all of them are in view; the side panel's width is added to the
+// right padding at fly time. `overrides` sets a fixed { zoom, pitch } for a site
+// if its fitted view needs adjusting.
+export const SITE_FOCUS = {
+  pitch: 55,
+  bearing: 270, // same upslope, west-facing direction as the starting view
+  duration: 2000, // ms
+  padding: { top: 80, bottom: 80, left: 80, right: 80 },
+  overrides: {},
 }
 
 export const STATION_MARKER = {

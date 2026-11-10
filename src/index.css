@@ -42,6 +42,13 @@ body,
   }
 }
 
+.map-home-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #333333;
+}
+
 .maplibregl-popup-content {
   font: 13px/1.45 system-ui, -apple-system, 'Segoe UI', sans-serif;
   color: #1a1a1a;

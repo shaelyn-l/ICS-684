@@ -20,7 +20,7 @@ const clampWidth = (w) =>
 
 // Open/closed state and width live in component state, so they last while the
 // page is open (not across reloads).
-export default function SidePanel() {
+export default function SidePanel({ sitesContent }) {
   const isMobile = useIsMobile()
   const [open, setOpen] = useState(true)
   const [width, setWidth] = useState(() => clampWidth(PANEL.defaultWidth))
@@ -98,7 +98,7 @@ export default function SidePanel() {
       <div id="side-panel-content" className="side-panel__content" inert={!open}>
         <section className="side-panel__section" aria-labelledby="panel-sites">
           <h2 id="panel-sites">Sites</h2>
-          <p className="side-panel__placeholder">Site buttons will go here (Step 2.5).</p>
+          {sitesContent}
         </section>
         <section className="side-panel__section" aria-labelledby="panel-layers">
           <h2 id="panel-layers">Layers</h2>
