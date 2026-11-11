@@ -408,8 +408,14 @@ Each script reads from `raw/`, writes to `public/data/` or `reports/`, and can b
 > Read PLAN.md. Do Step 2.6 only. Add a `StationTooltip` component.
 >
 > - Load `station_summary.json` and join it to `stations.geojson` by site + station + transect.
-> - Hovering a station (tapping on touch screens) shows a tooltip that opens with a clear heading: **"All seasons combined (May 2002 – Oct 2004)"**. Below it: station and transect number and elevation; *Culex* per trap night with the site's average beside it, labeled "site average, all seasons" (from `site_summary.json`, period `all`); mosquito infection as counts ("2 of 31 mosquitoes carried malaria; 1 could transmit it"); honeycreepers and non-native birds per count, with site averages (also labeled "all seasons"), only at stations with bird counts. Stations with no mosquito dissections say "no mosquitoes tested here." Every number shows its sample size.
-> - When a site is selected (Step 2.5), color its stations by *Culex* per trap night on a light-to-dark scale, with a small legend in the panel titled "*Culex* per trap night, all seasons". Stations with no data stay grey. When no site is selected, stations keep their Step 2.3 style.
+> - Hovering a station with the mouse shows a tooltip that opens with a clear heading: **"All seasons combined (May 2002 – Oct 2004)"**. Below it: station and transect number and elevation; *Culex* per trap night with the site's average beside it, labeled "site average, all seasons" (from `site_summary.json`, period `all`); mosquito infection as counts (see below); honeycreepers and non-native birds per count, with site averages (also labeled "all seasons"), only at stations with bird counts. Every number shows its sample size.
+> - Mosquito infection wording: show the two tests as separate, parallel lines, each with its own sample size, because they don't nest. At 50 of 405 stations more mosquitoes are salivary-positive than midgut-positive (once malaria reaches the salivary glands it often no longer shows in the gut), and at 60 stations the two sample sizes differ (by up to 3). Use:
+>   - "Malaria in the gut: 2 of 31 mosquitoes"
+>   - "Malaria in the salivary glands (can pass it to birds): 1 of 30 mosquitoes"
+>
+>   Don't phrase the second as a subset of the first (avoid "2 carried malaria; 1 could transmit it"). If only one test has results at a station, show that line and "not tested" for the other. If neither test has results (88 stations), show a single line: "No mosquitoes tested here."
+> - When a site is selected (Step 2.5), color its stations by *Culex* per trap night on a light-to-dark scale. Use **one shared scale for all sites** (same color = same value everywhere), not a separate scale per site, so low-catch sites like SOL and CJR correctly look uniformly pale instead of stretching tiny values to the darkest color. Stations with no data stay grey. When no site is selected, stations keep their Step 2.3 style.
+> - Add a small legend titled "*Culex* per trap night, all seasons" in the side panel's "Sites" section, below the site buttons, shown only while a site is focused (hidden in the overview). It shows the shared scale's range.
 > - Make hover targets slightly larger than the visible dots so they're easy to hit, and highlight the hovered station.
 > - Build the tooltip so it can show one extra line of text supplied by a later step (Step 4.2 uses this for the "doesn't change by season" note).
 >
@@ -420,8 +426,9 @@ Each script reads from `raw/`, writes to `public/data/` or `reports/`, and can b
 - [ ] The tooltip heading says "All seasons combined (May 2002 – Oct 2004)", and site averages and the legend are labeled "all seasons"
 - [ ] Site averages match `site_summary.json` (period `all`)
 - [ ] Stations without bird counts or dissections show the right messages
-- [ ] Station coloring appears only for the selected site
-- [ ] Tooltips work on touch screens
+- [ ] Mosquito infection shows gut and salivary-gland results as separate lines, each with its own sample size, and "not tested" where only one test has results
+- [ ] Station coloring appears only for the selected site and uses one shared scale (SOL and CJR look uniformly pale)
+- [ ] The legend appears in the "Sites" section below the site buttons only while a site is focused
 
 ---
 
