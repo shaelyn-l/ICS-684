@@ -1,31 +1,31 @@
 code,canonical_code,common_name,scientific_name,native,honeycreeper,in_counts,in_blood,count_guild,notes
-AFSI,AFSI,African Silverbill,Euodice cantans,false,false,false,true,,Native status from outside knowledge (introduced to Hawaiʻi); not in the counts file.
-AKIA,AKIP,ʻAkiapōlāʻau,Hemignathus wilsoni,true,true,false,true,,Merged with AKIP: both metadata files give the same scientific name. Honeycreeper status from outside knowledge (not in metadata).
-AKIP,AKIP,ʻAkiapōlāʻau,Hemignathus wilsoni,true,true,true,false,ENDM,Honeycreeper status from outside knowledge (not in metadata).
-APAP,APAP,ʻApapane,Himatione sanguinea,true,true,true,true,ENDM,Honeycreeper status from outside knowledge (not in metadata).
+AFSI,AFSI,African Silverbill,Euodice cantans,false,false,false,true,,
+AKIA,AKIP,ʻAkiapōlāʻau,Hemignathus wilsoni,true,true,false,true,,Same species as AKIP (same scientific name in both metadata files).
+AKIP,AKIP,ʻAkiapōlāʻau,Hemignathus wilsoni,true,true,true,false,ENDM,
+APAP,APAP,ʻApapane,Himatione sanguinea,true,true,true,true,ENDM,
 COMY,COMY,Common Myna,Acridotheres tristis,false,false,true,false,XNTV,
-HAAK,HAAK,Hawaiʻi ʻĀkepa,Loxops coccineus,true,true,true,true,ENDM,Honeycreeper status from outside knowledge (not in metadata).
-HAAM,HAAM,Hawaiʻi ʻAmakihi,Chlorodrepanis virens,true,true,true,true,ENDM,Honeycreeper status from outside knowledge (not in metadata).
+HAAK,HAAK,Hawaiʻi ʻĀkepa,Loxops coccineus,true,true,true,true,ENDM,
+HAAM,HAAM,Hawaiʻi ʻAmakihi,Chlorodrepanis virens,true,true,true,true,ENDM,
 HAEL,HAEL,Hawaiʻi ʻElepaio,Chasiempis sandwichensis,true,false,true,true,ENDM,
 HAWH,HAWH,ʻIo (Hawaiian Hawk),Buteo solitarius,true,false,false,true,,
-HCRE,HCRE,Hawaiʻi Creeper (ʻAlawī),Loxops mana,true,true,true,true,ENDM,"CHECK: files disagree. Counts metadata: Alawi (formerly Hawaii Creeper), Manucerthia mana. Blood metadata: Hawaii Creeper, Loxops mana. Same species either way. Honeycreeper status from outside knowledge (not in metadata)."
+HCRE,HCRE,Hawaiʻi Creeper (ʻAlawī),Loxops mana,true,true,true,true,ENDM,"CHECK: the two metadata files give different names (Alawi, Manucerthia mana vs. Hawaii Creeper, Loxops mana); same species either way."
 HOFI,HOFI,House Finch,Haemorhous mexicanus,false,false,true,true,XNTV,
-HWAH,HAWH,ʻIo (Hawaiian Hawk),Buteo solitarius,true,false,true,false,ENDM,Merged with HAWH: both metadata files give the same scientific name.
-HWAM,HWAM,Hwamei,Garrulax canorus,false,false,false,true,,Blood metadata spells it Garrulax canoris (typo); counts metadata has canorus.
-IIWI,IIWI,ʻIʻiwi,Drepanis coccinea,true,true,true,true,ENDM,Counts metadata has Vestiaria coccinea (older genus); blood metadata has Drepanis coccinea. Honeycreeper status from outside knowledge (not in metadata).
+HWAH,HAWH,ʻIo (Hawaiian Hawk),Buteo solitarius,true,false,true,false,ENDM,Same species as HAWH (same scientific name in both metadata files).
+HWAM,HWAM,Hwamei,Garrulax canorus,false,false,false,true,,
+IIWI,IIWI,ʻIʻiwi,Drepanis coccinea,true,true,true,true,ENDM,
 JABW,JABW,Japanese Bush-warbler,Horornis diphone,false,false,true,false,XNTV,
-JAWE,WAWE,Warbling White-eye,Zosterops japonicus,false,false,true,false,XNTV,Merged with WAWE: both metadata files give the same scientific name.
+JAWE,WAWE,Warbling White-eye,Zosterops japonicus,false,false,true,false,XNTV,Same species as WAWE (same scientific name in both metadata files).
 KAPH,KAPH,Kalij Pheasant,Lophura leucomelanos,false,false,true,true,GAME,
-MELT,HWAM,Hwamei,Garrulax canorus,false,false,true,false,XNTV,Merged with HWAM: both metadata files give the same scientific name. Blood metadata spells it Garrulax canoris (typo); counts metadata has canorus.
-MODO,MODO,Mourning Dove,Zenaida macroura,false,false,false,true,,Native status from outside knowledge (introduced to Hawaiʻi); not in the counts file.
-NOBI,,No birds detected,,,,true,false,,Not a species: marks a count with zero detections. Keep it when counting events; exclude it when counting birds.
+MELT,HWAM,Hwamei,Garrulax canorus,false,false,true,false,XNTV,Same species as HWAM (same scientific name in both metadata files).
+MODO,MODO,Mourning Dove,Zenaida macroura,false,false,false,true,,
+NOBI,,No birds detected,,,,true,false,,Not a species: a count with zero birds detected. Keep it when counting events; exclude it when counting birds.
 NOCA,NOCA,Northern Cardinal,Cardinalis cardinalis,false,false,true,true,XNTV,
-NUMA,SBMU,Scaly-breasted Munia,Lonchura punctulata,false,false,true,false,XNTV,Merged with SBMU: both metadata files give the same scientific name.
+NUMA,SBMU,Scaly-breasted Munia,Lonchura punctulata,false,false,true,false,XNTV,Same species as SBMU (same scientific name in both metadata files).
 OMAO,OMAO,ʻŌmaʻo,Myadestes obscurus,true,false,true,true,ENDM,
 RBLE,RBLE,Red-billed Leiothrix,Leiothrix lutea,false,false,true,true,XNTV,
-REJU,REJU,Red Junglefowl,Gallus gallus,false,false,true,false,,"Guild is NA on every count row. Set non-native because the metadata defines GAME as all Phasianidae, all introduced, and Gallus gallus is a Phasianidae. 4 count row(s) have guild NA (not recorded)."
+REJU,REJU,Red Junglefowl,Gallus gallus,false,false,true,false,,
 SBMU,SBMU,Scaly-breasted Munia,Lonchura punctulata,false,false,false,true,,
 SPDO,SPDO,Spotted Dove,Spilopelia chinensis,false,false,true,true,XNTV,
 WAWE,WAWE,Warbling White-eye,Zosterops japonicus,false,false,false,true,,
 WITU,WITU,Wild Turkey,Meleagris gallopavo,false,false,true,false,GAME,
-ZEBD,ZEBD,Zebra Dove,Geopelia striata,false,false,true,true,XNTV,Counts metadata spells it Geopelia striatara (typo); blood metadata has striata.
+ZEBD,ZEBD,Zebra Dove,Geopelia striata,false,false,true,true,XNTV,
