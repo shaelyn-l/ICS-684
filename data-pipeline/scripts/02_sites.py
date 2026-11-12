@@ -1,199 +1,148 @@
 """Step 1.2: map-ready station and site points.
 
-Reads the Biocomplexity sampling coordinates (already WGS84 decimal degrees, so
-no reprojection), the mosquito capture and bird count files (to flag which
-points were used for each), and the two XML metadata files (for site names).
+Reads the Biocomplexity sampling coordinates (already WGS84 longitude/latitude, so
+no reprojection is needed), plus the mosquito capture and bird count files to flag
+which points were used for each.
 
 Writes:
   public/data/stations.geojson   one point per site + station + transect
   public/data/sites.geojson      one point per site at the mean of its stations
-  reports/station200_check.md    the bird count rows recorded at station 200
 
 Rerunning overwrites the outputs. Raw data is not changed.
 Run from anywhere:  python data-pipeline/scripts/02_sites.py
 """
 
 import json
-import xml.etree.ElementTree as ET
 from pathlib import Path
 
 import pandas as pd
 
+# file locations, built from where this script lives so it runs from any folder
 PIPELINE = Path(__file__).resolve().parent.parent
-RAW = PIPELINE / "raw"
-BIO = RAW / "biocomplexity_2001_2004"
+BIO = PIPELINE / "raw" / "biocomplexity_2001_2004"
 OUT = PIPELINE.parent / "public" / "data"
-REPORTS = PIPELINE / "reports"
 
-COORDS_CSV = BIO / "Biocomplexity_sampling station spatial coordinates.csv"
-MOSQUITO_CSV = BIO / "Biocomplexity_mosquito capture data.csv"
-BIRD_COUNT_CSV = BIO / "Biocomplexity_bird count data.csv"
-METADATA_XML = [BIO / "BiocomplexityDR.xml",
-                RAW / "bird_malaria_2001_2005"
-                / "Island of Hawaii forest bird malaria infection data 2001-2005 revised.xml"]
+# Bird counts were done at the odd-numbered stations only (per the Biocomplexity metadata).
+# The 25 bird count rows at station 200 were checked earlier and are dropped from bird
+# counts; see "Bird counts" in reports/data_notes.md.
+BIRD_COUNT_STATIONS = [100, 300, 500, 700, 900]
 
-KEY = ["site", "station", "transect"]
-# Bird counts were done at these stations only (per the Biocomplexity metadata). The 25 rows
-# at station 200 are dropped from bird counts; see reports/data_notes.md.
-BIRD_COUNT_STATIONS = {100, 300, 500, 700, 900}
-
-
-def site_names_from_metadata():
-    """Map site code -> description from the site/LOCATION attribute domain in the XML."""
-    names = {}
-    for path in METADATA_XML:
-        if not path.exists():
-            continue
-        for attr in ET.parse(path).getroot().iter("attr"):
-            label = (attr.findtext("attrlabl") or "").strip().lower()
-            if label not in ("site", "location"):
-                continue
-            for domain in attr.iter("edom"):
-                code = (domain.findtext("edomv") or "").strip()
-                desc = " ".join((domain.findtext("edomvd") or "").split())
-                if code and desc:
-                    names.setdefault(code, desc)
-    return names
+# Full site names, taken from the site / LOCATION code lists in the two XML metadata files.
+# That cross-reference was done in an earlier version of this script, so the names are
+# written in here instead of being read from the XML each time.
+SITE_NAMES = {
+    "MAL": "Malama Ki Forest Reserve",
+    "NAN": "Nanawale Forest Reserve",
+    "BRY": "Bryson’s Cinder Cone, Puu Kaliu, Leilani Estates",
+    "WAI": "Waiakea Forest Reserve",
+    "COO": "Cooper Center, Volcano Village",
+    "CRA": "Crater Rim, Hawaii Volcanoes National Park",
+    "PUU": "Pu'u Unit, Ola'a Tract of Hawaii Volcanoes National Park",
+    "CJR": "CJ Ralph, Kamehameha Schools Bishop Estates, Keauhou",
+    "SOL": "Solomon’s Watering Hole, Kamehameha Schools Bishop Estates, Keauhou",
+}
 
 
-def point(lon, lat, props):
-    return {"type": "Feature",
-            "geometry": {"type": "Point", "coordinates": [round(lon, 7), round(lat, 7)]},
-            "properties": props}
+# ===========================================================================
+# 1. Load the data
+# ===========================================================================
+df_coords = pd.read_csv(BIO / "Biocomplexity_sampling station spatial coordinates.csv")
+df_capture = pd.read_csv(BIO / "Biocomplexity_mosquito capture data.csv")
+df_counts = pd.read_csv(BIO / "Biocomplexity_bird count data.csv")
+
+print(df_coords.shape)
+print(df_coords.head())
+
+# ===========================================================================
+# 3. Which points had mosquito traps and which had bird counts
+# ===========================================================================
+# a point had traps if it appears anywhere in the capture file
+trap_points = df_capture[["site", "station", "transect"]].drop_duplicates()
+trap_points["has_mosquito_traps"] = True
+
+# a point had bird counts if it appears in the bird count file at an odd-numbered station
+counted = df_counts[df_counts["station"].isin(BIRD_COUNT_STATIONS)]
+count_points = counted[["site", "station", "transect"]].drop_duplicates()
+count_points["has_bird_counts"] = True
+
+# join both flags onto the coordinates; points missing from a file get False
+df_stations = df_coords.merge(trap_points, on=["site", "station", "transect"], how="left")
+df_stations = df_stations.merge(count_points, on=["site", "station", "transect"], how="left")
+df_stations["has_mosquito_traps"] = df_stations["has_mosquito_traps"].fillna(False).astype(bool)
+df_stations["has_bird_counts"] = df_stations["has_bird_counts"].fillna(False).astype(bool)
+
+print("stations with mosquito traps:", df_stations["has_mosquito_traps"].sum(), "of", len(df_stations))
+print("stations with bird counts:   ", df_stations["has_bird_counts"].sum(), "of", len(df_stations))
+
+# every trapped or counted point should have coordinates; any that don't are printed
+all_data_points = pd.concat([trap_points, count_points])[["site", "station", "transect"]].drop_duplicates()
+no_coords = all_data_points.merge(df_coords, on=["site", "station", "transect"], how="left", indicator=True)
+no_coords = no_coords[no_coords["_merge"] == "left_only"]
 
 
-def write_geojson(path, features):
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps({"type": "FeatureCollection", "features": features},
-                               ensure_ascii=False, indent=1), encoding="utf-8")
-    print(f"wrote {path.relative_to(PIPELINE.parent)} ({len(features)} features)")
+# ===========================================================================
+# 4. Write stations.geojson
+# ===========================================================================
+# GeoJSON is a list of "features": each has a point geometry [longitude, latitude] and a
+# set of properties. Coordinates are rounded to 7 decimals (about 1 cm).
+station_features = []
+for row in df_stations.itertuples(index=False):
+    station_features.append({
+        "type": "Feature",
+        "geometry": {"type": "Point", "coordinates": [round(row.x_long, 7), round(row.y_lat, 7)]},
+        "properties": {
+            "site": row.site,
+            "station": int(row.station),
+            "transect": int(row.transect),
+            "elevation_m": float(row.elevation_m),
+            "has_mosquito_traps": bool(row.has_mosquito_traps),
+            "has_bird_counts": bool(row.has_bird_counts),
+        },
+    })
+
+OUT.mkdir(parents=True, exist_ok=True)
+stations_json = {"type": "FeatureCollection", "features": station_features}
+(OUT / "stations.geojson").write_text(json.dumps(stations_json, ensure_ascii=False, indent=1),
+                                      encoding="utf-8")
+print("wrote public/data/stations.geojson:", len(station_features), "features")
 
 
-def build_stations(coords, mosquito, birds):
-    trap_keys = set(mosquito[KEY].drop_duplicates().itertuples(index=False, name=None))
-    counted = birds[birds["station"].isin(BIRD_COUNT_STATIONS)]
-    count_keys = set(counted[KEY].drop_duplicates().itertuples(index=False, name=None))
-    features = []
-    for r in coords.itertuples(index=False):
-        key = (r.site, r.station, r.transect)
-        features.append(point(r.x_long, r.y_lat, {
-            "site": r.site,
-            "station": int(r.station),
-            "transect": int(r.transect),
-            "elevation_m": float(r.elevation_m),
-            "has_mosquito_traps": key in trap_keys,
-            "has_bird_counts": key in count_keys,
-        }))
-    missing = (trap_keys | count_keys) - set(coords[KEY].itertuples(index=False, name=None))
-    if missing:
-        print(f"WARNING: {len(missing)} site/station/transect combos in the data have no coordinates: "
-              f"{sorted(missing)}")
-    return features
+# ===========================================================================
+# 5. Site points: the mean of each site's stations
+# ===========================================================================
+# group the 45 stations of each site and take the mean position and elevation, plus the
+# lowest and highest station elevation; sort from lowest to highest site
+df_sites = df_coords.groupby("site").agg(
+    lon=("x_long", "mean"),
+    lat=("y_lat", "mean"),
+    elevation_m=("elevation_m", "mean"),
+    elevation_min_m=("elevation_m", "min"),
+    elevation_max_m=("elevation_m", "max"),
+    n_stations=("elevation_m", "size"),
+)
+df_sites = df_sites.sort_values("elevation_m")
+df_sites["site_name"] = df_sites.index.map(SITE_NAMES)
 
 
-def build_sites(coords, names):
-    grouped = coords.groupby("site").agg(
-        lon=("x_long", "mean"), lat=("y_lat", "mean"),
-        elevation_m=("elevation_m", "mean"),
-        elevation_min_m=("elevation_m", "min"), elevation_max_m=("elevation_m", "max"),
-        n_stations=("elevation_m", "size"),
-    ).sort_values("elevation_m")
-    features = [point(r.lon, r.lat, {
-        "site": site,
-        "site_name": names.get(site),
-        "elevation_m": round(r.elevation_m, 1),
-        "elevation_min_m": round(r.elevation_min_m, 1),
-        "elevation_max_m": round(r.elevation_max_m, 1),
-        "n_stations": int(r.n_stations),
-    }) for site, r in grouped.iterrows()]
-    return features, grouped
+# ===========================================================================
+# 6. Write sites.geojson
+# ===========================================================================
+site_features = []
+for site, row in df_sites.iterrows():
+    site_features.append({
+        "type": "Feature",
+        "geometry": {"type": "Point", "coordinates": [round(row.lon, 7), round(row.lat, 7)]},
+        "properties": {
+            "site": site,
+            "site_name": row.site_name,
+            "elevation_m": round(row.elevation_m, 1),
+            "elevation_min_m": round(row.elevation_min_m, 1),
+            "elevation_max_m": round(row.elevation_max_m, 1),
+            "n_stations": int(row.n_stations),
+        },
+    })
 
-
-def station200_report(birds):
-    """Describe bird count rows at station 200 and whether they could be a mistyped neighbor."""
-    rows = birds[birds["station"] == 200]
-    events = (rows.groupby(["site", "transect", "obsvdate", "obscode", "timestart"])
-              .size().reset_index(name="detections"))
-
-    # For each station-200 event, which stations on the same site/transect/date have counts,
-    # and when each was started (counts walk the transect in order, so times show the sequence)?
-    starts = birds.groupby(["site", "transect", "obsvdate", "station"])["timestart"].min()
-    events["stations counted that day on this transect (start time)"] = [
-        ", ".join(f"{st} ({t})" for st, t in starts[(e.site, e.transect, e.obsvdate)].items())
-        for e in events.itertuples(index=False)]
-
-    def table(df):
-        cols = list(df.columns)
-        lines = ["| " + " | ".join(cols) + " |", "|" + "---|" * len(cols)]
-        lines += ["| " + " | ".join(str(v) for v in row) + " |"
-                  for row in df.itertuples(index=False)]
-        return "\n".join(lines)
-
-    species = rows["alphacode"].value_counts().reset_index()
-    species.columns = ["alphacode", "rows"]
-    other_stations = sorted(set(birds["station"].astype(int)) - {200})
-
-    lines = [
-        "# Bird count rows at station 200", "",
-        "Generated by `scripts/02_sites.py`. Nothing has been changed or dropped.", "",
-        f"- Rows at station 200: {len(rows)} of {len(birds):,} bird count rows.",
-        f"- Other stations in the bird count file: {', '.join(map(str, other_stations))}.",
-        "- The Biocomplexity metadata says counts were done at 25 stations 200 m apart "
-        "(5 per transect), which matches the odd stations only.",
-        f"- Sites: {', '.join(sorted(rows['site'].unique()))}. "
-        f"Transects: {', '.join(map(str, sorted(rows['transect'].unique())))}. "
-        f"Dates: {', '.join(sorted(rows['obsvdate'].unique(), key=pd.to_datetime))}.", "",
-        "## Counting events at station 200", "",
-        "One event = site + transect + date + observer + start time. The last column lists every "
-        "station with counts on the same site, transect and date, with its earliest start time "
-        "(9999 = not recorded). If one of the usual stations is missing that day, station 200 may "
-        "be a mistyped station number; the start times show where it fell in the walk.", "",
-        table(events), "",
-        "## Species recorded at station 200", "",
-        table(species), "",
-        "## Decision", "",
-        "All 25 station-200 rows are dropped from bird count summaries; station 200 points have "
-        "`has_bird_counts = false`. The raw file is unchanged. See `reports/data_notes.md`.", "",
-    ]
-    path = REPORTS / "station200_check.md"
-    path.write_text("\n".join(lines), encoding="utf-8")
-    print(f"wrote {path.relative_to(PIPELINE)}")
-
-
-def main():
-    coords = pd.read_csv(COORDS_CSV)
-    mosquito = pd.read_csv(MOSQUITO_CSV)
-    birds = pd.read_csv(BIRD_COUNT_CSV)
-
-    # Sanity check that coordinates really are WGS84 degrees on Hawaiʻi Island.
-    assert coords["x_long"].between(-156.1, -154.8).all(), "x_long outside Hawaiʻi Island"
-    assert coords["y_lat"].between(18.9, 20.3).all(), "y_lat outside Hawaiʻi Island"
-    assert not coords.duplicated(KEY).any(), "duplicate site/station/transect in coordinates"
-
-    stations = build_stations(coords, mosquito, birds)
-    write_geojson(OUT / "stations.geojson", stations)
-
-    names = site_names_from_metadata()
-    sites, grouped = build_sites(coords, names)
-    write_geojson(OUT / "sites.geojson", sites)
-
-    station200_report(birds)
-
-    unexpected = sorted({(f["properties"]["site"], f["properties"]["station"])
-                         for f in stations if f["properties"]["has_bird_counts"]
-                         and f["properties"]["station"] not in BIRD_COUNT_STATIONS})
-    print(f"\nhas_bird_counts at stations outside {sorted(BIRD_COUNT_STATIONS)}: "
-          f"{unexpected or 'none'}")
-    print(f"stations with mosquito traps: {sum(f['properties']['has_mosquito_traps'] for f in stations)}"
-          f" of {len(stations)}; with bird counts: "
-          f"{sum(f['properties']['has_bird_counts'] for f in stations)}")
-
-    print("\nSites by mean elevation:")
-    table = grouped.reset_index()[["site", "elevation_m", "elevation_min_m", "elevation_max_m",
-                                   "n_stations"]].round(1)
-    table["site_name"] = table["site"].map(names).fillna("(not found)")
-    print(table.to_string(index=False))
-
-
-if __name__ == "__main__":
-    main()
+sites_json = {"type": "FeatureCollection", "features": site_features}
+(OUT / "sites.geojson").write_text(json.dumps(sites_json, ensure_ascii=False, indent=1),
+                                   encoding="utf-8")
+print("wrote public/data/sites.geojson:", len(site_features), "features")

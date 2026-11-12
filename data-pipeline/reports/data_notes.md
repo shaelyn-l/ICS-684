@@ -1,7 +1,9 @@
 # Data notes
 
-Known data issues and decisions from the Step 1.1 inspection (`reports/inspection.md`).
+Known data issues and decisions, starting from the Step 1.1 inspection (`scripts/01_inspect.py`).
 Read this before any data-pipeline step. Items marked **TBD** still need a decision.
+
+**Pipeline revision (2026-11-12).** The scripts now print their findings instead of writing markdown reports, and the old reports (`inspection.md`, `station200_check.md`, `species_check.md`, `coverage.md`, `site_summary_check.md`, `station_summary_check.md`) were deleted; they are in git history (last present in commit `ad2da5f`). This file keeps their findings and decisions. Current scripts, in run order: `01_inspect.py`, `02_sites.py`, `03_species.py`, `04_site_summary.py`, `04b_station_summary.py` (formerly `05_site_summary.py` and `05b_station_summary.py`; `04_coverage.py` was removed after Step 1.4). See PLAN.md, Phase 1.
 
 ## Files and key columns
 
@@ -46,16 +48,17 @@ Read this before any data-pipeline step. Items marked **TBD** still need a decis
 ## Small samples
 
 - Mosquito dissections per site: COO 1,959; PUU 1,523; WAI 1,517; NAN 661; MAL 451; CRA 328; BRY 282; CJR 60; SOL 2.
-- **Decision (Step 1.4):** minimum sample size is 20, for percentages only (mosquito infection, bird prevalence). Below 20 the percentage is `null`, the sample size is still filled in, and the app shows "too few samples." Abundance measures (per trap night, per count) are shown whenever the sample size is above zero. See `reports/coverage.md`.
+- **Decision (Step 1.4):** minimum sample size is 20, for percentages only (mosquito infection, bird prevalence). Below 20 the percentage is `null`, the sample size is still filled in, and the app shows "too few samples." Abundance measures (per trap night, per count) are shown whenever the sample size is above zero. Evidence: see "Step 1.4 coverage evidence" under Date ranges.
 
 ## Bird counts
 
 - Each row is one bird detected, not a count total. To get birds per count, define one counting event as a unique site + station + transect + date, then divide detections by events.
 - Bird counts were done at stations 100, 300, 500, 700, 900 only (25 count stations per site, 200 m apart, per the Biocomplexity metadata).
-- Station 200 (25 rows) is outside this protocol. See `reports/station200_check.md`.
-  - MAL, transect 0, 2003-05-06: an extra stop between 100 and 300; all five standard stops also present.
-  - CRA, transect 600, 2004-05-22: likely mislabeled (station 900 missing, timing out of order); can't be corrected confidently.
-- **Decision:** drop all 25 station-200 rows from bird count summaries (0.07% of rows; no meaningful effect on results). Keep the raw file unchanged. Station 200 points have `has_bird_counts = false` in `stations.geojson` (applied in `scripts/02_sites.py` via `BIRD_COUNT_STATIONS`). Later scripts that summarize bird counts must drop these rows too.
+- Station 200 (25 rows) is outside this protocol. It was spotted in 01_inspect's `station` value counts and investigated in the original Step 1.2 script. The 25 rows are two counting events (one event = site + transect + date + observer + start time):
+  - MAL, transect 0, 2003-05-06, observer EJT, 14 detections: stations counted that day (start time) were 100 (630), 200 (640), 300 (652), 500 (704), 700 (716), 900 (729). An extra stop between 100 and 300; all five standard stops also present.
+  - CRA, transect 600, 2004-05-22, observer KMM, 11 detections: 100 (728), 300 (742), 500 (755), 200 (821), 700 (836). Likely mislabeled (station 900 missing, "200" out of order between 500 and 700); can't be corrected confidently.
+  - Species recorded at station 200: APAP 6, HAAM 4, OMAO 3, ZEBD 3, HOFI 3, JAWE 2, NOCA 2, SPDO 2.
+- **Decision:** drop all 25 station-200 rows from bird count summaries (0.07% of rows; no meaningful effect on results). Keep the raw file unchanged. Station 200 points have `has_bird_counts = false` in `stations.geojson` (applied in `scripts/02_sites.py` via `BIRD_COUNT_STATIONS`). Later scripts that summarize bird counts must drop these rows too (`04_site_summary.py` and `04b_station_summary.py` do).
 
 ## Bird blood samples (malaria infection)
 
@@ -83,8 +86,8 @@ Read this before any data-pipeline step. Items marked **TBD** still need a decis
 
 ## Species codes (resolved in Step 1.3)
 
-- Lookup: `species_lookup.csv`. Summary: `reports/species_check.md`. 30 codes, 24 distinct species after merging.
-- All codes resolved from the two XML metadata files. Merged codes (same scientific name in both files):
+- Lookup: `species_lookup.csv`, built by `scripts/03_species.py`. 30 codes, 24 distinct species after merging.
+- All codes resolved from the two XML metadata files. Those results (names, native status, honeycreeper status, merges) are now hardcoded in `03_species.py` with comments on their sources. Guild meanings (Biocomplexity metadata): `ENDM` native birds (Hawaiian endemic passerines and indigenous species); `XNTV` non-native birds (non-Phasianidae introduced species); `GAME` game birds (Phasianidae, all introduced); `NA` no data recorded. Metadata name typos corrected: *Geopelia striatara* → *striata* (counts), *Garrulax canoris* → *canorus* (blood); ʻIʻiwi uses *Drepanis coccinea* (counts metadata has the older *Vestiaria*). Merged codes (same scientific name in both files):
   - AKIA → AKIP (ʻAkiapōlāʻau)
   - HWAH → HAWH (ʻIo, Hawaiian Hawk)
   - JAWE → WAWE (Warbling White-eye)
@@ -109,6 +112,22 @@ Read this before any data-pipeline step. Items marked **TBD** still need a decis
 - All four datasets overlap 2002–2004.
 - **Decision:** trim to end of 2004 to match the Biocomplexity data.
 - **Decision (Step 1.4):** time periods are Hawaiian seasons (wet Nov–Apr, dry May–Oct), starting 2002, five full seasons only: `2002-dry`, `2002-wet`, `2003-dry`, `2003-wet`, `2004-dry` (`2002-wet` = Nov 2002–Apr 2003). The partial periods Jan–Apr 2002 and Nov–Dec 2004 are dropped, so the data used runs May 2002–Oct 2004. Combined periods `all`, `dry` and `wet` are built from these five seasons only. In the app, time steps are buttons, not a slider.
+
+### Step 1.4 coverage evidence (from the removed `04_coverage.py`)
+
+% of site-period cells with at least 20 samples, start 2002 (end 2004-12-31; partial periods included):
+
+| Period option | Trap nights | Midgut examined | Salivary examined | Birds sampled | Honeycreepers sampled | Counting events |
+|---|---|---|---|---|---|---|
+| Month | 87% | 28% | 28% | 52% | 20% | 28% |
+| Hawaiian season | 95% | 68% | 68% | 94% | 65% | 97% |
+| Four seasons | 92% | 55% | 53% | 79% | 50% | 65% |
+| Year | 100% | 81% | 81% | 100% | 85% | 100% |
+
+- **Bird counts come in rounds about every three months**: Feb–Mar, May–Jun, Aug–Sep, Nov–Dec (none in April; 01_inspect prints rows per month). Hawaiian seasons put two rounds in every site-season (0% of cells without counts). Four seasons splits the Nov–Dec and Feb–Mar rounds across season boundaries, leaving 28% of site-seasons with no counts; months leave 63% of site-months with none.
+- **Start 2002, not 2001**: trapping starts Feb 2002 and counts Mar 2002, so a 2001 start leaves every 2001 period empty (26% of Hawaiian-season cells with no trap nights, vs. 5% starting 2002).
+- **Minimum n = 20**: at 10 one sample moves a percentage by 10 points; at 30 noticeably more cells go blank. No option rescues mosquito infection at CJR and SOL (median salivary-examined per Hawaiian season: 1 and 0; SOL 0 even per year).
+- **Year** has the most samples but only three steps and hides the seasonal swing; it lives on as the pooled `all` period instead.
 
 ## Known gaps
 

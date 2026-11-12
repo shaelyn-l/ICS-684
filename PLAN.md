@@ -47,8 +47,10 @@ This plan is written to be fed to Claude Code **one step at a time**. Each step 
 ├── data-pipeline/           ← Python scripts (run locally, not part of the website)
 │   ├── requirements.txt
 │   ├── raw/                 ← downloaded source data (large files git-ignored)
-│   ├── scripts/             ← one script per processing step
-│   └── reports/             ← text summaries from inspection scripts
+│   ├── scripts/             ← one script per processing step (01–04b, run in order)
+│   ├── processed/           ← CSV copies of the processed summaries (easy to open and read)
+│   ├── species_lookup.csv   ← species codes, merges, native/honeycreeper status (Step 1.3)
+│   └── reports/             ← data_notes.md: known data issues and decisions
 ├── public/
 │   └── data/                ← processed, web-ready files the app loads
 └── src/                     ← React app
@@ -170,6 +172,8 @@ Property: `zone` = `high_risk` (>21°C), `episodic` (13–21°C), `refuge` (<13�
 Columns: `code`, `canonical_code` (one code per species, merging codes for the same bird across files), `common_name`, `scientific_name`, `native` (true/false), `honeycreeper` (true/false), `in_counts` (true/false), `in_blood` (true/false), `count_guild` (the bird count file's `guild` value, blank if none), `notes` (`CHECK` marks rows needing review).
 `NOBI` ("no birds detected") is included with blank `canonical_code`, `native` and `honeycreeper`: it is a zero-detection count, not a species.
 
+**`processed/site_summary.csv`, `processed/station_summary.csv`** (in `data-pipeline/`): the same records as `site_summary.json` and `station_summary.json`, one row per record, written by `04_site_summary.py` and `04b_station_summary.py` for easy reading. Nulls are blank cells. The app does not read these.
+
 ---
 
 # Phase 0: Project setup
@@ -189,18 +193,26 @@ Columns: `code`, `canonical_code` (one code per species, merging codes for the s
 
 # Phase 1: Data pipeline (Python)
 
-Each script reads from `raw/`, writes to `public/data/` or `reports/`, and can be rerun safely.
+Each script reads from `raw/`, writes to `public/data/` (and a CSV copy to `processed/` where it produces data), prints its findings and checks to the terminal, and can be rerun safely. Run order: `01_inspect.py` → `02_sites.py` → `03_species.py` → `04_site_summary.py` → `04b_station_summary.py`.
+
+> **Pipeline revision (2026-11-12).** After Phase 2, the scripts were rewritten as plain top-to-bottom pandas steps with explanatory comments, producing identical `public/data/` files. The steps below describe the scripts as they are now; each has a **Revised** note saying what changed from the original prompt. Summary:
+> - Markdown reports (`reports/inspection.md`, `station200_check.md`, `species_check.md`, `coverage.md`, `site_summary_check.md`, `station_summary_check.md`) are no longer written; scripts print instead, and the old reports were deleted. Their findings and decisions are in `reports/data_notes.md`; the files themselves are in git history (last present in commit `ad2da5f`).
+> - Values already cross-referenced from the XML metadata (site names, species names and status) are hardcoded in the scripts, with comments saying where they came from.
+> - `04_coverage.py` (Step 1.4) was removed once its decisions were made; `05_site_summary.py` and `05b_station_summary.py` were renamed `04_site_summary.py` and `04b_station_summary.py`, and 04b no longer imports 04.
+> - Processed summaries are also saved as CSVs in `data-pipeline/processed/`.
 
 ### Step 1.1: Inspect the raw data
-**Goal:** a written report of what's actually in each file before any processing.
+**Goal:** a look at what's actually in each file before any processing.
 
 **Prompt:**
-> Read PLAN.md. Do Step 1.1 only. Write `data-pipeline/scripts/01_inspect.py`. For each CSV in `raw/biocomplexity_2001_2004/` and `raw/bird_malaria_2001_2005/`, report: column names and types, row count, unique values of site or location columns, min/max dates, count of nulls per column, and the first five rows. Also list unique species values in each file. Write the output to `data-pipeline/reports/inspection.md`. Do not transform any data.
+> Read PLAN.md. Do Step 1.1 only. Write `data-pipeline/scripts/01_inspect.py`. For each CSV in `raw/biocomplexity_2001_2004/` and `raw/bird_malaria_2001_2005/`, print: shape, column names and types, the first five rows, nulls and missing-value codes per column, `describe()` and unique counts, the site/station/transect values, min/max dates, and the species values. Also print bird count rows per calendar month (to see when counting rounds happened) and whether the site codes match across files. Use basic pandas calls, one section per file. Do not transform or save any data.
+
+**Revised:** originally wrote `reports/inspection.md` with regex-based column detection; now prints with plain pandas calls and known column names. The month-count line was added when `04_coverage.py` was removed: it shows the quarterly bird count rounds (Feb–Mar, May–Jun, Aug–Sep, Nov–Dec) behind the wet/dry season choice.
 
 **Done when:**
-- [ ] `reports/inspection.md` exists
+- [ ] The script runs and prints a section for each of the five CSVs
 - [ ] **You** review it and confirm: site codes match across files (e.g. `site` in Biocomplexity files = `LOCATION` in the bird blood file), coordinate columns look like lat/long, date formats are readable
-- [ ] Note any surprises in the report before Step 1.2
+- [ ] Record any surprises in `reports/data_notes.md` before Step 1.2
 
 ### Step 1.2: Stations and sites
 **Goal:** map-ready station and site points.
@@ -209,19 +221,20 @@ Each script reads from `raw/`, writes to `public/data/` or `reports/`, and can b
 > Read PLAN.md and data-pipeline/reports/data_notes.md. Do Step 1.2 only. Write `scripts/02_sites.py`. The sampling station spatial coordinates CSV is already in WGS84 decimal degrees (`x_long`, `y_lat`), so no coordinate conversion is needed.
 >
 > 1. Create `public/data/stations.geojson` with one point per site + station + transect (405 points). Properties: `site`, `station`, `transect`, `elevation_m`, plus `has_mosquito_traps` and `has_bird_counts` (true/false), based on whether that site + station + transect appears in the mosquito capture file and the bird count file.
-> 2. Check the bird count rows at station 200 (25 rows): which sites, transects, and dates they come from, and whether they look like data entry errors. Write findings to `reports/station200_check.md`. Do not change or drop them yet.
-> 3. Look in the two XML metadata files for full site names matching the nine site codes.
-> 4. Create `public/data/sites.geojson` with one point per site at the mean of its stations' coordinates. Properties: `site`, `site_name` (from the metadata, or null if not found), `elevation_m` (mean), `elevation_min_m`, `elevation_max_m`, `n_stations`.
+> 2. Bird counts were done at stations 100, 300, 500, 700, 900 only; the 25 station-200 rows are dropped (see data_notes.md), so `has_bird_counts` uses those five stations.
+> 3. Use the full site names from the XML metadata, hardcoded in the script with a comment saying where they came from.
+> 4. Create `public/data/sites.geojson` with one point per site at the mean of its stations' coordinates. Properties: `site`, `site_name`, `elevation_m` (mean), `elevation_min_m`, `elevation_max_m`, `n_stations`.
 > 5. Print a table of sites sorted by mean elevation.
 >
 > Update the Data contract in PLAN.md to include the new properties.
 
+**Revised:** originally this step also investigated the station-200 rows (writing `reports/station200_check.md`) and read site names from the XML metadata. Both were done once; the findings and the decision to drop station 200 are in data_notes.md, and the site names are now hardcoded. The coordinate sanity checks were also removed (01_inspect shows the ranges and row count).
+
 **Done when:**
 - [ ] `stations.geojson` has 405 points and `sites.geojson` has 9, both on Hawaiʻi Island's east side in https://geojson.io
 - [ ] Site elevations roughly 25–1,800 m
-- [ ] `has_bird_counts` is true only at stations 100, 300, 500, 700, 900 (plus wherever the station 200 rows fall)
-- [ ] `reports/station200_check.md` exists. **You** decide what to do with those rows and record it in data_notes.md
-- [ ] Site names filled in, or noted as not found
+- [ ] `has_bird_counts` is true only at stations 100, 300, 500, 700, 900
+- [ ] Site names filled in
 
 ### Step 1.3: Species lookup
 **Goal:** one table that defines every species code in both bird files, merges codes that mean the same bird, and marks native vs. non-native and honeycreeper species.
@@ -229,26 +242,27 @@ Each script reads from `raw/`, writes to `public/data/` or `reports/`, and can b
 **Prompt:**
 > Read PLAN.md and data-pipeline/reports/data_notes.md. Do Step 1.3 only. Write `scripts/03_species.py` that builds `data-pipeline/species_lookup.csv` covering every species code in the bird count file (`alphacode`) and the bird blood file (`SPECIES`).
 >
-> 1. Look up each code's meaning in the two XML metadata files first. Only use outside knowledge when a code isn't defined there, and say so in the notes.
+> 1. Hardcode each species' names, native status, and honeycreeper status (resolved from the two XML metadata files and the bird count `guild` column; see data_notes.md), with comments saying where each came from and which values are outside knowledge.
 > 2. Columns: `code`, `canonical_code`, `common_name`, `scientific_name`, `native` (true/false), `honeycreeper` (true/false), `in_counts` (true/false), `in_blood` (true/false), `count_guild` (the `guild` value from the bird count file, if any), `notes`.
-> 3. `canonical_code` merges codes for the same species across files. Known candidates from data_notes.md: JAWE/WAWE (white-eye), AKIP/AKIA (ʻAkiapōlāʻau). HWAH, HWAM, and HAWH are unresolved: merge them only if the metadata confirms they are the same species.
-> 4. Report the three `guild` values and what they mean (from the metadata), and flag any species where `guild` disagrees with the `native` column.
-> 5. Mark anything uncertain with `CHECK` in `notes` rather than guessing.
-> 6. Write a short summary to `reports/species_check.md`: merged codes, unresolved codes, guild meanings, and any disagreements.
+> 3. `canonical_code` merges codes for the same species across files: JAWE→WAWE, AKIA→AKIP, HWAH→HAWH, MELT→HWAM, NUMA→SBMU.
+> 4. Compute `in_counts`, `in_blood`, and `count_guild` from the data, and print a check that `guild` agrees with `native`.
+> 5. Keep `CHECK` in `notes` for rows needing review (HCRE).
 >
 > Update the `species_lookup.csv` entry in the Data contract in PLAN.md to match the new columns.
 
+**Revised:** originally read code meanings from the XML metadata and wrote `reports/species_check.md` with long per-row notes. The metadata cross-reference was done once (results in data_notes.md "Species codes"); names and status are now hardcoded, and `notes` is short (merges, NOBI, HCRE). Every other column is unchanged.
+
 **Done when:**
-- [ ] Every code from both files appears in the lookup (23 from counts, 20 from blood, with overlaps)
-- [ ] JAWE/WAWE and AKIP/AKIA resolved, with the source of the decision noted
-- [ ] HWAH/HWAM/HAWH either resolved from the metadata or marked `CHECK`
-- [ ] Guild meanings reported, with no unexplained disagreements with `native`
-- [ ] **You** review rows marked `CHECK` and record decisions in data_notes.md
+- [ ] Every code from both files appears in the lookup (23 from counts, 20 from blood, with overlaps; 30 codes, 24 species)
+- [ ] The five merges are applied
+- [ ] The printed check shows no disagreements between `guild` and `native`
 
 ### Step 1.4: Choose time periods
 **Goal:** decide the time periods the season buttons will step through and the start date, based on how much usable data each site has per period. Also set the minimum sample sizes.
 
-**Prompt:**
+**Revised:** done. The decisions (Hawaiian seasons, May 2002 – Oct 2004, minimum n = 20 for percentages) are in the Decisions log and data_notes.md, with the key evidence summarized in data_notes.md "Date ranges". `04_coverage.py` and `reports/coverage.md` were then removed; the original prompt is kept below as a record. The decisions live on as settings in `04_site_summary.py` (`START`, `END`, `SEASONS`, `MIN_N_PCT`), and 01_inspect's bird-count-by-month print shows the main pattern behind the season choice.
+
+**Original prompt:**
 > Read PLAN.md and data-pipeline/reports/data_notes.md. Do Step 1.4 only. Write `scripts/04_coverage.py`. Apply the rules in data_notes.md so the counts match what Step 1.5 will actually use:
 > - Mosquito captures: count trap nights (one trap on one night), using the `culex` column.
 > - Mosquito dissections: count examined mosquitoes only (exclude blank `midgut_infection` / `salivary_infection`), dated by `date_collected`.
@@ -267,7 +281,7 @@ Each script reads from `raw/`, writes to `public/data/` or `reports/`, and can b
 > Write everything to `reports/coverage.md`, ending with a recommendation for: (a) the period option, (b) the start date, (c) a minimum sample size for showing a percentage. Do not choose for me; present the recommendation and the trade-offs.
 
 **Done when:**
-- [ ] `reports/coverage.md` exists with tables for all four datasets and all four period options
+- [x] Coverage tables for all datasets and all four period options reviewed
 - [ ] **You** decide the period option, start date, and minimum sample sizes
 - [ ] Decisions recorded in the Decisions log in PLAN.md and in data_notes.md
 - [ ] Data contract's `period` format updated to match the chosen option
@@ -276,7 +290,7 @@ Each script reads from `raw/`, writes to `public/data/` or `reports/`, and can b
 **Goal:** the main data file the app reads: one record per site per period, every value with its sample size.
 
 **Prompt:**
-> Read PLAN.md and data-pipeline/reports/data_notes.md. Do Step 1.5 only. Write `scripts/05_site_summary.py` that produces `public/data/site_summary.json` exactly as described in the Data contract, and `reports/site_summary_check.md`.
+> Read PLAN.md and data-pipeline/reports/data_notes.md. Do Step 1.5 only. Write `scripts/04_site_summary.py` that produces `public/data/site_summary.json` exactly as described in the Data contract (plus a CSV copy, `processed/site_summary.csv`), and prints its checks.
 >
 > **Periods.** Assign every sample to a Hawaiian season by its date (wet Nov–Apr, dry May–Oct; `2002-wet` = Nov 2002–Apr 2003). Keep only May 2002–Oct 2004, the five full seasons. Build `all`, `dry` and `wet` by pooling the underlying samples, not by averaging seasonal values. Output one record per site per period (9 sites × 8 periods = 72), sorted by site elevation and then period (`2002-dry` … `2004-dry`, `all`, `dry`, `wet`). Every record has every contract field.
 >
@@ -290,33 +304,37 @@ Each script reads from `raw/`, writes to `public/data/` or `reports/`, and can b
 >
 > **Nulls and rounding.** Apply the Data contract rules: percentages `null` below 20 samples (sample size still filled in), abundance `null` only when its sample size is 0, a true zero stays `0`. Round percentages to 1 decimal, per-count values to 2, per-trap-night values to 3. Before writing, assert the contract holds: 72 records, exact field set, every percentage `null` exactly when its n < 20.
 >
-> **Check report** (`reports/site_summary_check.md`):
+> **Printed checks:**
 > 1. Per-site raw totals for `all`: Culex caught, CO2 trap nights, mosquitoes examined and infected (midgut, salivary), birds sampled and positive (all, honeycreepers), counting events, honeycreeper and non-native detections.
 > 2. Sum checks: for trap nights, mosquitoes examined and counting events, the five seasons add up to `all`, and `dry` + `wet` = `all`. (Bird sample sizes don't have to add up, since a bird can appear in more than one season.)
 > 3. Every cell where a percentage is `null` because n < 20, by site and period.
 > 4. Whether the Known gaps in data_notes.md still hold (SOL, CJR mosquito infection; WAI honeycreeper prevalence). Flag any difference.
 >
-> Do not change data_notes.md or the Data contract. If something in the data contradicts them, report it in the check file instead.
+> Do not change data_notes.md or the Data contract. If something in the data contradicts them, print it in the checks instead.
+
+**Revised:** originally `05_site_summary.py`, writing `reports/site_summary_check.md`. Renamed `04_site_summary.py` after `04_coverage.py` was removed, rewritten as top-to-bottom steps, and prints the same checks. `site_summary.json` is unchanged.
 
 **Done when:**
 - [ ] `site_summary.json` has 72 records with exactly the contract's fields, and the script's contract checks pass
-- [ ] Sum checks in `site_summary_check.md` pass
+- [ ] The printed sum checks pass
 - [ ] Known gaps match data_notes.md, or differences are explained
-- [ ] **You** review the per-site table for plausibility: *Culex* near zero at CJR and SOL and highest at the mid-elevation sites (PUU, WAI, COO), matching `reports/coverage.md`
+- [ ] **You** review the per-site table for plausibility: *Culex* near zero at CJR and SOL and highest at the mid-elevation sites (PUU, WAI, COO)
 
 ### Step 1.6: Station summaries
 **Goal:** per-station totals for the station hover tooltips. **Must be done before Step 2.6.**
 
 **Prompt:**
-> Read PLAN.md and data-pipeline/reports/data_notes.md. Do Step 1.6 only. Write `scripts/05b_station_summary.py` producing `public/data/station_summary.json` exactly as described in the Data contract, reusing the same rules and helper logic as `scripts/05_site_summary.py`: May 2002 – Oct 2004 only, CO2 traps for abundance, all dissected mosquitoes for infection, station 200 dropped from bird counts, NOBI events included, and `keep_default_na=False` for the bird count file.
+> Read PLAN.md and data-pipeline/reports/data_notes.md. Do Step 1.6 only. Write `scripts/04b_station_summary.py` producing `public/data/station_summary.json` exactly as described in the Data contract (plus a CSV copy, `processed/station_summary.csv`), using the same rules as `scripts/04_site_summary.py`: May 2002 – Oct 2004 only, CO2 traps for abundance, all dissected mosquitoes for infection, station 200 dropped from bird counts, NOBI events included, and `keep_default_na=False` for the bird count file.
 >
-> Also write `reports/station_summary_check.md` with:
+> Also print:
 > 1. Per-site sums of station trap nights, mosquitoes examined (midgut and salivary), and counting events, compared with the `all` values in `site_summary.json`. They must be equal.
 > 2. The stations with the highest *Culex* per trap night at each site.
 
+**Revised:** originally `05b_station_summary.py`, which imported the site summary script's loading code and wrote `reports/station_summary_check.md`. Renamed `04b_station_summary.py`; it now loads its own data with the same rules (the sum checks confirm the two agree) and prints its checks. `station_summary.json` is unchanged.
+
 **Done when:**
 - [ ] `station_summary.json` has 405 records with exactly the contract's fields
-- [ ] Sum checks in `station_summary_check.md` pass
+- [ ] The printed sum checks pass
 
 ---
 
@@ -644,5 +662,6 @@ Record choices here as you make them so every session and teammate stays in sync
 | 2026-11-05 | Station hover shows all-seasons totals, with infection as counts not percentages | Station sample sizes are small |
 | 2026-11-05 | Station data stays fixed at all seasons and is labeled as such: tooltip heading "All seasons combined (May 2002 – Oct 2004)", "all seasons" labels on site averages and the legend, and a "Station totals don't change by season" note when another period is selected (Steps 2.6, 4.2) | Site markers change by season but stations can't (too little data per station per season). Clear labels stop users from reading station values as belonging to the selected season, while keeping the within-site detail |
 | 2026-11-10 | Reference pages live in a top bar of tabs that open a large overlay over the map (Step 2.7). First tab: "About the station data"; Step 7.2 adds data sources as another tab. The station legend links to the explainer; the tooltip stays unclickable | Gives the station numbers a full plain-language explanation without crowding the tooltip or side panel, and keeps the map state intact while reading |
+| 2026-11-12 | Pipeline revision: scripts rewritten as plain top-to-bottom pandas steps; findings printed instead of written to markdown reports (old reports deleted, kept in git history); metadata cross-references hardcoded; `04_coverage.py` removed; `05`/`05b` renamed `04_site_summary.py`/`04b_station_summary.py`; CSV copies of the summaries in `data-pipeline/processed/` (committed). `public/data/` files are byte-for-byte unchanged | Easier to read and explain each processing step. One-time investigations (station 200, metadata, period coverage) were done; their conclusions are kept in data_notes.md and this log |
 | | Malaria zone temperature source: _(Step 3.3)_ | |
 | | Refuge area figures: _(Step 3.3)_ | |

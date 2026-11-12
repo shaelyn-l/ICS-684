@@ -1,180 +1,212 @@
 """Step 1.1: inspect the raw field-data CSVs before any processing.
 
-Reads every CSV in raw/biocomplexity_2001_2004/ and raw/bird_malaria_2001_2005/
-and writes reports/inspection.md. Read-only: no data is transformed or saved.
+Basic exploratory look at each raw file using pandas: size, columns, types,
+empty cells, summary statistics, site/station values, date ranges, species
+values, and the first rows. Read-only: nothing is changed or saved.
 
 Run from anywhere:  python data-pipeline/scripts/01_inspect.py
 """
 
-import re
-import sys
-import warnings
 from pathlib import Path
 
 import pandas as pd
 
-PIPELINE = Path(__file__).resolve().parent.parent
-RAW = PIPELINE / "raw"
-REPORT = PIPELINE / "reports" / "inspection.md"
-FOLDERS = ["biocomplexity_2001_2004", "bird_malaria_2001_2005"]
+# file locations, built from where this script lives so it runs from any folder
+RAW = Path(__file__).resolve().parent.parent / "raw"
+BIO = RAW / "biocomplexity_2001_2004"
+MALARIA = RAW / "bird_malaria_2001_2005"
 
-# Columns are found by name, case-insensitively. Adjust these if the report
-# shows a site, date, or species column being missed.
-SITE_PATTERN = re.compile(r"site|location|^loc|station|transect", re.I)
-CROSS_FILE_PATTERN = re.compile(r"site|location|^loc", re.I)  # site codes only, not station numbers
-DATE_PATTERN = re.compile(r"date", re.I)
-SPECIES_PATTERN = re.compile(r"spec|^spp?$|^sp_|taxon|alphacode", re.I)
+# show every column and row when printing, instead of hiding the middle with "..."
+pd.set_option("display.max_columns", None)
+pd.set_option("display.max_rows", None)
+pd.set_option("display.width", 250)
 
-# Values these files appear to use in place of empty cells. Counted, not changed.
-MISSING_CODES = [9999, -9999, "9999", "-9999", "ND", "NA", "N/A"]
-
-MAX_UNIQUE_LISTED = 100  # longer lists of unique values are cut off
+# values these files use in place of empty cells; they are counted, not changed
+MISSING_CODES = [9999, -9999, "9999", "-9999", "ND", "N/A"]
 
 
-def read_csv(path):
-    """Read a CSV as-is, trying UTF-8 first, then Latin-1 (common in USGS exports)."""
-    for encoding in ("utf-8", "latin-1"):
-        try:
-            return pd.read_csv(path, encoding=encoding, low_memory=False), encoding
-        except UnicodeDecodeError:
-            continue
-    raise ValueError(f"could not decode {path}")
+# ===========================================================================
+# 1. Bird count data
+# ===========================================================================
+print("=" * 80)
+print("BIRD COUNT DATA")
+df_counts = pd.read_csv(BIO / "Biocomplexity_bird count data.csv")
+
+# general formatting info on dataset
+print(df_counts.shape)
+print(df_counts.columns.tolist())
+print(df_counts.head())
+
+# column types, empty cells, and missing-value codes per column
+print(df_counts.dtypes)
+print(df_counts.isna().sum())
+print(df_counts.isin(MISSING_CODES).sum())
+
+# dataset description (count, mean, min, max of the number columns) and unique values per column
+print(df_counts.describe())
+print(df_counts.nunique())
+
+# site, station, and transect values
+print(df_counts["site"].value_counts())
+print(df_counts["station"].value_counts())
+print(df_counts["transect"].value_counts())
+
+# date range; errors="coerce" turns unreadable dates into NaT so they can be counted
+counts_dates = pd.to_datetime(df_counts["obsvdate"], format="%m/%d/%Y", errors="coerce")
+print("obsvdate:", counts_dates.min(), "to", counts_dates.max(), "| unreadable:", counts_dates.isna().sum())
+
+# bird count rows per calendar month (1 = January), to see when counting rounds happened;
+# rounds about every three months fit the Hawaiian wet (Nov–Apr) and dry (May–Oct) seasons
+print(counts_dates.dt.month.value_counts().sort_index())
+
+# species values (4-letter bird codes)
+print(df_counts["alphacode"].value_counts())
 
 
-def cell(value):
-    """Format a value for a markdown table cell."""
-    if pd.isna(value):
-        return ""
-    return str(value).replace("|", "\\|").replace("\n", " ")
+# ===========================================================================
+# 2. Mosquito dissection (infection and parity) data
+# ===========================================================================
+print("=" * 80)
+print("MOSQUITO DISSECTION DATA")
+df_dissect = pd.read_csv(BIO / "Biocomplexity_mosquito avian malaria infection and parity data.csv")
+
+# general formatting info on dataset
+print(df_dissect.shape)
+print(df_dissect.columns.tolist())
+print(df_dissect.head())
+
+# column types, empty cells, and missing-value codes per column
+print(df_dissect.dtypes)
+print(df_dissect.isna().sum())
+print(df_dissect.isin(MISSING_CODES).sum())
+
+# dataset description and unique values per column
+print(df_dissect.describe())
+print(df_dissect.nunique())
+
+# site, station, and transect values
+print(df_dissect["site"].value_counts())
+print(df_dissect["station"].value_counts())
+print(df_dissect["transect"].value_counts())
+
+# date ranges; this file writes dates as year-month-day, unlike the others
+collected = pd.to_datetime(df_dissect["date_collected"], format="%Y-%m-%d", errors="coerce")
+dissected = pd.to_datetime(df_dissect["date_dissected"], format="%Y-%m-%d", errors="coerce")
+print("date_collected:", collected.min(), "to", collected.max(),
+      "| unreadable:", collected.isna().sum())
+print("date_dissected:", dissected.min(), "to", dissected.max(),
+      "| empty or unreadable:", dissected.isna().sum())
+
+# species values
+print(df_dissect["species"].value_counts())
 
 
-def md_table(headers, rows):
-    lines = ["| " + " | ".join(cell(h) for h in headers) + " |",
-             "|" + "---|" * len(headers)]
-    lines += ["| " + " | ".join(cell(v) for v in row) + " |" for row in rows]
-    return "\n".join(lines)
+# ===========================================================================
+# 3. Mosquito capture data
+# ===========================================================================
+print("=" * 80)
+print("MOSQUITO CAPTURE DATA")
+df_capture = pd.read_csv(BIO / "Biocomplexity_mosquito capture data.csv")
+
+# general formatting info on dataset
+print(df_capture.shape)
+print(df_capture.columns.tolist())
+print(df_capture.head())
+
+# column types, empty cells, and missing-value codes per column
+print(df_capture.dtypes)
+print(df_capture.isna().sum())
+print(df_capture.isin(MISSING_CODES).sum())
+
+# dataset description and unique values per column
+print(df_capture.describe())
+print(df_capture.nunique())
+
+# site, station, and transect values
+print(df_capture["site"].value_counts())
+print(df_capture["station"].value_counts())
+print(df_capture["transect"].value_counts())
+
+# date range
+capture_dates = pd.to_datetime(df_capture["date"], format="%m/%d/%Y", errors="coerce")
+print("date:", capture_dates.min(), "to", capture_dates.max(), "| unreadable:", capture_dates.isna().sum())
+
+# no species column: mosquitoes are counted in separate culex / aedes / wyeomyia columns
 
 
-def column_summary(df):
-    rows = []
-    for col in df.columns:
-        s = df[col]
-        lo = hi = None
-        if pd.api.types.is_numeric_dtype(s) and s.notna().any():
-            lo, hi = s.min(), s.max()
-        codes = s.astype(str).str.strip().value_counts()
-        found = {str(c): codes[str(c)] for c in MISSING_CODES if str(c) in codes}
-        coded = ", ".join(f"{c}×{n}" for c, n in found.items())
-        rows.append([col, str(s.dtype), s.isna().sum(), coded, s.nunique(dropna=True), lo, hi])
-    return md_table(["column", "type", "nulls", "missing codes", "unique", "min", "max"], rows)
+# ===========================================================================
+# 4. Sampling station coordinates
+# ===========================================================================
+print("=" * 80)
+print("SAMPLING STATION COORDINATES")
+df_coords = pd.read_csv(BIO / "Biocomplexity_sampling station spatial coordinates.csv")
+
+# general formatting info on dataset
+print(df_coords.shape)
+print(df_coords.columns.tolist())
+print(df_coords.head())
+
+# column types, empty cells, and missing-value codes per column
+print(df_coords.dtypes)
+print(df_coords.isna().sum())
+print(df_coords.isin(MISSING_CODES).sum())
+
+# dataset description (includes the longitude, latitude, and elevation ranges) and unique values
+print(df_coords.describe())
+print(df_coords.nunique())
+
+# site, station, and transect values
+print(df_coords["site"].value_counts())
+print(df_coords["station"].value_counts())
+print(df_coords["transect"].value_counts())
+
+# no date or species columns in this file
 
 
-def value_counts_section(df, cols, label):
-    out = []
-    for col in cols:
-        counts = df[col].value_counts(dropna=False)
-        out += [f"**{label} column `{col}`**: {len(counts)} unique values", ""]
-        shown = counts.head(MAX_UNIQUE_LISTED)
-        out += [md_table(["value", "rows"], [[("(null)" if pd.isna(v) else v), n]
-                                             for v, n in shown.items()]), ""]
-        if len(counts) > MAX_UNIQUE_LISTED:
-            out += [f"_…{len(counts) - MAX_UNIQUE_LISTED} more not shown._", ""]
-    return out
+# ===========================================================================
+# 5. Bird blood samples (banding diagnostics)
+# ===========================================================================
+print("=" * 80)
+print("BIRD BLOOD SAMPLES")
+df_blood = pd.read_csv(MALARIA / "Banding Diagnostics Data Final_revised.csv", low_memory=False)
+
+# general formatting info on dataset
+print(df_blood.shape)
+print(df_blood.columns.tolist())
+print(df_blood.head())
+
+# column types, empty cells, and missing-value codes per column
+print(df_blood.dtypes)
+print(df_blood.isna().sum())
+print(df_blood.isin(MISSING_CODES).sum())
+
+# dataset description and unique values per column
+print(df_blood.describe())
+print(df_blood.nunique())
+
+# site values (this file calls the site column LOCATION and has no station or transect)
+print(df_blood["LOCATION"].value_counts())
+
+# date range
+blood_dates = pd.to_datetime(df_blood["DATE"], format="%m/%d/%Y", errors="coerce")
+print("DATE:", blood_dates.min(), "to", blood_dates.max(), "| unreadable:", blood_dates.isna().sum())
+
+# species values
+print(df_blood["SPECIES"].value_counts())
 
 
-def date_section(df, cols):
-    rows = []
-    for col in cols:
-        raw = df[col].dropna().astype(str)
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore")
-            parsed = pd.to_datetime(raw, errors="coerce", format="mixed")
-        n_bad = parsed.isna().sum()
-        example = raw.iloc[0] if len(raw) else None
-        rows.append([col, example, parsed.min(), parsed.max(), n_bad])
-    return md_table(["column", "example raw value", "min", "max", "unparseable"], rows)
+# ===========================================================================
+# Cross-file check: do all five files use the same site codes?
+# ===========================================================================
+print("=" * 80)
+print("SITE CODES IN EACH FILE")
+print("bird counts: ", sorted(df_counts["site"].unique()))
+print("dissections: ", sorted(df_dissect["site"].unique()))
+print("captures:    ", sorted(df_capture["site"].unique()))
+print("coordinates: ", sorted(df_coords["site"].unique()))
+print("blood:       ", sorted(df_blood["LOCATION"].unique()))
 
-
-def inspect_file(path, site_values):
-    df, encoding = read_csv(path)
-    name = path.relative_to(RAW).as_posix()
-    site_cols = [c for c in df.columns if SITE_PATTERN.search(c)]
-    date_cols = [c for c in df.columns if DATE_PATTERN.search(c)]
-    species_cols = [c for c in df.columns if SPECIES_PATTERN.search(c)]
-
-    out = [f"## `{name}`", "",
-           f"- Rows: {len(df):,}",
-           f"- Columns: {len(df.columns)}",
-           f"- Encoding: {encoding}",
-           f"- Site/location columns found: {', '.join(f'`{c}`' for c in site_cols) or 'none'}",
-           f"- Date columns found: {', '.join(f'`{c}`' for c in date_cols) or 'none'}",
-           f"- Species columns found: {', '.join(f'`{c}`' for c in species_cols) or 'none'}",
-           "", "### Columns, types, and nulls", "", column_summary(df), ""]
-
-    out += ["### Site / location values", ""]
-    out += value_counts_section(df, site_cols, "Site") if site_cols else ["_No site or location column found._"]
-    out.append("")
-
-    out += ["### Date range", ""]
-    out.append(date_section(df, date_cols) if date_cols else "_No date column found._")
-    out.append("")
-
-    out += ["### Species values", ""]
-    out += value_counts_section(df, species_cols, "Species") if species_cols else ["_No species column found._"]
-    out.append("")
-
-    out += ["### First five rows", "", md_table(df.columns, df.head(5).itertuples(index=False)), ""]
-
-    for col in site_cols:
-        if CROSS_FILE_PATTERN.search(col):
-            for v in df[col].dropna().unique():
-                site_values.setdefault(str(v), set()).add(f"{path.stem}: {col}")
-    return out
-
-
-def cross_file_section(site_values):
-    """Which site codes appear in which file, to check they match."""
-    sources = sorted({src for srcs in site_values.values() for src in srcs})
-    if not sources:
-        return []
-    headers = ["site"] + sources
-    rows = [[v] + ["✓" if s in site_values[v] else "" for s in sources]
-            for v in sorted(site_values)]
-    return ["## Cross-file check: site codes", "",
-            "Each column is one file and its site column. A blank cell means that site "
-            "code does not appear in that file.", "",
-            md_table(headers, rows), ""]
-
-
-def main():
-    out = ["# Raw data inspection", "",
-           "Generated by `scripts/01_inspect.py`. Raw data is read only; nothing is transformed.", ""]
-    site_values = {}
-    files = []
-    for folder in FOLDERS:
-        d = RAW / folder
-        if not d.is_dir():
-            out += [f"**Missing folder:** `raw/{folder}/`. See `raw/README.md`.", ""]
-            continue
-        csvs = sorted(d.rglob("*.csv"))
-        others = sorted(p for p in d.rglob("*") if p.is_file() and p.suffix.lower() != ".csv")
-        out += [f"# Folder `raw/{folder}/`", "",
-                f"CSV files: {len(csvs)}. Other files: "
-                + (", ".join(f"`{p.relative_to(d).as_posix()}`" for p in others) or "none"), ""]
-        for path in csvs:
-            print(f"inspecting {path.relative_to(RAW)}")
-            out += inspect_file(path, site_values)
-            files.append(path)
-
-    if not files:
-        print("No CSVs found. Download the data into data-pipeline/raw/ first (see raw/README.md).")
-        sys.exit(1)
-
-    out += cross_file_section(site_values)
-    REPORT.parent.mkdir(parents=True, exist_ok=True)
-    REPORT.write_text("\n".join(out), encoding="utf-8")
-    print(f"wrote {REPORT.relative_to(PIPELINE)}")
-
-
-if __name__ == "__main__":
-    main()
+# True if every file has exactly the same set of site codes
+site_sets = [set(df_counts["site"]), set(df_dissect["site"]), set(df_capture["site"]),
+             set(df_coords["site"]), set(df_blood["LOCATION"])]
+print("all files match:", all(s == site_sets[0] for s in site_sets))

@@ -2,15 +2,19 @@
 // tooltip means, how it was measured in the field, and how it was calculated.
 //
 // Sources for the numbers below: public/data/station_summary.json,
-// public/data/site_summary.json, data-pipeline/reports/ (data_notes.md,
-// site_summary_check.md, species_check.md), and the dataset metadata
-// (raw/biocomplexity_2001_2004/BiocomplexityDR.xml). Recheck them if the
-// pipeline changes.
+// public/data/site_summary.json, data-pipeline/reports/data_notes.md, the
+// printed checks of data-pipeline/scripts/04_site_summary.py and
+// 04b_station_summary.py, data-pipeline/species_lookup.csv, and the dataset
+// metadata (raw/biocomplexity_2001_2004/BiocomplexityDR.xml). Recheck them if
+// the pipeline changes.
 
 export default function StationExplainer() {
   return (
     <>
       <p>
+        TBD
+      </p>
+      {/* <p>
         When you pick a site, hovering one of its stations shows what was found there. This
         page explains each part of that tooltip: what it means, how it was measured in the
         field, and how it was calculated.
@@ -259,7 +263,7 @@ export default function StationExplainer() {
         </li>
         <li>Infection numbers depend partly on each site's mix of trap types.</li>
         <li>Bird figures are birds seen or heard per count, not numbers of individual birds.</li>
-      </ul>
+      </ul> */}
     </>
   )
 }
