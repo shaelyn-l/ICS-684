@@ -1,0 +1,56 @@
+.station-tooltip {
+  position: fixed;
+  z-index: 3; /* above the side panel */
+  max-width: 320px;
+  padding: 10px 12px;
+  border-radius: 6px;
+  background: #ffffff;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.25);
+  font: 12.5px/1.45 system-ui, -apple-system, 'Segoe UI', sans-serif;
+  color: #1a1a1a;
+  pointer-events: none; /* never blocks the hover underneath */
+}
+
+.station-tooltip__heading {
+  margin-bottom: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: #8a4b00;
+}
+
+.station-tooltip__title {
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+
+.station-tooltip__rows {
+  margin: 0;
+}
+
+.station-tooltip__rows dt {
+  margin-top: 6px;
+  font-weight: 600;
+  color: #444444;
+}
+
+.station-tooltip__rows dd {
+  margin: 0;
+}
+
+.station-tooltip__rows dd > span {
+  display: block;
+}
+
+.station-tooltip__avg {
+  color: #666666;
+}
+
+.station-tooltip__note {
+  margin-top: 8px;
+  padding-top: 6px;
+  border-top: 1px solid #e3e3e3;
+  font-style: italic;
+  color: #555555;
+}

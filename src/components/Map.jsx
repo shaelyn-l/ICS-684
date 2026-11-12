@@ -5,9 +5,11 @@ import {
 import workerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?url'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import {
-  BASEMAP_STYLE, DRAPE_BEFORE_LAYER, ELEVATION_TINT, HILLSHADE, INITIAL_VIEW, MAX_PITCH,
-  SITE_FOCUS, SITE_MARKER, SKY, START_CAMERA, STATION_MARKER, STATIONS_URL, TERRAIN,
+  BASEMAP_STYLE, CULEX_SCALE, DRAPE_BEFORE_LAYER, ELEVATION_TINT, HILLSHADE, INITIAL_VIEW, MAX_PITCH,
+  SITE_FOCUS, SITE_MARKER, SITE_SUMMARY_URL, SKY, START_CAMERA, STATION_MARKER, STATION_SUMMARY_URL,
+  STATIONS_URL, TERRAIN,
 } from '../config/map.js'
+import StationTooltip from './StationTooltip.jsx'
 
 // MapLibre 6 finds its worker relative to its own file, which Vite moves when
 // bundling. Point it at the worker explicitly so dev and build both work.
@@ -69,18 +71,28 @@ function fitToSites(map, sites) {
 // Sites and stations are data-driven layers (not HTML markers) so later steps can
 // restyle and animate them. Added without a beforeId, so they sit above the basemap.
 function addSitesAndStations(map, sites, stations) {
-  map.addSource('stations', { type: 'geojson', data: stations })
+  // generateId gives each station a feature id, used for the hover highlight.
+  map.addSource('stations', { type: 'geojson', data: stations, generateId: true })
   map.addLayer({
     id: 'stations',
     type: 'circle',
     source: 'stations',
     minzoom: STATION_MARKER.minZoom,
     paint: {
-      'circle-radius': STATION_MARKER.radius,
-      'circle-color': STATION_MARKER.color,
       'circle-opacity': STATION_MARKER.opacity,
-      'circle-stroke-color': STATION_MARKER.strokeColor,
-      'circle-stroke-width': STATION_MARKER.strokeWidth,
+      'circle-pitch-scale': 'viewport',
+      ...stationPaint(null),
+    },
+  })
+  // Invisible, larger circles on top of the dots: the hover target.
+  map.addLayer({
+    id: 'stations-hit',
+    type: 'circle',
+    source: 'stations',
+    minzoom: STATION_MARKER.minZoom,
+    paint: {
+      'circle-radius': STATION_MARKER.hitRadius,
+      'circle-opacity': 0,
       'circle-pitch-scale': 'viewport',
     },
   })
@@ -127,6 +139,20 @@ function addSitesAndStations(map, sites, stations) {
   map.on('mouseleave', 'sites', () => { map.getCanvas().style.cursor = '' })
 }
 
+// Adds each station's all-seasons totals (station_summary.json) to its point in
+// stations.geojson, matched by site + station + transect.
+function joinStationSummary(stationPoints, stationSummary) {
+  const key = (p) => `${p.site}|${p.station}|${p.transect}`
+  const byKey = new globalThis.Map(stationSummary.map((r) => [key(r), r]))
+  return {
+    ...stationPoints,
+    features: stationPoints.features.map((f) => ({
+      ...f,
+      properties: { ...f.properties, ...byKey.get(key(f.properties)) },
+    })),
+  }
+}
+
 // Site marker paint for the focused site (or none): focused site larger with a
 // gold outline, other sites dimmed.
 function sitePaint(focused) {
@@ -142,9 +168,33 @@ function sitePaint(focused) {
   }
 }
 
+// Station paint: the focused site's stations are larger and colored by Culex per
+// trap night on the shared scale; all other stations keep the Step 2.3 grey style.
+function stationPaint(focused) {
+  const hovered = ['boolean', ['feature-state', 'hover'], false]
+  const value = ['get', 'culex_per_trap_night']
+  const culexColor = ['case',
+    ['!=', ['typeof', value], 'number'], CULEX_SCALE.noDataColor,
+    ['interpolate', ['linear'], value, ...CULEX_SCALE.stops.flat()]]
+  const inFocus = ['==', ['get', 'site'], focused ?? '']
+  return {
+    'circle-stroke-color': ['case', hovered, STATION_MARKER.hoverStrokeColor,
+      focused ? ['case', inFocus, STATION_MARKER.focusedStrokeColor, STATION_MARKER.strokeColor]
+        : STATION_MARKER.strokeColor],
+    'circle-color': focused ? ['case', inFocus, culexColor, STATION_MARKER.color] : STATION_MARKER.color,
+    'circle-radius': focused ? ['case', inFocus, STATION_MARKER.focusedRadius, STATION_MARKER.radius]
+      : STATION_MARKER.radius,
+    'circle-stroke-width': ['case', hovered, STATION_MARKER.hoverStrokeWidth,
+      focused ? ['case', inFocus, 1, STATION_MARKER.strokeWidth] : STATION_MARKER.strokeWidth],
+  }
+}
+
 function applyFocusStyle(map, focused) {
   if (!map.getLayer('sites')) return
   for (const [prop, value] of Object.entries(sitePaint(focused))) map.setPaintProperty('sites', prop, value)
+  for (const [prop, value] of Object.entries(stationPaint(focused))) map.setPaintProperty('stations', prop, value)
+  map.setPaintProperty('stations', 'circle-opacity', focused
+    ? ['case', ['==', ['get', 'site'], focused], 1, STATION_MARKER.opacity] : STATION_MARKER.opacity)
   map.setPaintProperty('site-labels', 'text-opacity',
     focused ? ['case', ['==', ['get', 'site'], focused], 1, SITE_MARKER.dimmedOpacity] : 1)
 }
@@ -213,7 +263,9 @@ function sitePopup(p) {
 
 // focus: { site, id } — a request to focus a site (site = null for the overview).
 // A new id means a new request, so re-clicking the same site flies there again.
-export default function Map({ sites, focus, onFocusSite }) {
+// stationNote: optional extra line for the station tooltip (Step 4.2 uses it).
+// hoverDisabled: true while the info overlay is open; no station tooltip shows.
+export default function Map({ sites, focus, onFocusSite, stationNote, hoverDisabled }) {
   const containerRef = useRef(null)
   const mapRef = useRef(null)
   const startCameraRef = useRef(null)
@@ -222,8 +274,12 @@ export default function Map({ sites, focus, onFocusSite }) {
   const onFocusRef = useRef(onFocusSite)
   const [mapLoaded, setMapLoaded] = useState(false)
   const [ready, setReady] = useState(false)
+  const [hover, setHover] = useState(null) // { station, siteAverage, x, y } while hovering a station
 
   useEffect(() => { onFocusRef.current = onFocusSite }, [onFocusSite])
+
+  // Opening the overlay drops any tooltip, so a stale one can't reappear on close.
+  useEffect(() => { if (hoverDisabled) setHover(null) }, [hoverDisabled])
 
   useEffect(() => {
     // MapLibre tracks window resizes itself (trackResize defaults to true).
@@ -248,16 +304,45 @@ export default function Map({ sites, focus, onFocusSite }) {
   }, [])
 
   // Once the basemap and the site data are both in, fit the starting view and add
-  // the markers. Sites come from App (loaded once); stations are loaded here.
+  // the markers. Sites come from App (loaded once); stations, their all-seasons
+  // totals, and the site averages are loaded here.
   useEffect(() => {
     if (!mapLoaded || !sites) return
     const map = mapRef.current
     let cancelled = false
-    fetch(STATIONS_URL).then((r) => r.json()).then((stations) => {
+    const getJson = (url) => fetch(url).then((r) => r.json())
+    Promise.all([getJson(STATIONS_URL), getJson(STATION_SUMMARY_URL), getJson(SITE_SUMMARY_URL)])
+      .then(([stationPoints, stationSummary, siteSummary]) => {
       if (cancelled || map.getSource('sites')) return
+      const stations = joinStationSummary(stationPoints, stationSummary)
+      const siteAverages = Object.fromEntries(
+        siteSummary.filter((r) => r.period === 'all').map((r) => [r.site, r]))
       stationsRef.current = stations
       startCameraRef.current = fitToSites(map, sites)
       addSitesAndStations(map, sites, stations)
+
+      let hoveredId = null
+      const setHoverState = (id) => {
+        if (hoveredId !== null) map.setFeatureState({ source: 'stations', id: hoveredId }, { hover: false })
+        hoveredId = id
+        if (id !== null) map.setFeatureState({ source: 'stations', id }, { hover: true })
+      }
+      map.on('mousemove', 'stations-hit', (e) => {
+        const feature = e.features[0]
+        setHoverState(feature.id)
+        map.getCanvas().style.cursor = 'pointer'
+        setHover({
+          station: feature.properties,
+          siteAverage: siteAverages[feature.properties.site],
+          x: e.originalEvent.clientX,
+          y: e.originalEvent.clientY,
+        })
+      })
+      map.on('mouseleave', 'stations-hit', () => {
+        setHoverState(null)
+        map.getCanvas().style.cursor = ''
+        setHover(null)
+      })
       map.on('click', 'sites', (e) => {
         const site = e.features[0].properties.site
         onFocusRef.current(site)
@@ -269,7 +354,7 @@ export default function Map({ sites, focus, onFocusSite }) {
         popupRef.current = { popup, site }
       })
       setReady(true)
-    })
+      })
     return () => { cancelled = true }
   }, [mapLoaded, sites])
 
@@ -287,5 +372,10 @@ export default function Map({ sites, focus, onFocusSite }) {
     moveCamera(map, focus.site ? siteCamera(map, focus.site, stationsRef.current) : startCameraRef.current)
   }, [focus, ready])
 
-  return <div ref={containerRef} className="map" />
+  return (
+    <>
+      <div ref={containerRef} className="map" />
+      {hover && !hoverDisabled && <StationTooltip {...hover} note={stationNote} />}
+    </>
+  )
 }

@@ -7,9 +7,24 @@ body,
   overflow: hidden;
 }
 
-/* Contain the closed (off-screen) side panel so it never makes the page scrollable. */
+:root {
+  --top-bar-height: 48px; /* Step 2.7 top bar */
+}
+
+/* Top bar on top; the map and side panel fill the rest, below it. */
 #root {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Everything under the top bar: map, side panel, and map controls are positioned
+   inside this box, so none of them can sit behind the bar. It also contains the
+   closed (off-screen) side panel so it never makes the page scrollable. */
+.app-body {
   position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+  height: calc(100% - var(--top-bar-height));
   overflow: clip;
 }
 

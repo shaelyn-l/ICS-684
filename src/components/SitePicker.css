@@ -38,6 +38,60 @@
   box-shadow: 0 0 0 2px #f5b700;
 }
 
+.station-legend {
+  margin-top: 14px;
+  font-size: 12.5px;
+}
+
+.station-legend__title {
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+
+.station-legend__bar {
+  height: 10px;
+  border: 1px solid #d0d0d0;
+  border-radius: 3px;
+}
+
+.station-legend__labels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 2px;
+  color: #444444;
+}
+
+.station-legend__note {
+  margin-top: 6px;
+  color: #666666;
+}
+
+.station-legend__nodata {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  margin: 0 3px 0 6px;
+  border-radius: 50%;
+  vertical-align: -1px;
+}
+
+/* Looks like a link; it's a button because it opens the overlay rather than navigating. */
+.site-picker .station-legend__explain {
+  margin-top: 6px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: #1f4e79;
+  font-weight: 600;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.site-picker .station-legend__explain:hover {
+  background: none;
+  color: #163a5c;
+}
+
 .site-picker__loading {
   margin: 0;
   color: #666666;

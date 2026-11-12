@@ -1,0 +1,53 @@
+.top-bar {
+  display: flex;
+  flex: 0 0 var(--top-bar-height);
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  height: var(--top-bar-height);
+  padding: 0 16px;
+  box-sizing: border-box;
+  background: #1f4e79;
+  color: #ffffff;
+  font: 14px/1.4 system-ui, -apple-system, 'Segoe UI', sans-serif;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.25);
+  z-index: 4; /* shadow falls over the map */
+}
+
+.top-bar__title {
+  font-size: 16px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.top-bar__tabs {
+  display: flex;
+  gap: 6px;
+}
+
+.top-bar__tab {
+  padding: 6px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  border-radius: 6px;
+  background: transparent;
+  color: #ffffff;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.top-bar__tab:hover {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.top-bar__tab:focus-visible {
+  outline: 2px solid #f5b700;
+  outline-offset: 2px;
+}
+
+/* Tab whose page is open: matches the gold used for the focused site. */
+.top-bar__tab[aria-expanded='true'] {
+  border-color: #f5b700;
+  background: #ffffff;
+  color: #1f4e79;
+}

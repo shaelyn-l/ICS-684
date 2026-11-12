@@ -57,6 +57,8 @@ export const ELEVATION_TINT = {
 // foreground and Mauna Loa rising behind the high sites.
 export const SITES_URL = `${import.meta.env.BASE_URL}data/sites.geojson`
 export const STATIONS_URL = `${import.meta.env.BASE_URL}data/stations.geojson`
+export const STATION_SUMMARY_URL = `${import.meta.env.BASE_URL}data/station_summary.json`
+export const SITE_SUMMARY_URL = `${import.meta.env.BASE_URL}data/site_summary.json`
 export const START_CAMERA = {
   pitch: 60,
   bearing: 270,
@@ -104,6 +106,29 @@ export const STATION_MARKER = {
   opacity: 0.7,
   strokeColor: '#ffffff',
   strokeWidth: 0.75,
+  // Step 2.6: stations of the focused site are larger and colored by Culex.
+  focusedRadius: 5.5,
+  focusedStrokeColor: '#666666', // keeps the palest colors visible on light ground
+  hoverStrokeColor: '#111111',
+  hoverStrokeWidth: 2.5,
+  hitRadius: 11, // invisible hover target, larger than the dot so it's easy to hit
+}
+
+// Culex per trap night, all seasons, for the focused site's stations (Step 2.6).
+// One shared scale for every site, so the same color means the same value
+// everywhere. Values are skewed (median 0.19, 90th percentile 1.9, max 4.7 per
+// night; 98 of 405 stations caught none), so the stops are spaced where most
+// values fall. Values at or above the last stop get the darkest color.
+export const CULEX_SCALE = {
+  stops: [
+    [0, '#fff5eb'],
+    [0.25, '#fdd0a2'],
+    [0.5, '#fdae6b'],
+    [1, '#f16913'],
+    [2, '#d94801'],
+    [4, '#7f2704'],
+  ],
+  noDataColor: '#9e9e9e',
 }
 
 // How far the camera can tilt toward the horizon (MapLibre's default is 60).

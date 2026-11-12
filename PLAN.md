@@ -52,7 +52,7 @@ This plan is written to be fed to Claude Code **one step at a time**. Each step 
 ├── public/
 │   └── data/                ← processed, web-ready files the app loads
 └── src/                     ← React app
-    ├── components/          ← Map, LayerControls, SeasonButtons, SitePicker, StationTooltip, FlatChart, Story...
+    ├── components/          ← Map, LayerControls, SeasonButtons, SitePicker, StationTooltip, TopBar, InfoOverlay, FlatChart, Story...
     ├── config/              ← colors, layer settings, chapter definitions
     └── App.jsx
 ```
@@ -430,6 +430,54 @@ Each script reads from `raw/`, writes to `public/data/` or `reports/`, and can b
 - [ ] Station coloring appears only for the selected site and uses one shared scale (SOL and CJR look uniformly pale)
 - [ ] The legend appears in the "Sites" section below the site buttons only while a site is focused
 
+### Step 2.7: Top bar and station data explainer
+**Goal:** a top bar that holds tabs for reference pages about the visualization, with one tab for now, "About the station data". It explains, in plain language, what each number in the station tooltip means, how it was measured in the field, and how it was calculated, so users can read the tooltip without guessing. Later steps add more tabs (Step 7.2 adds data sources and credits). **Requires Step 2.6.**
+
+**Prompt:**
+> Read PLAN.md and `data-pipeline/reports/data_notes.md`. Do Step 2.7 only. Desktop only.
+>
+> **Top bar (`TopBar` component)**
+> - A thin bar across the top of the page, always visible: the project title on the left ("Hawaiʻi Island Avian Malaria"), tab buttons on the right. For now there is one tab: "About the station data".
+> - Build the tab list from a small config array (label, id, content component) so later steps add a tab by adding one entry.
+> - The map, the side panel and its toggle, and the map's navigation and home controls all sit below the bar; nothing is hidden behind it. Put the bar's height in one CSS variable (like `--panel-offset`) and use it for these offsets.
+>
+> **Info overlay (`InfoOverlay` component)**
+> - Clicking a tab opens its page in a large, centered, scrollable reading panel over a dimmed map. Close it with an X button, Escape, or a click on the dimmed area. The active tab is highlighted while its page is open.
+> - The map keeps its camera, focused site, and side panel state underneath, and comes back exactly as it was on close.
+> - While the overlay is open, Escape only closes the overlay (it must not also reset the map to the overview, as Escape does in Step 2.5), and station hover tooltips don't appear.
+> - Make it an accessible dialog: focus moves into it on open, Tab stays inside it, and focus returns to the tab button on close.
+>
+> **Link from the legend:** under the Step 2.6 station legend in the side panel, add a "What do these numbers mean?" link that opens the "About the station data" page. The tooltip itself stays unclickable (it follows the mouse).
+>
+> **Page content.** Keep the text in its own file (e.g. `src/content/stationExplainer.jsx`), separate from the overlay component, so wording can be edited without touching layout. Use short sections with headings, plain language, and a short definition the first time each term appears. Write it for a general audience. Check every number in it against `public/data/`, `data-pipeline/reports/`, or the dataset metadata (`raw/biocomplexity_2001_2004/BiocomplexityDR.xml`) before using it, and don't state anything the data or metadata don't support. Sections:
+> 1. **What the stations are.** Each site has 45 sampling stations: 5 parallel transects (0–800, 200 m apart) with 9 stations each (100–900, 100 m apart). Station values are totals for all five seasons, May 2002 – Oct 2004, because there's too little data per station to split by season (see Step 2.6). Colors use one shared scale at every site.
+> 2. **What *Culex* is and why it matters.** *Culex quinquefasciatus*, the southern house mosquito: introduced to Hawaiʻi in the 1800s, and the only mosquito there that carries avian malaria (*Plasmodium relictum*). Honeycreepers have little resistance to the disease. The parasite can't complete its development in the mosquito below about 13°C, which is why cool, high forests are refuges (link to the malaria zone thresholds in this plan).
+> 3. **How mosquitoes were caught.** Two trap types: CO2 traps baited with dry ice (attract females looking for a blood meal, the ones that bite birds) and gravid traps (attract females ready to lay eggs). Traps were set before sunset and emptied the next morning, 4–9 nights per site per month. A **trap night** is one trap running for one night.
+> 4. ***Culex* per trap night.** Total *Culex* caught ÷ trap nights, a rate (catch per unit effort), not a proportion; it can be above 1. Dividing by trap nights adjusts for stations being trapped different numbers of times (about 36–90 CO2 trap nights each). Only CO2 traps are used for this figure, and why. The site-wide figure pools the whole site: all *Culex* caught ÷ all trap nights at its 45 stations. Explain why trap nights at different stations on the same night add up (each is a separate trap catching different mosquitoes) and why the total is larger than the number of calendar days.
+> 5. **Mosquito infection: gut vs. salivary glands.** Some live *Culex* were taken to a lab and dissected (about 29% of those caught; the share ranged from about 9% to 75% by month, and the dataset doesn't say how they were chosen). Explain:
+>    - the parasite's path: picked up from an infected bird → cysts (oocysts) grow on the gut wall → they burst and release sporozoites → sporozoites reach the salivary glands → the mosquito can infect birds when it bites;
+>    - **gut** = infected (exposed to an infected bird), not yet able to pass it on; **salivary glands** = infectious, the better measure of risk to birds;
+>    - a gut-only infection may never become infectious: the mosquito can die first, it can be too cold, or the infection can fail;
+>    - the two lines usually show the same number of mosquitoes because both organs come from the same dissected mosquitoes; they differ by a few when one organ's slide was missing or unreadable (left out, not counted as negative);
+>    - why a station can have more salivary than gut positives (in later infections the gut stage is gone);
+>    - why counts are shown instead of percentages (small samples);
+>    - infection uses mosquitoes from both trap types, and gravid-trap mosquitoes test positive far more often (they have already fed), so a site's trap mix affects its numbers (CRA is the clearest case).
+> 6. **Bird counts.** About every three months, an observer stood at each odd-numbered station (100, 300, 500, 700, 900) for an 8-minute count and recorded every bird seen or heard. "Per count" = birds recorded ÷ counts, including counts with no birds. It's a relative measure for comparing places, not a population count: a bird can be recorded twice and quiet birds are missed. **Honeycreepers** are the six honeycreeper species in the data (list them with Hawaiian names); **non-native birds** are all introduced species. Other native birds (e.g. ʻŌmaʻo, ʻElepaio, ʻIo) are in neither figure. Even-numbered stations had no bird counts, so those lines don't appear there.
+> 7. **Reading a tooltip.** Walk through one real station's tooltip line by line (e.g. PUU station 700, transect 400), using its actual values from `station_summary.json`.
+> 8. **Limits to keep in mind.** A short list: all-seasons totals only; small samples at many stations; infection sample not chosen by a documented method and weighted by month; trap-mix effect on infection; bird figures are detections, not individuals.
+>
+> No new dependencies.
+
+**Done when:**
+- [ ] The top bar shows the title and an "About the station data" tab, and the map, side panel, toggle, and map controls all sit fully below it
+- [ ] Clicking the tab opens the overlay; the X, Escape, and a click outside all close it, and the map is unchanged afterward (same camera, focused site, and panel)
+- [ ] Escape with the overlay open closes only the overlay and doesn't reset the map
+- [ ] Focus moves into the overlay, stays inside while it's open, and returns to the tab button on close
+- [ ] The legend's "What do these numbers mean?" link opens the same page
+- [ ] The page covers all eight sections; every number in it matches the data files, reports, or metadata, and the worked example matches that station's tooltip
+- [ ] Adding a second tab only needs a new config entry and content file
+- [ ] **You** read the page and approve the wording
+
 ---
 
 # Phase 3: Environment layers
@@ -595,5 +643,6 @@ Record choices here as you make them so every session and teammate stays in sync
 | 2026-11-04 | Time steps in the app are season buttons: one per season plus `all`, `wet` and `dry` | Five seasons plus three combined periods suit a small set of labeled buttons |
 | 2026-11-05 | Station hover shows all-seasons totals, with infection as counts not percentages | Station sample sizes are small |
 | 2026-11-05 | Station data stays fixed at all seasons and is labeled as such: tooltip heading "All seasons combined (May 2002 – Oct 2004)", "all seasons" labels on site averages and the legend, and a "Station totals don't change by season" note when another period is selected (Steps 2.6, 4.2) | Site markers change by season but stations can't (too little data per station per season). Clear labels stop users from reading station values as belonging to the selected season, while keeping the within-site detail |
+| 2026-11-10 | Reference pages live in a top bar of tabs that open a large overlay over the map (Step 2.7). First tab: "About the station data"; Step 7.2 adds data sources as another tab. The station legend links to the explainer; the tooltip stays unclickable | Gives the station numbers a full plain-language explanation without crowding the tooltip or side panel, and keeps the map state intact while reading |
 | | Malaria zone temperature source: _(Step 3.3)_ | |
 | | Refuge area figures: _(Step 3.3)_ | |
