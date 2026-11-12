@@ -1,0 +1,132 @@
+.side-panel {
+  --slide: 250ms ease;
+  position: absolute;
+  z-index: 2;
+  background: #ffffff;
+  box-shadow: 0 0 16px rgba(0, 0, 0, 0.18);
+  font: 14px/1.45 system-ui, -apple-system, 'Segoe UI', sans-serif;
+  color: #1a1a1a;
+  transition: transform var(--slide);
+}
+
+/* Desktop: panel on the right, slides out to the right when closed. */
+.side-panel.is-side {
+  top: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.side-panel.is-side.is-closed {
+  transform: translateX(100%);
+}
+
+/* Narrow screens: bottom sheet, slides down when closed. */
+.side-panel.is-sheet {
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 12px 12px 0 0;
+}
+
+.side-panel.is-sheet.is-closed {
+  transform: translateY(100%);
+}
+
+.side-panel.is-dragging {
+  transition: none;
+  user-select: none;
+}
+
+.side-panel__content {
+  height: 100%;
+  overflow-y: auto;
+  padding: 16px 20px;
+  box-sizing: border-box;
+}
+
+.side-panel__section + .side-panel__section {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid #e3e3e3;
+}
+
+.side-panel__section h2 {
+  margin: 0 0 8px;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.side-panel__placeholder {
+  margin: 0;
+  color: #666666;
+}
+
+/* Toggle tab: sits outside the panel's edge so it stays visible when closed. */
+.side-panel__toggle {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  background: #ffffff;
+  color: #1a1a1a;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.18);
+}
+
+.side-panel.is-side .side-panel__toggle {
+  top: 50%;
+  left: -28px;
+  width: 28px;
+  height: 56px;
+  transform: translateY(-50%);
+  border-radius: 8px 0 0 8px;
+}
+
+.side-panel.is-sheet .side-panel__toggle {
+  top: -28px;
+  left: 50%;
+  width: 64px;
+  height: 28px;
+  transform: translateX(-50%);
+  border-radius: 8px 8px 0 0;
+}
+
+.side-panel__toggle:focus-visible,
+.side-panel__resize:focus-visible {
+  outline: 2px solid #1f4e79;
+  outline-offset: 2px;
+}
+
+/* Resize handle: a strip along the panel's left edge. */
+.side-panel__resize {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -4px;
+  width: 8px;
+  cursor: ew-resize;
+  touch-action: none;
+}
+
+.side-panel__resize:hover,
+.side-panel.is-dragging .side-panel__resize {
+  background: rgba(31, 78, 121, 0.25);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .side-panel {
+    transition: none;
+  }
+}

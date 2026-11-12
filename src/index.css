@@ -1,0 +1,74 @@
+html,
+body,
+#root {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+:root {
+  --top-bar-height: 48px; /* Step 2.7 top bar */
+}
+
+/* Top bar on top; the map and side panel fill the rest, below it. */
+#root {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Everything under the top bar: map, side panel, and map controls are positioned
+   inside this box, so none of them can sit behind the bar. It also contains the
+   closed (off-screen) side panel so it never makes the page scrollable. */
+.app-body {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+  height: calc(100% - var(--top-bar-height));
+  overflow: clip;
+}
+
+.map {
+  position: absolute;
+  inset: 0;
+}
+
+/* Keep the map's controls clear of the side panel (desktop) or bottom sheet
+   (narrow screens). SidePanel sets these variables. */
+.maplibregl-ctrl-top-right,
+.maplibregl-ctrl-bottom-right {
+  /* SidePanel sets --panel-transition to none while the panel is being dragged. */
+  transition: var(--panel-transition, right 250ms ease, bottom 250ms ease);
+}
+
+.maplibregl-ctrl-top-right {
+  right: var(--panel-offset, 0px);
+}
+
+.maplibregl-ctrl-bottom-right {
+  right: var(--panel-offset, 0px);
+  bottom: var(--sheet-offset, 0px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .maplibregl-ctrl-top-right,
+  .maplibregl-ctrl-bottom-right {
+    transition: none;
+  }
+}
+
+.map-home-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #333333;
+}
+
+.maplibregl-popup-content {
+  font: 13px/1.45 system-ui, -apple-system, 'Segoe UI', sans-serif;
+  color: #1a1a1a;
+}
+
+.maplibregl-popup-content strong {
+  font-size: 15px;
+}

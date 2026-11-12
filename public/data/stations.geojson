@@ -1,0 +1,7295 @@
+{
+ "type": "FeatureCollection",
+ "features": [
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.8976418,
+     19.5371132
+    ]
+   },
+   "properties": {
+    "site": "NAN",
+    "station": 100,
+    "transect": 0,
+    "elevation_m": 75.17,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.8962643,
+     19.5358269
+    ]
+   },
+   "properties": {
+    "site": "NAN",
+    "station": 100,
+    "transect": 200,
+    "elevation_m": 74.56,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.8948867,
+     19.5345406
+    ]
+   },
+   "properties": {
+    "site": "NAN",
+    "station": 100,
+    "transect": 400,
+    "elevation_m": 74.88,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.8935099,
+     19.5333084
+    ]
+   },
+   "properties": {
+    "site": "NAN",
+    "station": 100,
+    "transect": 600,
+    "elevation_m": 73.61,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.8921609,
+     19.5320127
+    ]
+   },
+   "properties": {
+    "site": "NAN",
+    "station": 100,
+    "transect": 800,
+    "elevation_m": 73.12,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.8969733,
+     19.5377522
+    ]
+   },
+   "properties": {
+    "site": "NAN",
+    "station": 200,
+    "transect": 0,
+    "elevation_m": 72.67,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.8955982,
+     19.536468
+    ]
+   },
+   "properties": {
+    "site": "NAN",
+    "station": 200,
+    "transect": 200,
+    "elevation_m": 72.03,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.8942422,
+     19.5352013
+    ]
+   },
+   "properties": {
+    "site": "NAN",
+    "station": 200,
+    "transect": 400,
+    "elevation_m": 71.91,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.8928461,
+     19.5339517
+    ]
+   },
+   "properties": {
+    "site": "NAN",
+    "station": 200,
+    "transect": 600,
+    "elevation_m": 71.89,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.8915066,
+     19.5326647
+    ]
+   },
+   "properties": {
+    "site": "NAN",
+    "station": 200,
+    "transect": 800,
+    "elevation_m": 71.41,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.8962943,
+     19.5384011
+    ]
+   },
+   "properties": {
+    "site": "NAN",
+    "station": 300,
+    "transect": 0,
+    "elevation_m": 69.43,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.8949169,
+     19.5371238
+    ]
+   },
+   "properties": {
+    "site": "NAN",
+    "station": 300,
+    "transect": 200,
+    "elevation_m": 69.96,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.893578,
+     19.5358822
+    ]
+   },
+   "properties": {
+    "site": "NAN",
+    "station": 300,
+    "transect": 400,
+    "elevation_m": 69.63,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.8921814,
+     19.534596
+    ]
+   },
+   "properties": {
+    "site": "NAN",
+    "station": 300,
+    "transect": 600,
+    "elevation_m": 70.42,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.8908234,
+     19.5333456
+    ]
+   },
+   "properties": {
+    "site": "NAN",
+    "station": 300,
+    "transect": 800,
+    "elevation_m": 69.31,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.8956433,
+     19.5390365
+    ]
+   },
+   "properties": {
+    "site": "NAN",
+    "station": 400,
+    "transect": 0,
+    "elevation_m": 66.27,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.894273,
+     19.5377569
+    ]
+   },
+   "properties": {
+    "site": "NAN",
+    "station": 400,
+    "transect": 200,
+    "elevation_m": 67.19,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.8929274,
+     19.5364992
+    ]
+   },
+   "properties": {
+    "site": "NAN",
+    "station": 400,
+    "transect": 400,
+    "elevation_m": 67.33,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.8915211,
+     19.5352406
+    ]
+   },
+   "properties": {
+    "site": "NAN",
+    "station": 400,
+    "transect": 600,
+    "elevation_m": 68.74,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.890189,
+     19.5339604
+    ]
+   },
+   "properties": {
+    "site": "NAN",
+    "station": 400,
+    "transect": 800,
+    "elevation_m": 68.35,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.894966,
+     19.5396977
+    ]
+   },
+   "properties": {
+    "site": "NAN",
+    "station": 500,
+    "transect": 0,
+    "elevation_m": 63.47,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.8936075,
+     19.5384112
+    ]
+   },
+   "properties": {
+    "site": "NAN",
+    "station": 500,
+    "transect": 200,
+    "elevation_m": 62.53,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.8922681,
+     19.5371244
+    ]
+   },
+   "properties": {
+    "site": "NAN",
+    "station": 500,
+    "transect": 400,
+    "elevation_m": 63.6,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.8908625,
+     19.5358835
+    ]
+   },
+   "properties": {
+    "site": "NAN",
+    "station": 500,
+    "transect": 600,
+    "elevation_m": 67.67,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.8895044,
+     19.534624
+    ]
+   },
+   "properties": {
+    "site": "NAN",
+    "station": 500,
+    "transect": 800,
+    "elevation_m": 65.66,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.8943113,
+     19.540319
+    ]
+   },
+   "properties": {
+    "site": "NAN",
+    "station": 600,
+    "transect": 0,
+    "elevation_m": 61.49,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.8929504,
+     19.5390481
+    ]
+   },
+   "properties": {
+    "site": "NAN",
+    "station": 600,
+    "transect": 200,
+    "elevation_m": 60.09,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.8915951,
+     19.5377813
+    ]
+   },
+   "properties": {
+    "site": "NAN",
+    "station": 600,
+    "transect": 400,
+    "elevation_m": 60.55,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.8901984,
+     19.5365318
+    ]
+   },
+   "properties": {
+    "site": "NAN",
+    "station": 600,
+    "transect": 600,
+    "elevation_m": 64.62,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.8888569,
+     19.5352428
+    ]
+   },
+   "properties": {
+    "site": "NAN",
+    "station": 600,
+    "transect": 800,
+    "elevation_m": 61.11,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.8936278,
+     19.5409674
+    ]
+   },
+   "properties": {
+    "site": "NAN",
+    "station": 700,
+    "transect": 0,
+    "elevation_m": 59.16,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.8922696,
+     19.539708
+    ]
+   },
+   "properties": {
+    "site": "NAN",
+    "station": 700,
+    "transect": 200,
+    "elevation_m": 58.86,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.8909114,
+     19.5384485
+    ]
+   },
+   "properties": {
+    "site": "NAN",
+    "station": 700,
+    "transect": 400,
+    "elevation_m": 59.81,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.8895247,
+     19.5371893
+    ]
+   },
+   "properties": {
+    "site": "NAN",
+    "station": 700,
+    "transect": 600,
+    "elevation_m": 61.66,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.8881569,
+     19.5359118
+    ]
+   },
+   "properties": {
+    "site": "NAN",
+    "station": 700,
+    "transect": 800,
+    "elevation_m": 60.3,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.8929788,
+     19.541601
+    ]
+   },
+   "properties": {
+    "site": "NAN",
+    "station": 800,
+    "transect": 0,
+    "elevation_m": 56.5,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.8916229,
+     19.5403348
+    ]
+   },
+   "properties": {
+    "site": "NAN",
+    "station": 800,
+    "transect": 200,
+    "elevation_m": 56.31,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.8902676,
+     19.539068
+    ]
+   },
+   "properties": {
+    "site": "NAN",
+    "station": 800,
+    "transect": 400,
+    "elevation_m": 58.57,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.8888733,
+     19.5378207
+    ]
+   },
+   "properties": {
+    "site": "NAN",
+    "station": 800,
+    "transect": 600,
+    "elevation_m": 59.98,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.8875267,
+     19.5365269
+    ]
+   },
+   "properties": {
+    "site": "NAN",
+    "station": 800,
+    "transect": 800,
+    "elevation_m": 59.73,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.8922994,
+     19.5422641
+    ]
+   },
+   "properties": {
+    "site": "NAN",
+    "station": 900,
+    "transect": 0,
+    "elevation_m": 54.71,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.8909223,
+     19.5410138
+    ]
+   },
+   "properties": {
+    "site": "NAN",
+    "station": 900,
+    "transect": 200,
+    "elevation_m": 56.19,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.8895734,
+     19.5397362
+    ]
+   },
+   "properties": {
+    "site": "NAN",
+    "station": 900,
+    "transect": 400,
+    "elevation_m": 57.13,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.8881962,
+     19.5384769
+    ]
+   },
+   "properties": {
+    "site": "NAN",
+    "station": 900,
+    "transect": 600,
+    "elevation_m": 58.49,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.8868285,
+     19.5372084
+    ]
+   },
+   "properties": {
+    "site": "NAN",
+    "station": 900,
+    "transect": 800,
+    "elevation_m": 58.82,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.933909,
+     19.4468124
+    ]
+   },
+   "properties": {
+    "site": "BRY",
+    "station": 100,
+    "transect": 0,
+    "elevation_m": 314.62,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.9320614,
+     19.446796
+    ]
+   },
+   "properties": {
+    "site": "BRY",
+    "station": 100,
+    "transect": 200,
+    "elevation_m": 303.58,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.9301096,
+     19.4468258
+    ]
+   },
+   "properties": {
+    "site": "BRY",
+    "station": 100,
+    "transect": 400,
+    "elevation_m": 293.57,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.9282531,
+     19.4468546
+    ]
+   },
+   "properties": {
+    "site": "BRY",
+    "station": 100,
+    "transect": 600,
+    "elevation_m": 281.32,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.9263041,
+     19.4468691
+    ]
+   },
+   "properties": {
+    "site": "BRY",
+    "station": 100,
+    "transect": 800,
+    "elevation_m": 265.39,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.9339391,
+     19.4477119
+    ]
+   },
+   "properties": {
+    "site": "BRY",
+    "station": 200,
+    "transect": 0,
+    "elevation_m": 311.92,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.9320334,
+     19.4476956
+    ]
+   },
+   "properties": {
+    "site": "BRY",
+    "station": 200,
+    "transect": 200,
+    "elevation_m": 302.1,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.9301249,
+     19.4477256
+    ]
+   },
+   "properties": {
+    "site": "BRY",
+    "station": 200,
+    "transect": 400,
+    "elevation_m": 299.07,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.9282121,
+     19.4477537
+    ]
+   },
+   "properties": {
+    "site": "BRY",
+    "station": 200,
+    "transect": 600,
+    "elevation_m": 289.57,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.9263179,
+     19.447769
+    ]
+   },
+   "properties": {
+    "site": "BRY",
+    "station": 200,
+    "transect": 800,
+    "elevation_m": 275.91,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.933968,
+     19.4485733
+    ]
+   },
+   "properties": {
+    "site": "BRY",
+    "station": 300,
+    "transect": 0,
+    "elevation_m": 309.54,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.9320062,
+     19.4485671
+    ]
+   },
+   "properties": {
+    "site": "BRY",
+    "station": 300,
+    "transect": 200,
+    "elevation_m": 298.52,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.930141,
+     19.4486682
+    ]
+   },
+   "properties": {
+    "site": "BRY",
+    "station": 300,
+    "transect": 400,
+    "elevation_m": 294.63,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.9281699,
+     19.4486802
+    ]
+   },
+   "properties": {
+    "site": "BRY",
+    "station": 300,
+    "transect": 600,
+    "elevation_m": 286.94,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.9263322,
+     19.4486997
+    ]
+   },
+   "properties": {
+    "site": "BRY",
+    "station": 300,
+    "transect": 800,
+    "elevation_m": 275.39,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.9339791,
+     19.4495114
+    ]
+   },
+   "properties": {
+    "site": "BRY",
+    "station": 400,
+    "transect": 0,
+    "elevation_m": 309.46,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.9320509,
+     19.4494942
+    ]
+   },
+   "properties": {
+    "site": "BRY",
+    "station": 400,
+    "transect": 200,
+    "elevation_m": 299.34,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.9301372,
+     19.4495255
+    ]
+   },
+   "properties": {
+    "site": "BRY",
+    "station": 400,
+    "transect": 400,
+    "elevation_m": 292.15,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.9282039,
+     19.4495522
+    ]
+   },
+   "properties": {
+    "site": "BRY",
+    "station": 400,
+    "transect": 600,
+    "elevation_m": 280.37,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.9263517,
+     19.4495686
+    ]
+   },
+   "properties": {
+    "site": "BRY",
+    "station": 400,
+    "transect": 800,
+    "elevation_m": 273.04,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.9339901,
+     19.4504339
+    ]
+   },
+   "properties": {
+    "site": "BRY",
+    "station": 500,
+    "transect": 0,
+    "elevation_m": 309.16,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.9320946,
+     19.4503999
+    ]
+   },
+   "properties": {
+    "site": "BRY",
+    "station": 500,
+    "transect": 200,
+    "elevation_m": 301.2,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.9301332,
+     19.4504298
+    ]
+   },
+   "properties": {
+    "site": "BRY",
+    "station": 500,
+    "transect": 400,
+    "elevation_m": 293.16,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.9282382,
+     19.4504319
+    ]
+   },
+   "properties": {
+    "site": "BRY",
+    "station": 500,
+    "transect": 600,
+    "elevation_m": 279.56,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.9263725,
+     19.4504969
+    ]
+   },
+   "properties": {
+    "site": "BRY",
+    "station": 500,
+    "transect": 800,
+    "elevation_m": 273.45,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.934019,
+     19.451311
+    ]
+   },
+   "properties": {
+    "site": "BRY",
+    "station": 600,
+    "transect": 0,
+    "elevation_m": 308.17,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.9320956,
+     19.4512932
+    ]
+   },
+   "properties": {
+    "site": "BRY",
+    "station": 600,
+    "transect": 200,
+    "elevation_m": 300.98,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.9301438,
+     19.4513254
+    ]
+   },
+   "properties": {
+    "site": "BRY",
+    "station": 600,
+    "transect": 400,
+    "elevation_m": 292.91,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.9282589,
+     19.4513514
+    ]
+   },
+   "properties": {
+    "site": "BRY",
+    "station": 600,
+    "transect": 600,
+    "elevation_m": 279.72,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.92635,
+     19.4513681
+    ]
+   },
+   "properties": {
+    "site": "BRY",
+    "station": 600,
+    "transect": 800,
+    "elevation_m": 274.21,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.9340494,
+     19.4522308
+    ]
+   },
+   "properties": {
+    "site": "BRY",
+    "station": 700,
+    "transect": 0,
+    "elevation_m": 305.79,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.9320967,
+     19.4521884
+    ]
+   },
+   "properties": {
+    "site": "BRY",
+    "station": 700,
+    "transect": 200,
+    "elevation_m": 299.2,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.9301545,
+     19.4522272
+    ]
+   },
+   "properties": {
+    "site": "BRY",
+    "station": 700,
+    "transect": 400,
+    "elevation_m": 291.05,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.9282784,
+     19.45222
+    ]
+   },
+   "properties": {
+    "site": "BRY",
+    "station": 700,
+    "transect": 600,
+    "elevation_m": 279.66,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.9263267,
+     19.4522679
+    ]
+   },
+   "properties": {
+    "site": "BRY",
+    "station": 700,
+    "transect": 800,
+    "elevation_m": 273.86,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.9340261,
+     19.4531102
+    ]
+   },
+   "properties": {
+    "site": "BRY",
+    "station": 800,
+    "transect": 0,
+    "elevation_m": 302.37,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.9321261,
+     19.4530928
+    ]
+   },
+   "properties": {
+    "site": "BRY",
+    "station": 800,
+    "transect": 200,
+    "elevation_m": 293.88,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.9301651,
+     19.4531253
+    ]
+   },
+   "properties": {
+    "site": "BRY",
+    "station": 800,
+    "transect": 400,
+    "elevation_m": 288.45,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.9282655,
+     19.4531511
+    ]
+   },
+   "properties": {
+    "site": "BRY",
+    "station": 800,
+    "transect": 600,
+    "elevation_m": 279.71,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.9263703,
+     19.4531669
+    ]
+   },
+   "properties": {
+    "site": "BRY",
+    "station": 800,
+    "transect": 800,
+    "elevation_m": 275.08,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.9340034,
+     19.4539657
+    ]
+   },
+   "properties": {
+    "site": "BRY",
+    "station": 900,
+    "transect": 0,
+    "elevation_m": 296.9,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.9321566,
+     19.4540306
+    ]
+   },
+   "properties": {
+    "site": "BRY",
+    "station": 900,
+    "transect": 200,
+    "elevation_m": 291.0,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.9301762,
+     19.4540607
+    ]
+   },
+   "properties": {
+    "site": "BRY",
+    "station": 900,
+    "transect": 400,
+    "elevation_m": 286.42,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.9282527,
+     19.4540721
+    ]
+   },
+   "properties": {
+    "site": "BRY",
+    "station": 900,
+    "transect": 600,
+    "elevation_m": 278.0,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.9264148,
+     19.4540826
+    ]
+   },
+   "properties": {
+    "site": "BRY",
+    "station": 900,
+    "transect": 800,
+    "elevation_m": 274.59,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.8664756,
+     19.4399399
+    ]
+   },
+   "properties": {
+    "site": "MAL",
+    "station": 100,
+    "transect": 0,
+    "elevation_m": 28.31,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.8654167,
+     19.4414413
+    ]
+   },
+   "properties": {
+    "site": "MAL",
+    "station": 100,
+    "transect": 200,
+    "elevation_m": 31.18,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.864329,
+     19.4429249
+    ]
+   },
+   "properties": {
+    "site": "MAL",
+    "station": 100,
+    "transect": 400,
+    "elevation_m": 29.34,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.8632124,
+     19.4443727
+    ]
+   },
+   "properties": {
+    "site": "MAL",
+    "station": 100,
+    "transect": 600,
+    "elevation_m": 29.66,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.8621154,
+     19.4458836
+    ]
+   },
+   "properties": {
+    "site": "MAL",
+    "station": 100,
+    "transect": 800,
+    "elevation_m": 29.33,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.8672713,
+     19.4404299
+    ]
+   },
+   "properties": {
+    "site": "MAL",
+    "station": 200,
+    "transect": 0,
+    "elevation_m": 30.45,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.8662235,
+     19.4419147
+    ]
+   },
+   "properties": {
+    "site": "MAL",
+    "station": 200,
+    "transect": 200,
+    "elevation_m": 32.62,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.8651304,
+     19.4434065
+    ]
+   },
+   "properties": {
+    "site": "MAL",
+    "station": 200,
+    "transect": 400,
+    "elevation_m": 33.67,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.863998,
+     19.4448772
+    ]
+   },
+   "properties": {
+    "site": "MAL",
+    "station": 200,
+    "transect": 600,
+    "elevation_m": 33.89,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.8629075,
+     19.4463788
+    ]
+   },
+   "properties": {
+    "site": "MAL",
+    "station": 200,
+    "transect": 800,
+    "elevation_m": 32.47,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.8681059,
+     19.4409439
+    ]
+   },
+   "properties": {
+    "site": "MAL",
+    "station": 300,
+    "transect": 0,
+    "elevation_m": 33.58,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.8670657,
+     19.442409
+    ]
+   },
+   "properties": {
+    "site": "MAL",
+    "station": 300,
+    "transect": 200,
+    "elevation_m": 35.28,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.8659399,
+     19.443893
+    ]
+   },
+   "properties": {
+    "site": "MAL",
+    "station": 300,
+    "transect": 400,
+    "elevation_m": 38.61,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.8648048,
+     19.4453952
+    ]
+   },
+   "properties": {
+    "site": "MAL",
+    "station": 300,
+    "transect": 600,
+    "elevation_m": 38.18,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.8637076,
+     19.446879
+    ]
+   },
+   "properties": {
+    "site": "MAL",
+    "station": 300,
+    "transect": 800,
+    "elevation_m": 37.14,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.8688701,
+     19.4413988
+    ]
+   },
+   "properties": {
+    "site": "MAL",
+    "station": 400,
+    "transect": 0,
+    "elevation_m": 35.99,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.8678158,
+     19.4428926
+    ]
+   },
+   "properties": {
+    "site": "MAL",
+    "station": 400,
+    "transect": 200,
+    "elevation_m": 36.12,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.8667247,
+     19.4443822
+    ]
+   },
+   "properties": {
+    "site": "MAL",
+    "station": 400,
+    "transect": 400,
+    "elevation_m": 42.61,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.8655776,
+     19.445874
+    ]
+   },
+   "properties": {
+    "site": "MAL",
+    "station": 400,
+    "transect": 600,
+    "elevation_m": 41.16,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.8644967,
+     19.447362
+    ]
+   },
+   "properties": {
+    "site": "MAL",
+    "station": 400,
+    "transect": 800,
+    "elevation_m": 39.42,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.8697167,
+     19.4419029
+    ]
+   },
+   "properties": {
+    "site": "MAL",
+    "station": 500,
+    "transect": 0,
+    "elevation_m": 41.18,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.8686102,
+     19.4434048
+    ]
+   },
+   "properties": {
+    "site": "MAL",
+    "station": 500,
+    "transect": 200,
+    "elevation_m": 39.06,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.8675225,
+     19.4448795
+    ]
+   },
+   "properties": {
+    "site": "MAL",
+    "station": 500,
+    "transect": 400,
+    "elevation_m": 41.98,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.8663969,
+     19.4463816
+    ]
+   },
+   "properties": {
+    "site": "MAL",
+    "station": 500,
+    "transect": 600,
+    "elevation_m": 42.75,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.8653187,
+     19.4478651
+    ]
+   },
+   "properties": {
+    "site": "MAL",
+    "station": 500,
+    "transect": 800,
+    "elevation_m": 41.32,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.8704581,
+     19.4423831
+    ]
+   },
+   "properties": {
+    "site": "MAL",
+    "station": 600,
+    "transect": 0,
+    "elevation_m": 47.61,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.8693917,
+     19.4438947
+    ]
+   },
+   "properties": {
+    "site": "MAL",
+    "station": 600,
+    "transect": 200,
+    "elevation_m": 42.78,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.8683125,
+     19.4453674
+    ]
+   },
+   "properties": {
+    "site": "MAL",
+    "station": 600,
+    "transect": 400,
+    "elevation_m": 43.21,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.8671634,
+     19.4468622
+    ]
+   },
+   "properties": {
+    "site": "MAL",
+    "station": 600,
+    "transect": 600,
+    "elevation_m": 44.04,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.8660839,
+     19.448348
+    ]
+   },
+   "properties": {
+    "site": "MAL",
+    "station": 600,
+    "transect": 800,
+    "elevation_m": 42.88,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.8713093,
+     19.4429344
+    ]
+   },
+   "properties": {
+    "site": "MAL",
+    "station": 700,
+    "transect": 0,
+    "elevation_m": 50.58,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.8702408,
+     19.4444269
+    ]
+   },
+   "properties": {
+    "site": "MAL",
+    "station": 700,
+    "transect": 200,
+    "elevation_m": 45.19,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.8691049,
+     19.4458568
+    ]
+   },
+   "properties": {
+    "site": "MAL",
+    "station": 700,
+    "transect": 400,
+    "elevation_m": 45.53,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.8679987,
+     19.4473859
+    ]
+   },
+   "properties": {
+    "site": "MAL",
+    "station": 700,
+    "transect": 600,
+    "elevation_m": 45.58,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.8668823,
+     19.4488517
+    ]
+   },
+   "properties": {
+    "site": "MAL",
+    "station": 700,
+    "transect": 800,
+    "elevation_m": 44.08,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.872041,
+     19.4433749
+    ]
+   },
+   "properties": {
+    "site": "MAL",
+    "station": 800,
+    "transect": 0,
+    "elevation_m": 52.27,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.8709669,
+     19.4448979
+    ]
+   },
+   "properties": {
+    "site": "MAL",
+    "station": 800,
+    "transect": 200,
+    "elevation_m": 48.1,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.8698952,
+     19.4463598
+    ]
+   },
+   "properties": {
+    "site": "MAL",
+    "station": 800,
+    "transect": 400,
+    "elevation_m": 47.06,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.8687476,
+     19.4478527
+    ]
+   },
+   "properties": {
+    "site": "MAL",
+    "station": 800,
+    "transect": 600,
+    "elevation_m": 46.76,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.8676659,
+     19.4493416
+    ]
+   },
+   "properties": {
+    "site": "MAL",
+    "station": 800,
+    "transect": 800,
+    "elevation_m": 45.02,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.8728435,
+     19.443858
+    ]
+   },
+   "properties": {
+    "site": "MAL",
+    "station": 900,
+    "transect": 0,
+    "elevation_m": 56.26,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.8717759,
+     19.4454228
+    ]
+   },
+   "properties": {
+    "site": "MAL",
+    "station": 900,
+    "transect": 200,
+    "elevation_m": 53.65,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.8706973,
+     19.4468702
+    ]
+   },
+   "properties": {
+    "site": "MAL",
+    "station": 900,
+    "transect": 400,
+    "elevation_m": 48.76,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.8695813,
+     19.4483723
+    ]
+   },
+   "properties": {
+    "site": "MAL",
+    "station": 900,
+    "transect": 600,
+    "elevation_m": 48.14,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.8684745,
+     19.4498471
+    ]
+   },
+   "properties": {
+    "site": "MAL",
+    "station": 900,
+    "transect": 800,
+    "elevation_m": 46.69,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.231702,
+     19.6113207
+    ]
+   },
+   "properties": {
+    "site": "WAI",
+    "station": 100,
+    "transect": 0,
+    "elevation_m": 1010.83,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2305302,
+     19.6099714
+    ]
+   },
+   "properties": {
+    "site": "WAI",
+    "station": 100,
+    "transect": 200,
+    "elevation_m": 1000.36,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2292154,
+     19.6086239
+    ]
+   },
+   "properties": {
+    "site": "WAI",
+    "station": 100,
+    "transect": 400,
+    "elevation_m": 991.24,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2279765,
+     19.6072483
+    ]
+   },
+   "properties": {
+    "site": "WAI",
+    "station": 100,
+    "transect": 600,
+    "elevation_m": 983.71,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2267376,
+     19.6058728
+    ]
+   },
+   "properties": {
+    "site": "WAI",
+    "station": 100,
+    "transect": 800,
+    "elevation_m": 976.52,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2310516,
+     19.611977
+    ]
+   },
+   "properties": {
+    "site": "WAI",
+    "station": 200,
+    "transect": 0,
+    "elevation_m": 1002.47,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2298746,
+     19.6106231
+    ]
+   },
+   "properties": {
+    "site": "WAI",
+    "station": 200,
+    "transect": 200,
+    "elevation_m": 996.51,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2285797,
+     19.6092931
+    ]
+   },
+   "properties": {
+    "site": "WAI",
+    "station": 200,
+    "transect": 400,
+    "elevation_m": 987.87,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2273304,
+     19.6079085
+    ]
+   },
+   "properties": {
+    "site": "WAI",
+    "station": 200,
+    "transect": 600,
+    "elevation_m": 979.48,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.22606,
+     19.6065039
+    ]
+   },
+   "properties": {
+    "site": "WAI",
+    "station": 200,
+    "transect": 800,
+    "elevation_m": 970.73,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2304424,
+     19.6125917
+    ]
+   },
+   "properties": {
+    "site": "WAI",
+    "station": 300,
+    "transect": 0,
+    "elevation_m": 993.62,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2292421,
+     19.6112518
+    ]
+   },
+   "properties": {
+    "site": "WAI",
+    "station": 300,
+    "transect": 200,
+    "elevation_m": 989.88,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2279565,
+     19.6099491
+    ]
+   },
+   "properties": {
+    "site": "WAI",
+    "station": 300,
+    "transect": 400,
+    "elevation_m": 982.71,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2266701,
+     19.6085832
+    ]
+   },
+   "properties": {
+    "site": "WAI",
+    "station": 300,
+    "transect": 600,
+    "elevation_m": 977.5,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2254108,
+     19.6071085
+    ]
+   },
+   "properties": {
+    "site": "WAI",
+    "station": 300,
+    "transect": 800,
+    "elevation_m": 965.6,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2297449,
+     19.6132844
+    ]
+   },
+   "properties": {
+    "site": "WAI",
+    "station": 400,
+    "transect": 0,
+    "elevation_m": 983.88,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2285462,
+     19.6119105
+    ]
+   },
+   "properties": {
+    "site": "WAI",
+    "station": 400,
+    "transect": 200,
+    "elevation_m": 980.01,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2272585,
+     19.6105857
+    ]
+   },
+   "properties": {
+    "site": "WAI",
+    "station": 400,
+    "transect": 400,
+    "elevation_m": 974.72,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2260288,
+     19.6092204
+    ]
+   },
+   "properties": {
+    "site": "WAI",
+    "station": 400,
+    "transect": 600,
+    "elevation_m": 973.24,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2247473,
+     19.6078047
+    ]
+   },
+   "properties": {
+    "site": "WAI",
+    "station": 400,
+    "transect": 800,
+    "elevation_m": 959.42,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2290979,
+     19.613927
+    ]
+   },
+   "properties": {
+    "site": "WAI",
+    "station": 500,
+    "transect": 0,
+    "elevation_m": 972.26,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2278497,
+     19.6125696
+    ]
+   },
+   "properties": {
+    "site": "WAI",
+    "station": 500,
+    "transect": 200,
+    "elevation_m": 970.85,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2266011,
+     19.6111852
+    ]
+   },
+   "properties": {
+    "site": "WAI",
+    "station": 500,
+    "transect": 400,
+    "elevation_m": 966.69,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2253632,
+     19.6098818
+    ]
+   },
+   "properties": {
+    "site": "WAI",
+    "station": 500,
+    "transect": 600,
+    "elevation_m": 964.3,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2240955,
+     19.6084885
+    ]
+   },
+   "properties": {
+    "site": "WAI",
+    "station": 500,
+    "transect": 800,
+    "elevation_m": 953.61,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2284309,
+     19.6145852
+    ]
+   },
+   "properties": {
+    "site": "WAI",
+    "station": 600,
+    "transect": 0,
+    "elevation_m": 959.67,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2272105,
+     19.6131913
+    ]
+   },
+   "properties": {
+    "site": "WAI",
+    "station": 600,
+    "transect": 200,
+    "elevation_m": 965.32,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2259318,
+     19.6118737
+    ]
+   },
+   "properties": {
+    "site": "WAI",
+    "station": 600,
+    "transect": 400,
+    "elevation_m": 959.72,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2246802,
+     19.6104879
+    ]
+   },
+   "properties": {
+    "site": "WAI",
+    "station": 600,
+    "transect": 600,
+    "elevation_m": 956.35,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2234386,
+     19.6091095
+    ]
+   },
+   "properties": {
+    "site": "WAI",
+    "station": 600,
+    "transect": 800,
+    "elevation_m": 947.8,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2278002,
+     19.6152075
+    ]
+   },
+   "properties": {
+    "site": "WAI",
+    "station": 700,
+    "transect": 0,
+    "elevation_m": 952.57,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2265047,
+     19.6138778
+    ]
+   },
+   "properties": {
+    "site": "WAI",
+    "station": 700,
+    "transect": 200,
+    "elevation_m": 955.81,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2252948,
+     19.612529
+    ]
+   },
+   "properties": {
+    "site": "WAI",
+    "station": 700,
+    "transect": 400,
+    "elevation_m": 952.16,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2239696,
+     19.6111183
+    ]
+   },
+   "properties": {
+    "site": "WAI",
+    "station": 700,
+    "transect": 600,
+    "elevation_m": 947.11,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2227595,
+     19.6097514
+    ]
+   },
+   "properties": {
+    "site": "WAI",
+    "station": 700,
+    "transect": 800,
+    "elevation_m": 939.91,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2271046,
+     19.6158747
+    ]
+   },
+   "properties": {
+    "site": "WAI",
+    "station": 800,
+    "transect": 0,
+    "elevation_m": 949.25,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.225889,
+     19.6144852
+    ]
+   },
+   "properties": {
+    "site": "WAI",
+    "station": 800,
+    "transect": 200,
+    "elevation_m": 948.77,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2246127,
+     19.6131692
+    ]
+   },
+   "properties": {
+    "site": "WAI",
+    "station": 800,
+    "transect": 400,
+    "elevation_m": 947.05,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2233419,
+     19.6117645
+    ]
+   },
+   "properties": {
+    "site": "WAI",
+    "station": 800,
+    "transect": 600,
+    "elevation_m": 940.86,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2220958,
+     19.6103835
+    ]
+   },
+   "properties": {
+    "site": "WAI",
+    "station": 800,
+    "transect": 800,
+    "elevation_m": 933.86,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2264551,
+     19.6164976
+    ]
+   },
+   "properties": {
+    "site": "WAI",
+    "station": 900,
+    "transect": 0,
+    "elevation_m": 945.41,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2251883,
+     19.6151766
+    ]
+   },
+   "properties": {
+    "site": "WAI",
+    "station": 900,
+    "transect": 200,
+    "elevation_m": 943.82,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2239492,
+     19.613792
+    ]
+   },
+   "properties": {
+    "site": "WAI",
+    "station": 900,
+    "transect": 400,
+    "elevation_m": 942.47,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2226821,
+     19.6124438
+    ]
+   },
+   "properties": {
+    "site": "WAI",
+    "station": 900,
+    "transect": 600,
+    "elevation_m": 934.28,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2214048,
+     19.6110416
+    ]
+   },
+   "properties": {
+    "site": "WAI",
+    "station": 900,
+    "transect": 800,
+    "elevation_m": 929.36,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2690332,
+     19.4981939
+    ]
+   },
+   "properties": {
+    "site": "PUU",
+    "station": 100,
+    "transect": 0,
+    "elevation_m": 1330.23,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.268059,
+     19.4966346
+    ]
+   },
+   "properties": {
+    "site": "PUU",
+    "station": 100,
+    "transect": 200,
+    "elevation_m": 1322.35,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2670474,
+     19.4951209
+    ]
+   },
+   "properties": {
+    "site": "PUU",
+    "station": 100,
+    "transect": 400,
+    "elevation_m": 1317.42,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2660547,
+     19.4935889
+    ]
+   },
+   "properties": {
+    "site": "PUU",
+    "station": 100,
+    "transect": 600,
+    "elevation_m": 1313.78,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2650711,
+     19.4920297
+    ]
+   },
+   "properties": {
+    "site": "PUU",
+    "station": 100,
+    "transect": 800,
+    "elevation_m": 1310.97,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2682124,
+     19.4986465
+    ]
+   },
+   "properties": {
+    "site": "PUU",
+    "station": 200,
+    "transect": 0,
+    "elevation_m": 1332.25,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2672386,
+     19.4970878
+    ]
+   },
+   "properties": {
+    "site": "PUU",
+    "station": 200,
+    "transect": 200,
+    "elevation_m": 1322.94,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2662233,
+     19.4955682
+    ]
+   },
+   "properties": {
+    "site": "PUU",
+    "station": 200,
+    "transect": 400,
+    "elevation_m": 1314.93,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2652283,
+     19.4940323
+    ]
+   },
+   "properties": {
+    "site": "PUU",
+    "station": 200,
+    "transect": 600,
+    "elevation_m": 1309.93,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.26424,
+     19.4924651
+    ]
+   },
+   "properties": {
+    "site": "PUU",
+    "station": 200,
+    "transect": 800,
+    "elevation_m": 1307.91,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2674075,
+     19.4990903
+    ]
+   },
+   "properties": {
+    "site": "PUU",
+    "station": 300,
+    "transect": 0,
+    "elevation_m": 1330.69,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2663861,
+     19.4975587
+    ]
+   },
+   "properties": {
+    "site": "PUU",
+    "station": 300,
+    "transect": 200,
+    "elevation_m": 1321.26,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2654121,
+     19.4960084
+    ]
+   },
+   "properties": {
+    "site": "PUU",
+    "station": 300,
+    "transect": 400,
+    "elevation_m": 1313.51,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2644003,
+     19.4944767
+    ]
+   },
+   "properties": {
+    "site": "PUU",
+    "station": 300,
+    "transect": 600,
+    "elevation_m": 1308.53,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2634637,
+     19.4928717
+    ]
+   },
+   "properties": {
+    "site": "PUU",
+    "station": 300,
+    "transect": 800,
+    "elevation_m": 1303.87,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2665705,
+     19.4995513
+    ]
+   },
+   "properties": {
+    "site": "PUU",
+    "station": 400,
+    "transect": 0,
+    "elevation_m": 1326.01,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2656005,
+     19.4979988
+    ]
+   },
+   "properties": {
+    "site": "PUU",
+    "station": 400,
+    "transect": 200,
+    "elevation_m": 1319.02,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2645804,
+     19.4964711
+    ]
+   },
+   "properties": {
+    "site": "PUU",
+    "station": 400,
+    "transect": 400,
+    "elevation_m": 1311.73,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.26358,
+     19.4949264
+    ]
+   },
+   "properties": {
+    "site": "PUU",
+    "station": 400,
+    "transect": 600,
+    "elevation_m": 1306.07,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2625957,
+     19.4933653
+    ]
+   },
+   "properties": {
+    "site": "PUU",
+    "station": 400,
+    "transect": 800,
+    "elevation_m": 1300.59,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2657629,
+     19.499996
+    ]
+   },
+   "properties": {
+    "site": "PUU",
+    "station": 500,
+    "transect": 0,
+    "elevation_m": 1320.38,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2647701,
+     19.498464
+    ]
+   },
+   "properties": {
+    "site": "PUU",
+    "station": 500,
+    "transect": 200,
+    "elevation_m": 1313.97,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2637677,
+     19.4969231
+    ]
+   },
+   "properties": {
+    "site": "PUU",
+    "station": 500,
+    "transect": 400,
+    "elevation_m": 1309.05,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2627652,
+     19.4953732
+    ]
+   },
+   "properties": {
+    "site": "PUU",
+    "station": 500,
+    "transect": 600,
+    "elevation_m": 1303.73,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2617912,
+     19.4938229
+    ]
+   },
+   "properties": {
+    "site": "PUU",
+    "station": 500,
+    "transect": 800,
+    "elevation_m": 1296.97,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2649313,
+     19.5004606
+    ]
+   },
+   "properties": {
+    "site": "PUU",
+    "station": 600,
+    "transect": 0,
+    "elevation_m": 1313.89,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2639629,
+     19.4989105
+    ]
+   },
+   "properties": {
+    "site": "PUU",
+    "station": 600,
+    "transect": 200,
+    "elevation_m": 1307.91,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2629398,
+     19.497378
+    ]
+   },
+   "properties": {
+    "site": "PUU",
+    "station": 600,
+    "transect": 400,
+    "elevation_m": 1305.1,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2619337,
+     19.4958239
+    ]
+   },
+   "properties": {
+    "site": "PUU",
+    "station": 600,
+    "transect": 600,
+    "elevation_m": 1300.1,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2609607,
+     19.4942811
+    ]
+   },
+   "properties": {
+    "site": "PUU",
+    "station": 600,
+    "transect": 800,
+    "elevation_m": 1294.1,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.264109,
+     19.5009199
+    ]
+   },
+   "properties": {
+    "site": "PUU",
+    "station": 700,
+    "transect": 0,
+    "elevation_m": 1305.73,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2631161,
+     19.4993789
+    ]
+   },
+   "properties": {
+    "site": "PUU",
+    "station": 700,
+    "transect": 200,
+    "elevation_m": 1301.07,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2620853,
+     19.4978474
+    ]
+   },
+   "properties": {
+    "site": "PUU",
+    "station": 700,
+    "transect": 400,
+    "elevation_m": 1299.75,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2611109,
+     19.4962699
+    ]
+   },
+   "properties": {
+    "site": "PUU",
+    "station": 700,
+    "transect": 600,
+    "elevation_m": 1295.36,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2600994,
+     19.4947562
+    ]
+   },
+   "properties": {
+    "site": "PUU",
+    "station": 700,
+    "transect": 800,
+    "elevation_m": 1291.03,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2632814,
+     19.5013518
+    ]
+   },
+   "properties": {
+    "site": "PUU",
+    "station": 800,
+    "transect": 0,
+    "elevation_m": 1301.42,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2623114,
+     19.4997992
+    ]
+   },
+   "properties": {
+    "site": "PUU",
+    "station": 800,
+    "transect": 200,
+    "elevation_m": 1296.69,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2612884,
+     19.4982669
+    ]
+   },
+   "properties": {
+    "site": "PUU",
+    "station": 800,
+    "transect": 400,
+    "elevation_m": 1293.3,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2602847,
+     19.4967169
+    ]
+   },
+   "properties": {
+    "site": "PUU",
+    "station": 800,
+    "transect": 600,
+    "elevation_m": 1291.85,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2593186,
+     19.4951854
+    ]
+   },
+   "properties": {
+    "site": "PUU",
+    "station": 800,
+    "transect": 800,
+    "elevation_m": 1286.63,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.262407,
+     19.5018082
+    ]
+   },
+   "properties": {
+    "site": "PUU",
+    "station": 900,
+    "transect": 0,
+    "elevation_m": 1295.34,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2614331,
+     19.5002579
+    ]
+   },
+   "properties": {
+    "site": "PUU",
+    "station": 900,
+    "transect": 200,
+    "elevation_m": 1293.25,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2604685,
+     19.4986985
+    ]
+   },
+   "properties": {
+    "site": "PUU",
+    "station": 900,
+    "transect": 400,
+    "elevation_m": 1288.88,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2594189,
+     19.4971852
+    ]
+   },
+   "properties": {
+    "site": "PUU",
+    "station": 900,
+    "transect": 600,
+    "elevation_m": 1285.95,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2585021,
+     19.4956342
+    ]
+   },
+   "properties": {
+    "site": "PUU",
+    "station": 900,
+    "transect": 800,
+    "elevation_m": 1282.86,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2325277,
+     19.4426415
+    ]
+   },
+   "properties": {
+    "site": "COO",
+    "station": 100,
+    "transect": 0,
+    "elevation_m": 1128.82,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2316212,
+     19.4410992
+    ]
+   },
+   "properties": {
+    "site": "COO",
+    "station": 100,
+    "transect": 200,
+    "elevation_m": 1119.49,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2307343,
+     19.4396018
+    ]
+   },
+   "properties": {
+    "site": "COO",
+    "station": 100,
+    "transect": 400,
+    "elevation_m": 1120.48,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2298184,
+     19.4380686
+    ]
+   },
+   "properties": {
+    "site": "COO",
+    "station": 100,
+    "transect": 600,
+    "elevation_m": 1119.12,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2288934,
+     19.4365626
+    ]
+   },
+   "properties": {
+    "site": "COO",
+    "station": 100,
+    "transect": 800,
+    "elevation_m": 1113.33,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2317534,
+     19.4430798
+    ]
+   },
+   "properties": {
+    "site": "COO",
+    "station": 200,
+    "transect": 0,
+    "elevation_m": 1125.71,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2308537,
+     19.4415481
+    ]
+   },
+   "properties": {
+    "site": "COO",
+    "station": 200,
+    "transect": 200,
+    "elevation_m": 1114.02,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2299591,
+     19.4400386
+    ]
+   },
+   "properties": {
+    "site": "COO",
+    "station": 200,
+    "transect": 400,
+    "elevation_m": 1113.74,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2290522,
+     19.4385194
+    ]
+   },
+   "properties": {
+    "site": "COO",
+    "station": 200,
+    "transect": 600,
+    "elevation_m": 1114.13,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2281268,
+     19.4370128
+    ]
+   },
+   "properties": {
+    "site": "COO",
+    "station": 200,
+    "transect": 800,
+    "elevation_m": 1109.79,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2309783,
+     19.4435186
+    ]
+   },
+   "properties": {
+    "site": "COO",
+    "station": 300,
+    "transect": 0,
+    "elevation_m": 1121.78,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.230091,
+     19.4419941
+    ]
+   },
+   "properties": {
+    "site": "COO",
+    "station": 300,
+    "transect": 200,
+    "elevation_m": 1112.3,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2291943,
+     19.4404697
+    ]
+   },
+   "properties": {
+    "site": "COO",
+    "station": 300,
+    "transect": 400,
+    "elevation_m": 1106.19,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2282506,
+     19.438991
+    ]
+   },
+   "properties": {
+    "site": "COO",
+    "station": 300,
+    "transect": 600,
+    "elevation_m": 1105.44,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2273539,
+     19.4374666
+    ]
+   },
+   "properties": {
+    "site": "COO",
+    "station": 300,
+    "transect": 800,
+    "elevation_m": 1104.26,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2302066,
+     19.4439592
+    ]
+   },
+   "properties": {
+    "site": "COO",
+    "station": 400,
+    "transect": 0,
+    "elevation_m": 1116.49,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2293082,
+     19.4424294
+    ]
+   },
+   "properties": {
+    "site": "COO",
+    "station": 400,
+    "transect": 200,
+    "elevation_m": 1108.3,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2284136,
+     19.44092
+    ]
+   },
+   "properties": {
+    "site": "COO",
+    "station": 400,
+    "transect": 400,
+    "elevation_m": 1098.58,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.227512,
+     19.4394091
+    ]
+   },
+   "properties": {
+    "site": "COO",
+    "station": 400,
+    "transect": 600,
+    "elevation_m": 1096.89,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2265905,
+     19.4379085
+    ]
+   },
+   "properties": {
+    "site": "COO",
+    "station": 400,
+    "transect": 800,
+    "elevation_m": 1096.39,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.22941,
+     19.444414
+    ]
+   },
+   "properties": {
+    "site": "COO",
+    "station": 500,
+    "transect": 0,
+    "elevation_m": 1112.78,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.228513,
+     19.4428715
+    ]
+   },
+   "properties": {
+    "site": "COO",
+    "station": 500,
+    "transect": 200,
+    "elevation_m": 1100.79,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2276262,
+     19.4413741
+    ]
+   },
+   "properties": {
+    "site": "COO",
+    "station": 500,
+    "transect": 400,
+    "elevation_m": 1087.63,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2267011,
+     19.4398681
+    ]
+   },
+   "properties": {
+    "site": "COO",
+    "station": 500,
+    "transect": 600,
+    "elevation_m": 1087.56,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2258236,
+     19.4383525
+    ]
+   },
+   "properties": {
+    "site": "COO",
+    "station": 500,
+    "transect": 800,
+    "elevation_m": 1092.75,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2286557,
+     19.4448321
+    ]
+   },
+   "properties": {
+    "site": "COO",
+    "station": 600,
+    "transect": 0,
+    "elevation_m": 1108.71,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2277655,
+     19.4433149
+    ]
+   },
+   "properties": {
+    "site": "COO",
+    "station": 600,
+    "transect": 200,
+    "elevation_m": 1099.4,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2268674,
+     19.4418003
+    ]
+   },
+   "properties": {
+    "site": "COO",
+    "station": 600,
+    "transect": 400,
+    "elevation_m": 1088.89,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2259637,
+     19.4402861
+    ]
+   },
+   "properties": {
+    "site": "COO",
+    "station": 600,
+    "transect": 600,
+    "elevation_m": 1085.07,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.225055,
+     19.4388056
+    ]
+   },
+   "properties": {
+    "site": "COO",
+    "station": 600,
+    "transect": 800,
+    "elevation_m": 1089.58,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2278603,
+     19.445273
+    ]
+   },
+   "properties": {
+    "site": "COO",
+    "station": 700,
+    "transect": 0,
+    "elevation_m": 1106.78,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2269735,
+     19.4437846
+    ]
+   },
+   "properties": {
+    "site": "COO",
+    "station": 700,
+    "transect": 200,
+    "elevation_m": 1098.91,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2260482,
+     19.4422605
+    ]
+   },
+   "properties": {
+    "site": "COO",
+    "station": 700,
+    "transect": 400,
+    "elevation_m": 1090.7,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2251706,
+     19.4407359
+    ]
+   },
+   "properties": {
+    "site": "COO",
+    "station": 700,
+    "transect": 600,
+    "elevation_m": 1082.26,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2242746,
+     19.4392656
+    ]
+   },
+   "properties": {
+    "site": "COO",
+    "station": 700,
+    "transect": 800,
+    "elevation_m": 1085.76,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2271073,
+     19.4457089
+    ]
+   },
+   "properties": {
+    "site": "COO",
+    "station": 800,
+    "transect": 0,
+    "elevation_m": 1104.13,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2262343,
+     19.4442186
+    ]
+   },
+   "properties": {
+    "site": "COO",
+    "station": 800,
+    "transect": 200,
+    "elevation_m": 1097.24,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2253244,
+     19.4426855
+    ]
+   },
+   "properties": {
+    "site": "COO",
+    "station": 800,
+    "transect": 400,
+    "elevation_m": 1088.72,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2244271,
+     19.4411812
+    ]
+   },
+   "properties": {
+    "site": "COO",
+    "station": 800,
+    "transect": 600,
+    "elevation_m": 1078.85,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2235136,
+     19.4396932
+    ]
+   },
+   "properties": {
+    "site": "COO",
+    "station": 800,
+    "transect": 800,
+    "elevation_m": 1081.73,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2263299,
+     19.4461588
+    ]
+   },
+   "properties": {
+    "site": "COO",
+    "station": 900,
+    "transect": 0,
+    "elevation_m": 1101.28,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2254339,
+     19.4446886
+    ]
+   },
+   "properties": {
+    "site": "COO",
+    "station": 900,
+    "transect": 200,
+    "elevation_m": 1095.65,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2245086,
+     19.4431645
+    ]
+   },
+   "properties": {
+    "site": "COO",
+    "station": 900,
+    "transect": 400,
+    "elevation_m": 1084.82,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2236312,
+     19.4416579
+    ]
+   },
+   "properties": {
+    "site": "COO",
+    "station": 900,
+    "transect": 600,
+    "elevation_m": 1078.31,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2226967,
+     19.440152
+    ]
+   },
+   "properties": {
+    "site": "COO",
+    "station": 900,
+    "transect": 800,
+    "elevation_m": 1076.51,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2432391,
+     19.3982804
+    ]
+   },
+   "properties": {
+    "site": "CRA",
+    "station": 100,
+    "transect": 0,
+    "elevation_m": 1115.04,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2416168,
+     19.3993662
+    ]
+   },
+   "properties": {
+    "site": "CRA",
+    "station": 100,
+    "transect": 200,
+    "elevation_m": 1121.38,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2398649,
+     19.40002
+    ]
+   },
+   "properties": {
+    "site": "CRA",
+    "station": 100,
+    "transect": 400,
+    "elevation_m": 1129.87,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2378491,
+     19.4001803
+    ]
+   },
+   "properties": {
+    "site": "CRA",
+    "station": 100,
+    "transect": 600,
+    "elevation_m": 1129.34,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2360685,
+     19.4008254
+    ]
+   },
+   "properties": {
+    "site": "CRA",
+    "station": 100,
+    "transect": 800,
+    "elevation_m": 1134.77,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2435679,
+     19.3991728
+    ]
+   },
+   "properties": {
+    "site": "CRA",
+    "station": 200,
+    "transect": 0,
+    "elevation_m": 1120.06,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2419529,
+     19.4002562
+    ]
+   },
+   "properties": {
+    "site": "CRA",
+    "station": 200,
+    "transect": 200,
+    "elevation_m": 1127.21,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2401786,
+     19.4009173
+    ]
+   },
+   "properties": {
+    "site": "CRA",
+    "station": 200,
+    "transect": 400,
+    "elevation_m": 1135.17,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2381993,
+     19.4010654
+    ]
+   },
+   "properties": {
+    "site": "CRA",
+    "station": 200,
+    "transect": 600,
+    "elevation_m": 1135.17,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2364445,
+     19.4017009
+    ]
+   },
+   "properties": {
+    "site": "CRA",
+    "station": 200,
+    "transect": 800,
+    "elevation_m": 1140.95,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2438986,
+     19.4000646
+    ]
+   },
+   "properties": {
+    "site": "CRA",
+    "station": 300,
+    "transect": 0,
+    "elevation_m": 1127.38,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2422897,
+     19.4011459
+    ]
+   },
+   "properties": {
+    "site": "CRA",
+    "station": 300,
+    "transect": 200,
+    "elevation_m": 1133.51,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2404971,
+     19.401813
+    ]
+   },
+   "properties": {
+    "site": "CRA",
+    "station": 300,
+    "transect": 400,
+    "elevation_m": 1138.5,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2385507,
+     19.40195
+    ]
+   },
+   "properties": {
+    "site": "CRA",
+    "station": 300,
+    "transect": 600,
+    "elevation_m": 1142.44,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2368152,
+     19.4025783
+    ]
+   },
+   "properties": {
+    "site": "CRA",
+    "station": 300,
+    "transect": 800,
+    "elevation_m": 1150.45,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2442446,
+     19.4009512
+    ]
+   },
+   "properties": {
+    "site": "CRA",
+    "station": 400,
+    "transect": 0,
+    "elevation_m": 1133.69,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2426363,
+     19.4020323
+    ]
+   },
+   "properties": {
+    "site": "CRA",
+    "station": 400,
+    "transect": 200,
+    "elevation_m": 1140.43,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2408553,
+     19.4026952
+    ]
+   },
+   "properties": {
+    "site": "CRA",
+    "station": 400,
+    "transect": 400,
+    "elevation_m": 1145.67,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2389093,
+     19.4028321
+    ]
+   },
+   "properties": {
+    "site": "CRA",
+    "station": 400,
+    "transect": 600,
+    "elevation_m": 1149.36,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2371334,
+     19.4034742
+    ]
+   },
+   "properties": {
+    "site": "CRA",
+    "station": 400,
+    "transect": 800,
+    "elevation_m": 1158.13,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2445907,
+     19.4018377
+    ]
+   },
+   "properties": {
+    "site": "CRA",
+    "station": 500,
+    "transect": 0,
+    "elevation_m": 1117.56,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.24298,
+     19.4029196
+    ]
+   },
+   "properties": {
+    "site": "CRA",
+    "station": 500,
+    "transect": 200,
+    "elevation_m": 1135.57,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2412111,
+     19.4035783
+    ]
+   },
+   "properties": {
+    "site": "CRA",
+    "station": 500,
+    "transect": 400,
+    "elevation_m": 1148.97,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2392599,
+     19.4037169
+    ]
+   },
+   "properties": {
+    "site": "CRA",
+    "station": 500,
+    "transect": 600,
+    "elevation_m": 1155.42,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2374572,
+     19.4043682
+    ]
+   },
+   "properties": {
+    "site": "CRA",
+    "station": 500,
+    "transect": 800,
+    "elevation_m": 1163.1,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2449352,
+     19.4027248
+    ]
+   },
+   "properties": {
+    "site": "CRA",
+    "station": 600,
+    "transect": 0,
+    "elevation_m": 1120.0,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2433074,
+     19.4038125
+    ]
+   },
+   "properties": {
+    "site": "CRA",
+    "station": 600,
+    "transect": 200,
+    "elevation_m": 1132.67,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2415561,
+     19.4044652
+    ]
+   },
+   "properties": {
+    "site": "CRA",
+    "station": 600,
+    "transect": 400,
+    "elevation_m": 1146.35,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.239586,
+     19.4046102
+    ]
+   },
+   "properties": {
+    "site": "CRA",
+    "station": 600,
+    "transect": 600,
+    "elevation_m": 1161.32,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2378004,
+     19.4052557
+    ]
+   },
+   "properties": {
+    "site": "CRA",
+    "station": 600,
+    "transect": 800,
+    "elevation_m": 1165.43,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2452746,
+     19.4036137
+    ]
+   },
+   "properties": {
+    "site": "CRA",
+    "station": 700,
+    "transect": 0,
+    "elevation_m": 1121.14,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2436347,
+     19.4047055
+    ]
+   },
+   "properties": {
+    "site": "CRA",
+    "station": 700,
+    "transect": 200,
+    "elevation_m": 1135.28,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2419012,
+     19.4053521
+    ]
+   },
+   "properties": {
+    "site": "CRA",
+    "station": 700,
+    "transect": 400,
+    "elevation_m": 1140.29,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2399122,
+     19.4055035
+    ]
+   },
+   "properties": {
+    "site": "CRA",
+    "station": 700,
+    "transect": 600,
+    "elevation_m": 1164.92,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2381423,
+     19.4061437
+    ]
+   },
+   "properties": {
+    "site": "CRA",
+    "station": 700,
+    "transect": 800,
+    "elevation_m": 1167.09,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2456149,
+     19.4045022
+    ]
+   },
+   "properties": {
+    "site": "CRA",
+    "station": 800,
+    "transect": 0,
+    "elevation_m": 1121.96,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2439895,
+     19.4055888
+    ]
+   },
+   "properties": {
+    "site": "CRA",
+    "station": 800,
+    "transect": 200,
+    "elevation_m": 1136.57,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.242229,
+     19.4062448
+    ]
+   },
+   "properties": {
+    "site": "CRA",
+    "station": 800,
+    "transect": 400,
+    "elevation_m": 1145.28,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2402652,
+     19.4063875
+    ]
+   },
+   "properties": {
+    "site": "CRA",
+    "station": 800,
+    "transect": 600,
+    "elevation_m": 1170.22,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2384803,
+     19.4070331
+    ]
+   },
+   "properties": {
+    "site": "CRA",
+    "station": 800,
+    "transect": 800,
+    "elevation_m": 1169.36,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2459572,
+     19.4053901
+    ]
+   },
+   "properties": {
+    "site": "CRA",
+    "station": 900,
+    "transect": 0,
+    "elevation_m": 1127.22,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2443526,
+     19.4064692
+    ]
+   },
+   "properties": {
+    "site": "CRA",
+    "station": 900,
+    "transect": 200,
+    "elevation_m": 1140.05,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2425519,
+     19.4071392
+    ]
+   },
+   "properties": {
+    "site": "CRA",
+    "station": 900,
+    "transect": 400,
+    "elevation_m": 1150.47,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2406229,
+     19.4072699
+    ]
+   },
+   "properties": {
+    "site": "CRA",
+    "station": 900,
+    "transect": 600,
+    "elevation_m": 1168.61,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2388183,
+     19.4079224
+    ]
+   },
+   "properties": {
+    "site": "CRA",
+    "station": 900,
+    "transect": 800,
+    "elevation_m": 1175.25,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.3336654,
+     19.5169878
+    ]
+   },
+   "properties": {
+    "site": "CJR",
+    "station": 100,
+    "transect": 0,
+    "elevation_m": 1775.13,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.3328797,
+     19.5153361
+    ]
+   },
+   "properties": {
+    "site": "CJR",
+    "station": 100,
+    "transect": 200,
+    "elevation_m": 1761.52,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.3321792,
+     19.5136473
+    ]
+   },
+   "properties": {
+    "site": "CJR",
+    "station": 100,
+    "transect": 400,
+    "elevation_m": 1755.11,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.3314694,
+     19.5119676
+    ]
+   },
+   "properties": {
+    "site": "CJR",
+    "station": 100,
+    "transect": 600,
+    "elevation_m": 1743.46,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.3307693,
+     19.5103058
+    ]
+   },
+   "properties": {
+    "site": "CJR",
+    "station": 100,
+    "transect": 800,
+    "elevation_m": 1725.8,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.3327998,
+     19.5173583
+    ]
+   },
+   "properties": {
+    "site": "CJR",
+    "station": 200,
+    "transect": 0,
+    "elevation_m": 1769.88,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.3320275,
+     19.5157336
+    ]
+   },
+   "properties": {
+    "site": "CJR",
+    "station": 200,
+    "transect": 200,
+    "elevation_m": 1754.85,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.3313161,
+     19.5140229
+    ]
+   },
+   "properties": {
+    "site": "CJR",
+    "station": 200,
+    "transect": 400,
+    "elevation_m": 1746.07,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.3306128,
+     19.5123563
+    ]
+   },
+   "properties": {
+    "site": "CJR",
+    "station": 200,
+    "transect": 600,
+    "elevation_m": 1740.3,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.3299105,
+     19.5106902
+    ]
+   },
+   "properties": {
+    "site": "CJR",
+    "station": 200,
+    "transect": 800,
+    "elevation_m": 1723.78,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.3318383,
+     19.51777
+    ]
+   },
+   "properties": {
+    "site": "CJR",
+    "station": 300,
+    "transect": 0,
+    "elevation_m": 1760.52,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.3311672,
+     19.5161349
+    ]
+   },
+   "properties": {
+    "site": "CJR",
+    "station": 300,
+    "transect": 200,
+    "elevation_m": 1748.38,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.330447,
+     19.5144012
+    ]
+   },
+   "properties": {
+    "site": "CJR",
+    "station": 300,
+    "transect": 400,
+    "elevation_m": 1738.64,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.3297282,
+     19.5127577
+    ]
+   },
+   "properties": {
+    "site": "CJR",
+    "station": 300,
+    "transect": 600,
+    "elevation_m": 1732.7,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.3290658,
+     19.5110683
+    ]
+   },
+   "properties": {
+    "site": "CJR",
+    "station": 300,
+    "transect": 800,
+    "elevation_m": 1722.67,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.331077,
+     19.5181164
+    ]
+   },
+   "properties": {
+    "site": "CJR",
+    "station": 400,
+    "transect": 0,
+    "elevation_m": 1754.45,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.3303112,
+     19.5165044
+    ]
+   },
+   "properties": {
+    "site": "CJR",
+    "station": 400,
+    "transect": 200,
+    "elevation_m": 1741.12,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.3296008,
+     19.5147959
+    ]
+   },
+   "properties": {
+    "site": "CJR",
+    "station": 400,
+    "transect": 400,
+    "elevation_m": 1731.1,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.3288958,
+     19.5131263
+    ]
+   },
+   "properties": {
+    "site": "CJR",
+    "station": 400,
+    "transect": 600,
+    "elevation_m": 1726.36,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.3281906,
+     19.5114543
+    ]
+   },
+   "properties": {
+    "site": "CJR",
+    "station": 400,
+    "transect": 800,
+    "elevation_m": 1720.31,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.3301634,
+     19.5185321
+    ]
+   },
+   "properties": {
+    "site": "CJR",
+    "station": 500,
+    "transect": 0,
+    "elevation_m": 1745.38,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.3294633,
+     19.5168704
+    ]
+   },
+   "properties": {
+    "site": "CJR",
+    "station": 500,
+    "transect": 200,
+    "elevation_m": 1735.43,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.3287345,
+     19.5151999
+    ]
+   },
+   "properties": {
+    "site": "CJR",
+    "station": 500,
+    "transect": 400,
+    "elevation_m": 1723.89,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.3280056,
+     19.5135205
+    ]
+   },
+   "properties": {
+    "site": "CJR",
+    "station": 500,
+    "transect": 600,
+    "elevation_m": 1718.38,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.3273148,
+     19.5118405
+    ]
+   },
+   "properties": {
+    "site": "CJR",
+    "station": 500,
+    "transect": 800,
+    "elevation_m": 1715.21,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.3293562,
+     19.5188784
+    ]
+   },
+   "properties": {
+    "site": "CJR",
+    "station": 600,
+    "transect": 0,
+    "elevation_m": 1738.72,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.3285847,
+     19.5172553
+    ]
+   },
+   "properties": {
+    "site": "CJR",
+    "station": 600,
+    "transect": 200,
+    "elevation_m": 1729.63,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.3278957,
+     19.5155893
+    ]
+   },
+   "properties": {
+    "site": "CJR",
+    "station": 600,
+    "transect": 400,
+    "elevation_m": 1718.23,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.3271793,
+     19.5138971
+    ]
+   },
+   "properties": {
+    "site": "CJR",
+    "station": 600,
+    "transect": 600,
+    "elevation_m": 1711.27,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.3264718,
+     19.5122206
+    ]
+   },
+   "properties": {
+    "site": "CJR",
+    "station": 600,
+    "transect": 800,
+    "elevation_m": 1707.51,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.3283836,
+     19.5192957
+    ]
+   },
+   "properties": {
+    "site": "CJR",
+    "station": 700,
+    "transect": 0,
+    "elevation_m": 1730.15,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.3277216,
+     19.5176334
+    ]
+   },
+   "properties": {
+    "site": "CJR",
+    "station": 700,
+    "transect": 200,
+    "elevation_m": 1722.61,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.3269935,
+     19.5160081
+    ]
+   },
+   "properties": {
+    "site": "CJR",
+    "station": 700,
+    "transect": 400,
+    "elevation_m": 1714.01,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.3262928,
+     19.5143011
+    ]
+   },
+   "properties": {
+    "site": "CJR",
+    "station": 700,
+    "transect": 600,
+    "elevation_m": 1704.57,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.325583,
+     19.5126214
+    ]
+   },
+   "properties": {
+    "site": "CJR",
+    "station": 700,
+    "transect": 800,
+    "elevation_m": 1696.87,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.3276279,
+     19.5196254
+    ]
+   },
+   "properties": {
+    "site": "CJR",
+    "station": 800,
+    "transect": 0,
+    "elevation_m": 1728.45,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.326866,
+     19.5180216
+    ]
+   },
+   "properties": {
+    "site": "CJR",
+    "station": 800,
+    "transect": 200,
+    "elevation_m": 1718.64,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.3261761,
+     19.5163534
+    ]
+   },
+   "properties": {
+    "site": "CJR",
+    "station": 800,
+    "transect": 400,
+    "elevation_m": 1709.43,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.325464,
+     19.5146705
+    ]
+   },
+   "properties": {
+    "site": "CJR",
+    "station": 800,
+    "transect": 600,
+    "elevation_m": 1696.66,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.3247548,
+     19.5129905
+    ]
+   },
+   "properties": {
+    "site": "CJR",
+    "station": 800,
+    "transect": 800,
+    "elevation_m": 1686.51,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.3266987,
+     19.5200308
+    ]
+   },
+   "properties": {
+    "site": "CJR",
+    "station": 900,
+    "transect": 0,
+    "elevation_m": 1726.15,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.3259804,
+     19.5184235
+    ]
+   },
+   "properties": {
+    "site": "CJR",
+    "station": 900,
+    "transect": 200,
+    "elevation_m": 1716.67,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.3252515,
+     19.516744
+    ]
+   },
+   "properties": {
+    "site": "CJR",
+    "station": 900,
+    "transect": 400,
+    "elevation_m": 1705.53,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.3245608,
+     19.515073
+    ]
+   },
+   "properties": {
+    "site": "CJR",
+    "station": 900,
+    "transect": 600,
+    "elevation_m": 1691.2,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.323851,
+     19.5133933
+    ]
+   },
+   "properties": {
+    "site": "CJR",
+    "station": 900,
+    "transect": 800,
+    "elevation_m": 1677.48,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.3329462,
+     19.5425105
+    ]
+   },
+   "properties": {
+    "site": "SOL",
+    "station": 100,
+    "transect": 0,
+    "elevation_m": 1836.1,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.3329485,
+     19.5406862
+    ]
+   },
+   "properties": {
+    "site": "SOL",
+    "station": 100,
+    "transect": 200,
+    "elevation_m": 1834.1,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.3329037,
+     19.5388895
+    ]
+   },
+   "properties": {
+    "site": "SOL",
+    "station": 100,
+    "transect": 400,
+    "elevation_m": 1828.69,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.3328972,
+     19.5371104
+    ]
+   },
+   "properties": {
+    "site": "SOL",
+    "station": 100,
+    "transect": 600,
+    "elevation_m": 1820.17,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.332842,
+     19.5352597
+    ]
+   },
+   "properties": {
+    "site": "SOL",
+    "station": 100,
+    "transect": 800,
+    "elevation_m": 1812.74,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.3319964,
+     19.5425228
+    ]
+   },
+   "properties": {
+    "site": "SOL",
+    "station": 200,
+    "transect": 0,
+    "elevation_m": 1826.15,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.3319987,
+     19.540694
+    ]
+   },
+   "properties": {
+    "site": "SOL",
+    "station": 200,
+    "transect": 200,
+    "elevation_m": 1822.04,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.3319541,
+     19.5389108
+    ]
+   },
+   "properties": {
+    "site": "SOL",
+    "station": 200,
+    "transect": 400,
+    "elevation_m": 1816.98,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.3319474,
+     19.5371091
+    ]
+   },
+   "properties": {
+    "site": "SOL",
+    "station": 200,
+    "transect": 600,
+    "elevation_m": 1809.59,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.3318923,
+     19.535272
+    ]
+   },
+   "properties": {
+    "site": "SOL",
+    "station": 200,
+    "transect": 800,
+    "elevation_m": 1801.0,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.3310508,
+     19.542535
+    ]
+   },
+   "properties": {
+    "site": "SOL",
+    "station": 300,
+    "transect": 0,
+    "elevation_m": 1811.18,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.3310245,
+     19.540702
+    ]
+   },
+   "properties": {
+    "site": "SOL",
+    "station": 300,
+    "transect": 200,
+    "elevation_m": 1809.47,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.3309991,
+     19.5389322
+    ]
+   },
+   "properties": {
+    "site": "SOL",
+    "station": 300,
+    "transect": 400,
+    "elevation_m": 1805.65,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.3310014,
+     19.5371078
+    ]
+   },
+   "properties": {
+    "site": "SOL",
+    "station": 300,
+    "transect": 600,
+    "elevation_m": 1799.71,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.3309372,
+     19.5352843
+    ]
+   },
+   "properties": {
+    "site": "SOL",
+    "station": 300,
+    "transect": 800,
+    "elevation_m": 1790.99,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.3300969,
+     19.5425383
+    ]
+   },
+   "properties": {
+    "site": "SOL",
+    "station": 400,
+    "transect": 0,
+    "elevation_m": 1796.57,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.3301002,
+     19.5407446
+    ]
+   },
+   "properties": {
+    "site": "SOL",
+    "station": 400,
+    "transect": 200,
+    "elevation_m": 1799.09,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.3300548,
+     19.5389398
+    ]
+   },
+   "properties": {
+    "site": "SOL",
+    "station": 400,
+    "transect": 400,
+    "elevation_m": 1796.62,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.330048,
+     19.5371291
+    ]
+   },
+   "properties": {
+    "site": "SOL",
+    "station": 400,
+    "transect": 600,
+    "elevation_m": 1790.47,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.3299932,
+     19.5353097
+    ]
+   },
+   "properties": {
+    "site": "SOL",
+    "station": 400,
+    "transect": 800,
+    "elevation_m": 1782.25,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.3291456,
+     19.5425415
+    ]
+   },
+   "properties": {
+    "site": "SOL",
+    "station": 500,
+    "transect": 0,
+    "elevation_m": 1786.87,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.3291205,
+     19.5407898
+    ]
+   },
+   "properties": {
+    "site": "SOL",
+    "station": 500,
+    "transect": 200,
+    "elevation_m": 1788.83,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.3291131,
+     19.5389475
+    ]
+   },
+   "properties": {
+    "site": "SOL",
+    "station": 500,
+    "transect": 400,
+    "elevation_m": 1788.38,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.3290873,
+     19.5371506
+    ]
+   },
+   "properties": {
+    "site": "SOL",
+    "station": 500,
+    "transect": 600,
+    "elevation_m": 1781.02,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.3290041,
+     19.5353363
+    ]
+   },
+   "properties": {
+    "site": "SOL",
+    "station": 500,
+    "transect": 800,
+    "elevation_m": 1772.09,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.3281981,
+     19.5425808
+    ]
+   },
+   "properties": {
+    "site": "SOL",
+    "station": 600,
+    "transect": 0,
+    "elevation_m": 1778.96,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.3282018,
+     19.5408016
+    ]
+   },
+   "properties": {
+    "site": "SOL",
+    "station": 600,
+    "transect": 200,
+    "elevation_m": 1780.36,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.3281553,
+     19.5389598
+    ]
+   },
+   "properties": {
+    "site": "SOL",
+    "station": 600,
+    "transect": 400,
+    "elevation_m": 1781.11,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.3281487,
+     19.5371495
+    ]
+   },
+   "properties": {
+    "site": "SOL",
+    "station": 600,
+    "transect": 600,
+    "elevation_m": 1772.21,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.328094,
+     19.5353436
+    ]
+   },
+   "properties": {
+    "site": "SOL",
+    "station": 600,
+    "transect": 800,
+    "elevation_m": 1763.75,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.327251,
+     19.5426201
+    ]
+   },
+   "properties": {
+    "site": "SOL",
+    "station": 700,
+    "transect": 0,
+    "elevation_m": 1770.42,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.3271965,
+     19.5408146
+    ]
+   },
+   "properties": {
+    "site": "SOL",
+    "station": 700,
+    "transect": 200,
+    "elevation_m": 1769.74,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.3271701,
+     19.5389725
+    ]
+   },
+   "properties": {
+    "site": "SOL",
+    "station": 700,
+    "transect": 400,
+    "elevation_m": 1772.38,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.3271535,
+     19.5371484
+    ]
+   },
+   "properties": {
+    "site": "SOL",
+    "station": 700,
+    "transect": 600,
+    "elevation_m": 1763.98,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.3271563,
+     19.5353511
+    ]
+   },
+   "properties": {
+    "site": "SOL",
+    "station": 700,
+    "transect": 800,
+    "elevation_m": 1754.69,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.3262994,
+     19.5426056
+    ]
+   },
+   "properties": {
+    "site": "SOL",
+    "station": 800,
+    "transect": 0,
+    "elevation_m": 1762.29,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.3263022,
+     19.5408089
+    ]
+   },
+   "properties": {
+    "site": "SOL",
+    "station": 800,
+    "transect": 200,
+    "elevation_m": 1763.46,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.3262559,
+     19.5389887
+    ]
+   },
+   "properties": {
+    "site": "SOL",
+    "station": 800,
+    "transect": 400,
+    "elevation_m": 1765.61,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.3262496,
+     19.5371774
+    ]
+   },
+   "properties": {
+    "site": "SOL",
+    "station": 800,
+    "transect": 600,
+    "elevation_m": 1755.09,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.3261946,
+     19.535368
+    ]
+   },
+   "properties": {
+    "site": "SOL",
+    "station": 800,
+    "transect": 800,
+    "elevation_m": 1748.28,
+    "has_mosquito_traps": true,
+    "has_bird_counts": false
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.3253262,
+     19.5425907
+    ]
+   },
+   "properties": {
+    "site": "SOL",
+    "station": 900,
+    "transect": 0,
+    "elevation_m": 1754.53,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.3253102,
+     19.5408027
+    ]
+   },
+   "properties": {
+    "site": "SOL",
+    "station": 900,
+    "transect": 200,
+    "elevation_m": 1755.49,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.3252939,
+     19.5390057
+    ]
+   },
+   "properties": {
+    "site": "SOL",
+    "station": 900,
+    "transect": 400,
+    "elevation_m": 1757.16,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.3252682,
+     19.5372088
+    ]
+   },
+   "properties": {
+    "site": "SOL",
+    "station": 900,
+    "transect": 600,
+    "elevation_m": 1750.12,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.3252135,
+     19.5353852
+    ]
+   },
+   "properties": {
+    "site": "SOL",
+    "station": 900,
+    "transect": 800,
+    "elevation_m": 1741.61,
+    "has_mosquito_traps": true,
+    "has_bird_counts": true
+   }
+  }
+ ]
+}

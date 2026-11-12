@@ -1,0 +1,648 @@
+# Hawaiʻi Island Avian Malaria Story Map — Build Plan
+
+An interactive web application telling the story of avian malaria and Hawaiian honeycreepers on Hawaiʻi Island, using a 3D terrain map, environmental layers, field data from nine study sites, and a flat comparison view.
+
+This plan is written to be fed to Claude Code **one step at a time**. Each step has a goal, a prompt you can paste, and a "done when" check. Finish and check each step before starting the next, so any problem is easy to trace to the step that caused it.
+
+---
+
+## How to use this plan with Claude Code
+
+1. Put this file in the root of the repository as `PLAN.md`.
+2. Start each Claude Code session with: *"Read PLAN.md. We are doing Step X.Y only."* Then paste that step's prompt.
+3. After each step: run the app or script, check the "done when" list, then commit (`git commit -m "Step X.Y: ..."`).
+4. If something breaks, you know it came from the most recent step. Ask Claude Code to fix it before moving on.
+
+### Ground rules for Claude Code (include in every session)
+
+- Do **only** the current step. Don't start later steps or refactor unrelated files.
+- Don't change the data file formats in `public/data/` without updating the **Data contract** section of this plan.
+- Keep dependencies free and open source. No API keys or paid services.
+- Explain any new dependency before adding it.
+- When a step is finished, summarize what changed and how to test it.
+
+---
+
+## Tech stack (all free, shareable among team members)
+
+| Part | Choice | Why |
+|---|---|---|
+| Web framework | **React + Vite** | Free, widely documented, components keep map, charts, and story separate |
+| Map | **MapLibre GL JS** | Free and open source, 3D terrain, no account or token |
+| Terrain tiles | **AWS Terrain Tiles (Terrarium format)** to start; optionally self-generated tiles from the USGS 10 m DEM later | Free, no key, works with MapLibre immediately |
+| Charts | **D3** | Flat bar chart view and small linked charts |
+| Scroll story | **Scrollama** (Phase 6) | Lightweight scroll-triggered chapters |
+| Data processing | **Python** (pandas, geopandas, pyproj, rasterio, shapely) | Handles CSVs, coordinate conversion, and rasters |
+| Collaboration | **GitHub** repository | Shared code, issues, and history |
+| Hosting | **GitHub Pages** (or Netlify/Vercel free tier) | Free public link for the team and viewers |
+
+---
+
+## Folder structure
+
+```
+/
+├── PLAN.md                  ← this file
+├── README.md                ← setup instructions for teammates
+├── data-pipeline/           ← Python scripts (run locally, not part of the website)
+│   ├── requirements.txt
+│   ├── raw/                 ← downloaded source data (large files git-ignored)
+│   ├── scripts/             ← one script per processing step
+│   └── reports/             ← text summaries from inspection scripts
+├── public/
+│   └── data/                ← processed, web-ready files the app loads
+└── src/                     ← React app
+    ├── components/          ← Map, LayerControls, SeasonButtons, SitePicker, StationTooltip, TopBar, InfoOverlay, FlatChart, Story...
+    ├── config/              ← colors, layer settings, chapter definitions
+    └── App.jsx
+```
+
+---
+
+## Source data you need to download (into `data-pipeline/raw/`)
+
+| Folder name | Dataset | Link |
+|---|---|---|
+| `biocomplexity_2001_2004/` | Island of Hawaiʻi bird, mosquito, and avian malaria infection data 2001–2004: all four CSVs plus the XML metadata | https://usgs.gov/data/island-hawaii-bird-mosquito-and-avian-malaria-infection-data-2001-2004 |
+| `bird_malaria_2001_2005/` | Island of Hawaiʻi forest bird malaria infection data 2001–2005: CSV plus metadata | https://data.usgs.gov/datacatalog/data/USGS:671c19e5d34efed56210f490 |
+| `land_cover/` | Hawaiʻi Land Cover and Habitat Status (Carbon Assessment of Hawaiʻi) | https://www.usgs.gov/data/hawaii-land-cover-and-habitat-status |
+| `temperature/` | Climate of Hawaiʻi air temperature GIS layers (mean annual, and monthly if available) | https://www.hawaii.edu/climate-data-portal/climate-atlas/ |
+| `dem/` | USGS 10 m DEM, Big Island (PacIOOS). Optional at first, since terrain tiles cover the visual. Needed for area calculations. | https://pae-paha.pacioos.hawaii.edu/erddap/griddap/usgs_dem_10m_bigisland.html |
+
+Later phases (not needed for the core story):
+- Fortini et al. 2015 species range projections: https://www.sciencebase.gov/catalog/item/55e108e0e4b05561fa20652f
+- Predicted malaria risk 2098–2100: https://sciencebase.gov/catalog/item/57ec5fbce4b090825010b908
+
+Key reference for the malaria temperature thresholds (13°C refuge limit, reduced development below 21°C): LaPointe, Goff & Atkinson 2010, https://pubs.usgs.gov/publication/70200648
+
+---
+
+## Data contract (what the app expects in `public/data/`)
+
+Claude Code should create these exact files and fields. If a step needs to change them, update this section first.
+
+**`stations.geojson`**: Point features, one per sampling point (site + station + transect; 405 total).
+Properties: `site`, `station`, `transect`, `elevation_m`, `has_mosquito_traps` (true/false), `has_bird_counts` (true/false)
+
+**`sites.geojson`**: Point features, one per site (the centroid of its stations).
+Properties: `site`, `site_name` (from the XML metadata, or `null` if not found), `elevation_m` (mean of stations), `elevation_min_m`, `elevation_max_m`, `n_stations`
+
+**`site_summary.json`**: Measures per site per time period.
+```json
+[
+  {
+    "site": "COO",
+    "period": "2002-dry",
+    "mosquito_per_trap_night": 1.4,      "mosquito_trap_nights": 52,
+    "mosq_midgut_pct": 4.2,              "mosq_midgut_n": 95,
+    "mosq_salivary_pct": 1.1,            "mosq_salivary_n": 93,
+    "bird_prevalence_pct": 22.0,         "bird_sampled_n": 41,
+    "honeycreeper_prevalence_pct": 18.5, "honeycreeper_sampled_n": 27,
+    "honeycreepers_per_count": 3.1,      "nonnative_birds_per_count": 5.2,   "bird_counts_n": 30
+  }
+]
+```
+
+| Field | Definition |
+|---|---|
+| `site` | Site code, one of the nine in `sites.geojson`. |
+| `period` | One of eight values. Five Hawaiian seasons (wet Nov–Apr, dry May–Oct; wet seasons labeled by start year, so `2002-wet` = Nov 2002–Apr 2003): `2002-dry`, `2002-wet`, `2003-dry`, `2003-wet`, `2004-dry`. Three combined periods: `all` (all five seasons together), `dry` (the three dry seasons), `wet` (the two wet seasons). Samples from Jan–Apr 2002 and Nov–Dec 2004 are dropped from every period, including the combined ones. |
+| `mosquito_per_trap_night` | *Culex* caught in CO2 traps ÷ `mosquito_trap_nights`. Uses the `culex` column only (the only malaria vector). Gravid traps are not used for abundance. |
+| `mosquito_trap_nights` | CO2 trap rows in the mosquito capture file for this site-period (one row = one trap set for one night). |
+| `mosq_midgut_pct` | % of dissected *Culex* with `midgut_infection` = yes. Period assigned by `date_collected`. |
+| `mosq_midgut_n` | Dissected mosquitoes with a recorded `midgut_infection`. Blank = not examined, excluded. |
+| `mosq_salivary_pct` | % of dissected *Culex* with `salivary_infection` = yes. Period assigned by `date_collected`. |
+| `mosq_salivary_n` | Dissected mosquitoes with a recorded `salivary_infection`. Blank = not examined, excluded. |
+| `bird_prevalence_pct` | % of sampled birds (all species) infected, from `INFECTION_STATUS`. |
+| `bird_sampled_n` | Unique birds (`BANDNUMBER`) sampled in this site-period, counting each bird once. A bird is a unique site + period + band number + species; unbanded (`NB`) rows count as one bird each. A bird with several results in the period is positive if any is `P`, negative if any is `N` and none `P`, and excluded if all are `U` (see data_notes.md). |
+| `honeycreeper_prevalence_pct` | Same as `bird_prevalence_pct`, restricted to species with `honeycreeper = true` in `species_lookup.csv`. |
+| `honeycreeper_sampled_n` | Same as `bird_sampled_n`, restricted to honeycreepers. |
+| `honeycreepers_per_count` | Honeycreeper detections ÷ `bird_counts_n`. This is the app's "native bird abundance" measure. Native non-honeycreepers (ʻŌmaʻo, ʻElepaio, ʻIo) are in neither abundance field. |
+| `nonnative_birds_per_count` | Detections of species with `native = false` ÷ `bird_counts_n`. |
+| `bird_counts_n` | Counting events: unique site + station + transect + date in the bird count file. Stations 100, 300, 500, 700, 900 only (station 200 rows dropped). Events recorded as `NOBI` (no birds detected) are included. |
+
+Rules:
+- Missing data is `null`, never `0`. A measure is `null` when its sample size is 0. A true zero (counts or dissections done, nothing found) is `0`.
+- Every percentage has its own sample size next to it.
+- Percentages (`mosq_midgut_pct`, `mosq_salivary_pct`, `bird_prevalence_pct`, `honeycreeper_prevalence_pct`) are `null` when their sample size is below 20. The sample size is still filled in, and the app shows "too few samples".
+- Abundance measures (`mosquito_per_trap_night`, `honeycreepers_per_count`, `nonnative_birds_per_count`) are shown whenever their sample size is above 0.
+- Species are matched through `canonical_code` in `species_lookup.csv`, never the raw code.
+
+**`station_summary.json`**: Measures per sampling point, totaled across all five seasons combined (May 2002 – Oct 2004, the same `all` period as `site_summary.json`). One record per site + station + transect (405 records).
+```json
+[
+  {
+    "site": "COO", "station": 300, "transect": 400,
+    "culex_per_trap_night": 0.84,   "trap_nights": 64,
+    "mosq_midgut_n": 31,            "mosq_midgut_infected": 2,
+    "mosq_salivary_n": 31,          "mosq_salivary_infected": 1,
+    "honeycreepers_per_count": 4.2, "nonnative_birds_per_count": 3.6,   "bird_counts_n": 10
+  }
+]
+```
+
+| Field | Definition |
+|---|---|
+| `site`, `station`, `transect` | The sampling point; matches `stations.geojson`. |
+| `culex_per_trap_night` | *Culex* caught in CO2 traps ÷ `trap_nights`. Same rules as `mosquito_per_trap_night` in `site_summary.json`. |
+| `trap_nights` | CO2 trap rows for this sampling point (one row = one trap set for one night). |
+| `mosq_midgut_n` | Dissected mosquitoes from this point with a recorded `midgut_infection` (all trap types, dated by `date_collected`). |
+| `mosq_midgut_infected` | How many of those were midgut-positive. |
+| `mosq_salivary_n` | Dissected mosquitoes from this point with a recorded `salivary_infection`. |
+| `mosq_salivary_infected` | How many of those were salivary-positive. |
+| `honeycreepers_per_count` | Honeycreeper detections ÷ `bird_counts_n`. Same rules as `site_summary.json`. |
+| `nonnative_birds_per_count` | Detections of species with `native = false` ÷ `bird_counts_n`. Same rules as `site_summary.json`. |
+| `bird_counts_n` | Counting events at this point (site + station + transect + date), NOBI events included. |
+
+Rules:
+- Infection is stored as counts, never percentages, because station sample sizes are small. The 20-sample minimum does not apply, since no percentages are stored.
+- Missing data is `null`; a true zero stays `0`. When a mosquito sample size is 0, its `_infected` count is `null`.
+- Stations without bird counts (station 200 and the even-numbered stations) have `honeycreepers_per_count` and `nonnative_birds_per_count` = `null` and `bird_counts_n` = 0.
+- Per-site sums of `trap_nights`, `mosq_midgut_n`, `mosq_salivary_n` and `bird_counts_n` equal the `all` values for that site in `site_summary.json`.
+
+**`landcover.geojson`** (or `.pmtiles` if too large): simplified polygons clipped to Hawaiʻi Island.
+Property: `class` (one of a small set, e.g. `wet_forest`, `dry_forest`, `shrub_grass`, `bare_lava`, `developed_ag`), plus `native_status` if using Habitat Status.
+
+**`malaria_zones.geojson`**: polygons clipped to Hawaiʻi Island.
+Property: `zone` = `high_risk` (>21°C), `episodic` (13–21°C), `refuge` (<13°C).
+
+**`species_lookup.csv`** (in `data-pipeline/`): one row per species code found in either bird file.
+Columns: `code`, `canonical_code` (one code per species, merging codes for the same bird across files), `common_name`, `scientific_name`, `native` (true/false), `honeycreeper` (true/false), `in_counts` (true/false), `in_blood` (true/false), `count_guild` (the bird count file's `guild` value, blank if none), `notes` (`CHECK` marks rows needing review).
+`NOBI` ("no birds detected") is included with blank `canonical_code`, `native` and `honeycreeper`: it is a zero-detection count, not a species.
+
+---
+
+# Phase 0: Project setup
+
+### Step 0.1: Create the repository and app skeleton
+**Goal:** an empty React + Vite app that runs, with the folder structure above.
+
+**Prompt:**
+> Read PLAN.md. Do Step 0.1 only. Create a React + Vite project in this repository using the folder structure in PLAN.md. Add a README.md explaining how a teammate installs and runs the app (`npm install`, `npm run dev`) and how to set up the Python environment for `data-pipeline/`. Create `data-pipeline/requirements.txt` with pandas, geopandas, pyproj, rasterio, shapely. Add a `.gitignore` that ignores `node_modules`, Python virtual environments, and large raw data files in `data-pipeline/raw/` (but keeps a `README` listing what goes there). The app should show only a page title for now.
+
+**Done when:**
+- [ ] `npm run dev` shows the page title in the browser
+- [ ] Python environment installs from `requirements.txt` without errors
+- [ ] Folder structure matches PLAN.md
+
+---
+
+# Phase 1: Data pipeline (Python)
+
+Each script reads from `raw/`, writes to `public/data/` or `reports/`, and can be rerun safely.
+
+### Step 1.1: Inspect the raw data
+**Goal:** a written report of what's actually in each file before any processing.
+
+**Prompt:**
+> Read PLAN.md. Do Step 1.1 only. Write `data-pipeline/scripts/01_inspect.py`. For each CSV in `raw/biocomplexity_2001_2004/` and `raw/bird_malaria_2001_2005/`, report: column names and types, row count, unique values of site or location columns, min/max dates, count of nulls per column, and the first five rows. Also list unique species values in each file. Write the output to `data-pipeline/reports/inspection.md`. Do not transform any data.
+
+**Done when:**
+- [ ] `reports/inspection.md` exists
+- [ ] **You** review it and confirm: site codes match across files (e.g. `site` in Biocomplexity files = `LOCATION` in the bird blood file), coordinate columns look like lat/long, date formats are readable
+- [ ] Note any surprises in the report before Step 1.2
+
+### Step 1.2: Stations and sites
+**Goal:** map-ready station and site points.
+
+**Prompt:**
+> Read PLAN.md and data-pipeline/reports/data_notes.md. Do Step 1.2 only. Write `scripts/02_sites.py`. The sampling station spatial coordinates CSV is already in WGS84 decimal degrees (`x_long`, `y_lat`), so no coordinate conversion is needed.
+>
+> 1. Create `public/data/stations.geojson` with one point per site + station + transect (405 points). Properties: `site`, `station`, `transect`, `elevation_m`, plus `has_mosquito_traps` and `has_bird_counts` (true/false), based on whether that site + station + transect appears in the mosquito capture file and the bird count file.
+> 2. Check the bird count rows at station 200 (25 rows): which sites, transects, and dates they come from, and whether they look like data entry errors. Write findings to `reports/station200_check.md`. Do not change or drop them yet.
+> 3. Look in the two XML metadata files for full site names matching the nine site codes.
+> 4. Create `public/data/sites.geojson` with one point per site at the mean of its stations' coordinates. Properties: `site`, `site_name` (from the metadata, or null if not found), `elevation_m` (mean), `elevation_min_m`, `elevation_max_m`, `n_stations`.
+> 5. Print a table of sites sorted by mean elevation.
+>
+> Update the Data contract in PLAN.md to include the new properties.
+
+**Done when:**
+- [ ] `stations.geojson` has 405 points and `sites.geojson` has 9, both on Hawaiʻi Island's east side in https://geojson.io
+- [ ] Site elevations roughly 25–1,800 m
+- [ ] `has_bird_counts` is true only at stations 100, 300, 500, 700, 900 (plus wherever the station 200 rows fall)
+- [ ] `reports/station200_check.md` exists. **You** decide what to do with those rows and record it in data_notes.md
+- [ ] Site names filled in, or noted as not found
+
+### Step 1.3: Species lookup
+**Goal:** one table that defines every species code in both bird files, merges codes that mean the same bird, and marks native vs. non-native and honeycreeper species.
+
+**Prompt:**
+> Read PLAN.md and data-pipeline/reports/data_notes.md. Do Step 1.3 only. Write `scripts/03_species.py` that builds `data-pipeline/species_lookup.csv` covering every species code in the bird count file (`alphacode`) and the bird blood file (`SPECIES`).
+>
+> 1. Look up each code's meaning in the two XML metadata files first. Only use outside knowledge when a code isn't defined there, and say so in the notes.
+> 2. Columns: `code`, `canonical_code`, `common_name`, `scientific_name`, `native` (true/false), `honeycreeper` (true/false), `in_counts` (true/false), `in_blood` (true/false), `count_guild` (the `guild` value from the bird count file, if any), `notes`.
+> 3. `canonical_code` merges codes for the same species across files. Known candidates from data_notes.md: JAWE/WAWE (white-eye), AKIP/AKIA (ʻAkiapōlāʻau). HWAH, HWAM, and HAWH are unresolved: merge them only if the metadata confirms they are the same species.
+> 4. Report the three `guild` values and what they mean (from the metadata), and flag any species where `guild` disagrees with the `native` column.
+> 5. Mark anything uncertain with `CHECK` in `notes` rather than guessing.
+> 6. Write a short summary to `reports/species_check.md`: merged codes, unresolved codes, guild meanings, and any disagreements.
+>
+> Update the `species_lookup.csv` entry in the Data contract in PLAN.md to match the new columns.
+
+**Done when:**
+- [ ] Every code from both files appears in the lookup (23 from counts, 20 from blood, with overlaps)
+- [ ] JAWE/WAWE and AKIP/AKIA resolved, with the source of the decision noted
+- [ ] HWAH/HWAM/HAWH either resolved from the metadata or marked `CHECK`
+- [ ] Guild meanings reported, with no unexplained disagreements with `native`
+- [ ] **You** review rows marked `CHECK` and record decisions in data_notes.md
+
+### Step 1.4: Choose time periods
+**Goal:** decide the time periods the season buttons will step through and the start date, based on how much usable data each site has per period. Also set the minimum sample sizes.
+
+**Prompt:**
+> Read PLAN.md and data-pipeline/reports/data_notes.md. Do Step 1.4 only. Write `scripts/04_coverage.py`. Apply the rules in data_notes.md so the counts match what Step 1.5 will actually use:
+> - Mosquito captures: count trap nights (one trap on one night), using the `culex` column.
+> - Mosquito dissections: count examined mosquitoes only (exclude blank `midgut_infection` / `salivary_infection`), dated by `date_collected`.
+> - Bird blood samples: count unique birds (`BANDNUMBER`) per period with a determined `INFECTION_STATUS`. Report all birds and honeycreepers separately.
+> - Bird counts: count counting events (site + station + transect + date), including NOBI events and excluding station 200.
+> - Parse each file's dates with its own format. Trim everything after 2004-12-31.
+>
+> For each dataset, count samples per site for each of these period options:
+> 1. Month
+> 2. Hawaiian season: wet (Nov–Apr) and dry (May–Oct). Label wet seasons by start year, e.g. `2002-wet` = Nov 2002–Apr 2003.
+> 3. Four seasons (Dec–Feb, Mar–May, Jun–Aug, Sep–Nov). Assign December to the following year's Dec–Feb season.
+> 4. Year
+>
+> For each option, report the % of site-period cells with at least 10, 20, and 30 samples, and list cells with zero samples. Show results twice: starting 2001, and starting 2002.
+>
+> Write everything to `reports/coverage.md`, ending with a recommendation for: (a) the period option, (b) the start date, (c) a minimum sample size for showing a percentage. Do not choose for me; present the recommendation and the trade-offs.
+
+**Done when:**
+- [ ] `reports/coverage.md` exists with tables for all four datasets and all four period options
+- [ ] **You** decide the period option, start date, and minimum sample sizes
+- [ ] Decisions recorded in the Decisions log in PLAN.md and in data_notes.md
+- [ ] Data contract's `period` format updated to match the chosen option
+
+### Step 1.5: Site summaries
+**Goal:** the main data file the app reads: one record per site per period, every value with its sample size.
+
+**Prompt:**
+> Read PLAN.md and data-pipeline/reports/data_notes.md. Do Step 1.5 only. Write `scripts/05_site_summary.py` that produces `public/data/site_summary.json` exactly as described in the Data contract, and `reports/site_summary_check.md`.
+>
+> **Periods.** Assign every sample to a Hawaiian season by its date (wet Nov–Apr, dry May–Oct; `2002-wet` = Nov 2002–Apr 2003). Keep only May 2002–Oct 2004, the five full seasons. Build `all`, `dry` and `wet` by pooling the underlying samples, not by averaging seasonal values. Output one record per site per period (9 sites × 8 periods = 72), sorted by site elevation and then period (`2002-dry` … `2004-dry`, `all`, `dry`, `wet`). Every record has every contract field.
+>
+> **Mosquito abundance.** CO2 trap rows only. `mosquito_trap_nights` = CO2 rows; `mosquito_per_trap_night` = sum of `culex` ÷ trap nights. Count each row as a trap night, including the 72 repeated rows.
+>
+> **Mosquito infection.** Every dissected mosquito, whatever trap caught it, dated by `date_collected`. Midgut and salivary are computed separately, each over the mosquitoes with a recorded (non-blank) result for that test.
+>
+> **Bird prevalence.** From the bird blood file. A bird is a unique site + period + `BANDNUMBER` + `canonical_code`; each `NB` row is its own bird. Combine a bird's results within the period: any `P` → positive; else any `N` → negative; all `U` → excluded. In combined periods, a bird sampled in several seasons counts once. Honeycreeper fields use `honeycreeper = true` in `species_lookup.csv`, matched through `canonical_code`.
+>
+> **Bird abundance.** From the bird count file, read with `keep_default_na=False` so guild `NA` stays text. Drop station 200. A counting event is a unique site + station + transect + date, NOBI events included. Detections are rows, excluding NOBI. `honeycreepers_per_count` = honeycreeper detections ÷ events; `nonnative_birds_per_count` = `native = false` detections ÷ events. Native non-honeycreepers are in neither.
+>
+> **Nulls and rounding.** Apply the Data contract rules: percentages `null` below 20 samples (sample size still filled in), abundance `null` only when its sample size is 0, a true zero stays `0`. Round percentages to 1 decimal, per-count values to 2, per-trap-night values to 3. Before writing, assert the contract holds: 72 records, exact field set, every percentage `null` exactly when its n < 20.
+>
+> **Check report** (`reports/site_summary_check.md`):
+> 1. Per-site raw totals for `all`: Culex caught, CO2 trap nights, mosquitoes examined and infected (midgut, salivary), birds sampled and positive (all, honeycreepers), counting events, honeycreeper and non-native detections.
+> 2. Sum checks: for trap nights, mosquitoes examined and counting events, the five seasons add up to `all`, and `dry` + `wet` = `all`. (Bird sample sizes don't have to add up, since a bird can appear in more than one season.)
+> 3. Every cell where a percentage is `null` because n < 20, by site and period.
+> 4. Whether the Known gaps in data_notes.md still hold (SOL, CJR mosquito infection; WAI honeycreeper prevalence). Flag any difference.
+>
+> Do not change data_notes.md or the Data contract. If something in the data contradicts them, report it in the check file instead.
+
+**Done when:**
+- [ ] `site_summary.json` has 72 records with exactly the contract's fields, and the script's contract checks pass
+- [ ] Sum checks in `site_summary_check.md` pass
+- [ ] Known gaps match data_notes.md, or differences are explained
+- [ ] **You** review the per-site table for plausibility: *Culex* near zero at CJR and SOL and highest at the mid-elevation sites (PUU, WAI, COO), matching `reports/coverage.md`
+
+### Step 1.6: Station summaries
+**Goal:** per-station totals for the station hover tooltips. **Must be done before Step 2.6.**
+
+**Prompt:**
+> Read PLAN.md and data-pipeline/reports/data_notes.md. Do Step 1.6 only. Write `scripts/05b_station_summary.py` producing `public/data/station_summary.json` exactly as described in the Data contract, reusing the same rules and helper logic as `scripts/05_site_summary.py`: May 2002 – Oct 2004 only, CO2 traps for abundance, all dissected mosquitoes for infection, station 200 dropped from bird counts, NOBI events included, and `keep_default_na=False` for the bird count file.
+>
+> Also write `reports/station_summary_check.md` with:
+> 1. Per-site sums of station trap nights, mosquitoes examined (midgut and salivary), and counting events, compared with the `all` values in `site_summary.json`. They must be equal.
+> 2. The stations with the highest *Culex* per trap night at each site.
+
+**Done when:**
+- [ ] `station_summary.json` has 405 records with exactly the contract's fields
+- [ ] Sum checks in `station_summary_check.md` pass
+
+---
+
+# Phase 2: The base map
+
+### Step 2.1: Flat map of Hawaiʻi Island
+**Prompt:**
+> Read PLAN.md. Do Step 2.1 only. Add MapLibre GL JS. Create a `Map` component showing Hawaiʻi Island that fills the whole browser window (full width and height, no scrollbars), using a free basemap style that needs no API key (e.g. OpenFreeMap). Include navigation controls. The map should resize correctly when the browser window is resized.
+
+**Done when:**
+- [ ] Map fills the entire window, with no scrollbars or gaps
+- [ ] Map loads centered on Hawaiʻi Island, pans and zooms
+- [ ] Map resizes correctly when the window is resized
+
+### Step 2.2: 3D terrain
+**Prompt:**
+> Read PLAN.md. Do Step 2.2 only. Add 3D terrain from the free AWS Terrain Tiles (`https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png`, `encoding: "terrarium"`, tileSize 256, maxzoom 15) as a raster-dem source, added after the basemap style loads. Add a hillshade layer from the same data, placed above the basemap's land layers but below its roads and labels; record that insertion layer in `src/config/map.js` so later draped layers (land cover, malaria zones) use it too. Add the terrain data's attribution.
+>
+> Set terrain exaggeration to about 3× so the 28–1,836 m study gradient stands out clearly. Make the hillshade pronounced (darker shadows, light highlights), and add a semi-transparent elevation color tint (`color-relief` layer from the same terrain data) below the hillshade, with most of its color change in 0–2,000 m where the sites are (green lowlands → tan/brown uplands → grey/white summits). Allow the camera to tilt to about 80°. Set the starting camera from `sites.geojson`: centered on the nine sites, pitched about 60°, looking upslope roughly west so the low sites are in the foreground and Mauna Loa rises behind the high sites. Leave right-side padding for the side panel (Step 2.4). Put exaggeration, hillshade, tint, tilt, camera, and padding settings in `src/config/map.js`. Terrain is visual only: any elevation shown to users comes from the data, not the terrain.
+
+**Done when:**
+- [ ] Mountains appear in 3D and you can tilt (to about 80°) and rotate
+- [ ] Elevation differences are easy to see: low, mid, and high sites fall on clearly different tint colors
+- [ ] The starting view shows all nine site locations, looking upslope from the ocean side, clear of the side panel's area
+- [ ] Hillshade sits under roads and labels; place names stay readable
+- [ ] Terrain attribution is shown
+- [ ] Performance is acceptable on a normal laptop
+
+### Step 2.3: Sites and stations
+**Prompt:**
+> Read PLAN.md. Do Step 2.3 only. Add `stations.geojson` and `sites.geojson` as GeoJSON sources with MapLibre layers (not HTML markers), so later steps can restyle and animate the site markers from data (Steps 4.1, 4.2, 5.3). Load `sites.geojson` once and reuse it for the starting camera from Step 2.2. Add these layers on top of all basemap layers.
+>
+> - Stations: small, semi-transparent grey circles with a thin white outline, shown from about zoom 11 so they don't crowd the starting view.
+> - Sites: larger circles with a white outline, plus a label with the site code (white text halo so it stays readable over the elevation tint and hillshade).
+> - Clicking a site opens a popup with its code, full `site_name`, mean elevation with its range (e.g. "1,786 m (1,742–1,836 m)"), and "45 sampling points (9 stations × 5 transects)". All values come from `sites.geojson`. Show a pointer cursor when hovering over a site.
+>
+> Put marker sizes, colors, and the station zoom threshold in `src/config/map.js`.
+
+**Done when:**
+- [ ] All nine sites appear as labeled circles in the starting view, sitting on the terrain at the right places
+- [ ] Stations appear when zoomed in to a site and sit on the terrain along their transects
+- [ ] Site labels and markers stay readable over the elevation tint and hillshade
+- [ ] Popups show the correct name, elevation, elevation range, and sampling points for each site
+- [ ] Sanity check: low sites (MAL, NAN, BRY) sit on green tint, high sites (CJR, SOL) on tan/brown
+
+### Step 2.4: Collapsible side panel
+**Goal:** a side panel for controls, legends, and info that users can open and close, so the map can use the full screen when the panel isn't needed.
+
+**Prompt:**
+> Read PLAN.md. Do Step 2.4 only. Add a `SidePanel` component on the right side of the screen that slides over the full-screen map. It should:
+> - open and close with a clearly visible toggle button (e.g. a tab on the panel's edge), with a smooth slide animation;
+> - be about 350px wide on desktop when open, and resizable by dragging its left edge (minimum ~280px, maximum ~50% of the window);
+> - remember whether it was open or closed and its width while the page is open;
+> - start open, with two sections for later steps: "Sites" (for Step 2.5) and "Layers" (for Phase 3 and 4 controls), each with placeholder content only;
+> - on screens narrower than 768px, become a bottom sheet that slides up instead.
+>
+> The map stays full screen underneath. When the panel opens or closes, keep the map's navigation controls visible and not hidden behind the panel. Respect reduced-motion preferences by opening and closing instantly instead of sliding.
+
+**Done when:**
+- [ ] Panel opens and closes smoothly with the toggle button
+- [ ] Panel can be resized by dragging its edge, within the min and max widths
+- [ ] Map stays usable and full screen underneath; navigation controls are never hidden
+- [ ] On a narrow window, the panel becomes a bottom sheet
+- [ ] Panel shows "Sites" and "Layers" sections with placeholder content
+
+### Step 2.5: Site navigation
+**Goal:** let users jump between the nine sites from the side panel or the map, and get back to the overview. The panel holds navigation buttons only; site information stays in the map popup from Step 2.3.
+
+**Prompt:**
+> Read PLAN.md. Do Step 2.5 only. Add a `SitePicker` component in the side panel's "Sites" section.
+>
+> - One button per site, sorted by mean elevation (lowest first), showing only the site code (e.g. "SOL"). The buttons are navigation only: they show no site information in the panel.
+> - Clicking a site button smoothly flies the camera to that site: centered on the site's stations, zoomed in so all 45 stations are visible, tilted to show the slope. It does not open the popup. Store the per-site zoom, pitch, and fly duration in `src/config/map.js`.
+> - Clicking a site's marker on the map flies the camera to that site the same way **and** opens its popup (the Step 2.3 popup: code, full name, mean elevation with range, sampling points). The popup remains the only place site information is shown.
+> - The focused site's button and marker are highlighted and the other site markers are dimmed, whether the site was focused from a button or a marker. Step 2.6 uses this selection to decide which site's stations to color.
+> - Add an "Overview" button at the top of the "Sites" section, and a home-icon control next to the map's navigation controls. Both fly back to the exact starting camera from Step 2.2, clear the site selection, and close any open popup. Pressing Escape does the same.
+> - Respect reduced-motion preferences: jump to the new view instead of flying.
+
+**Done when:**
+- [ ] Every site button flies to the right site with all its stations visible, without opening a popup or showing info in the panel
+- [ ] Clicking a site marker flies to the site and opens its popup with the correct information
+- [ ] The focused site's button and marker are clearly highlighted and the other markers dimmed
+- [ ] Overview, the home control, and Escape all return to the starting view, clear the selection, and close the popup
+
+### Step 2.6: Station hover
+**Goal:** show what was found at each sampling point when the user hovers a station. **Requires Step 1.6** (`station_summary.json`).
+
+**Prompt:**
+> Read PLAN.md. Do Step 2.6 only. Add a `StationTooltip` component.
+>
+> - Load `station_summary.json` and join it to `stations.geojson` by site + station + transect.
+> - Hovering a station with the mouse shows a tooltip that opens with a clear heading: **"All seasons combined (May 2002 – Oct 2004)"**. Below it: station and transect number and elevation; *Culex* per trap night with the site's average beside it, labeled "site average, all seasons" (from `site_summary.json`, period `all`); mosquito infection as counts (see below); honeycreepers and non-native birds per count, with site averages (also labeled "all seasons"), only at stations with bird counts. Every number shows its sample size.
+> - Mosquito infection wording: show the two tests as separate, parallel lines, each with its own sample size, because they don't nest. At 50 of 405 stations more mosquitoes are salivary-positive than midgut-positive (once malaria reaches the salivary glands it often no longer shows in the gut), and at 60 stations the two sample sizes differ (by up to 3). Use:
+>   - "Malaria in the gut: 2 of 31 mosquitoes"
+>   - "Malaria in the salivary glands (can pass it to birds): 1 of 30 mosquitoes"
+>
+>   Don't phrase the second as a subset of the first (avoid "2 carried malaria; 1 could transmit it"). If only one test has results at a station, show that line and "not tested" for the other. If neither test has results (88 stations), show a single line: "No mosquitoes tested here."
+> - When a site is selected (Step 2.5), color its stations by *Culex* per trap night on a light-to-dark scale. Use **one shared scale for all sites** (same color = same value everywhere), not a separate scale per site, so low-catch sites like SOL and CJR correctly look uniformly pale instead of stretching tiny values to the darkest color. Stations with no data stay grey. When no site is selected, stations keep their Step 2.3 style.
+> - Add a small legend titled "*Culex* per trap night, all seasons" in the side panel's "Sites" section, below the site buttons, shown only while a site is focused (hidden in the overview). It shows the shared scale's range.
+> - Make hover targets slightly larger than the visible dots so they're easy to hit, and highlight the hovered station.
+> - Build the tooltip so it can show one extra line of text supplied by a later step (Step 4.2 uses this for the "doesn't change by season" note).
+>
+> **Why station data is fixed and labeled this way:** station sample sizes are too small to split by season (on average about 13 CO2 trap nights, a handful of dissected mosquitoes, and 2 bird counts per station per season), so stations show all-seasons totals only, while the nine site markers change with the season buttons (Step 4.2). Without clear labels, a user who switches to a single season would see site markers change but station values stay the same, and could misread the station values as belonging to that season. The heading, the "all seasons" labels on site averages and the legend, and the Step 4.2 note make the difference explicit. Station values are always compared with the site's all-seasons average, never a seasonal one.
+
+**Done when:**
+- [ ] Hovering any station shows correct values matching `station_summary.json`
+- [ ] The tooltip heading says "All seasons combined (May 2002 – Oct 2004)", and site averages and the legend are labeled "all seasons"
+- [ ] Site averages match `site_summary.json` (period `all`)
+- [ ] Stations without bird counts or dissections show the right messages
+- [ ] Mosquito infection shows gut and salivary-gland results as separate lines, each with its own sample size, and "not tested" where only one test has results
+- [ ] Station coloring appears only for the selected site and uses one shared scale (SOL and CJR look uniformly pale)
+- [ ] The legend appears in the "Sites" section below the site buttons only while a site is focused
+
+### Step 2.7: Top bar and station data explainer
+**Goal:** a top bar that holds tabs for reference pages about the visualization, with one tab for now, "About the station data". It explains, in plain language, what each number in the station tooltip means, how it was measured in the field, and how it was calculated, so users can read the tooltip without guessing. Later steps add more tabs (Step 7.2 adds data sources and credits). **Requires Step 2.6.**
+
+**Prompt:**
+> Read PLAN.md and `data-pipeline/reports/data_notes.md`. Do Step 2.7 only. Desktop only.
+>
+> **Top bar (`TopBar` component)**
+> - A thin bar across the top of the page, always visible: the project title on the left ("Hawaiʻi Island Avian Malaria"), tab buttons on the right. For now there is one tab: "About the station data".
+> - Build the tab list from a small config array (label, id, content component) so later steps add a tab by adding one entry.
+> - The map, the side panel and its toggle, and the map's navigation and home controls all sit below the bar; nothing is hidden behind it. Put the bar's height in one CSS variable (like `--panel-offset`) and use it for these offsets.
+>
+> **Info overlay (`InfoOverlay` component)**
+> - Clicking a tab opens its page in a large, centered, scrollable reading panel over a dimmed map. Close it with an X button, Escape, or a click on the dimmed area. The active tab is highlighted while its page is open.
+> - The map keeps its camera, focused site, and side panel state underneath, and comes back exactly as it was on close.
+> - While the overlay is open, Escape only closes the overlay (it must not also reset the map to the overview, as Escape does in Step 2.5), and station hover tooltips don't appear.
+> - Make it an accessible dialog: focus moves into it on open, Tab stays inside it, and focus returns to the tab button on close.
+>
+> **Link from the legend:** under the Step 2.6 station legend in the side panel, add a "What do these numbers mean?" link that opens the "About the station data" page. The tooltip itself stays unclickable (it follows the mouse).
+>
+> **Page content.** Keep the text in its own file (e.g. `src/content/stationExplainer.jsx`), separate from the overlay component, so wording can be edited without touching layout. Use short sections with headings, plain language, and a short definition the first time each term appears. Write it for a general audience. Check every number in it against `public/data/`, `data-pipeline/reports/`, or the dataset metadata (`raw/biocomplexity_2001_2004/BiocomplexityDR.xml`) before using it, and don't state anything the data or metadata don't support. Sections:
+> 1. **What the stations are.** Each site has 45 sampling stations: 5 parallel transects (0–800, 200 m apart) with 9 stations each (100–900, 100 m apart). Station values are totals for all five seasons, May 2002 – Oct 2004, because there's too little data per station to split by season (see Step 2.6). Colors use one shared scale at every site.
+> 2. **What *Culex* is and why it matters.** *Culex quinquefasciatus*, the southern house mosquito: introduced to Hawaiʻi in the 1800s, and the only mosquito there that carries avian malaria (*Plasmodium relictum*). Honeycreepers have little resistance to the disease. The parasite can't complete its development in the mosquito below about 13°C, which is why cool, high forests are refuges (link to the malaria zone thresholds in this plan).
+> 3. **How mosquitoes were caught.** Two trap types: CO2 traps baited with dry ice (attract females looking for a blood meal, the ones that bite birds) and gravid traps (attract females ready to lay eggs). Traps were set before sunset and emptied the next morning, 4–9 nights per site per month. A **trap night** is one trap running for one night.
+> 4. ***Culex* per trap night.** Total *Culex* caught ÷ trap nights, a rate (catch per unit effort), not a proportion; it can be above 1. Dividing by trap nights adjusts for stations being trapped different numbers of times (about 36–90 CO2 trap nights each). Only CO2 traps are used for this figure, and why. The site-wide figure pools the whole site: all *Culex* caught ÷ all trap nights at its 45 stations. Explain why trap nights at different stations on the same night add up (each is a separate trap catching different mosquitoes) and why the total is larger than the number of calendar days.
+> 5. **Mosquito infection: gut vs. salivary glands.** Some live *Culex* were taken to a lab and dissected (about 29% of those caught; the share ranged from about 9% to 75% by month, and the dataset doesn't say how they were chosen). Explain:
+>    - the parasite's path: picked up from an infected bird → cysts (oocysts) grow on the gut wall → they burst and release sporozoites → sporozoites reach the salivary glands → the mosquito can infect birds when it bites;
+>    - **gut** = infected (exposed to an infected bird), not yet able to pass it on; **salivary glands** = infectious, the better measure of risk to birds;
+>    - a gut-only infection may never become infectious: the mosquito can die first, it can be too cold, or the infection can fail;
+>    - the two lines usually show the same number of mosquitoes because both organs come from the same dissected mosquitoes; they differ by a few when one organ's slide was missing or unreadable (left out, not counted as negative);
+>    - why a station can have more salivary than gut positives (in later infections the gut stage is gone);
+>    - why counts are shown instead of percentages (small samples);
+>    - infection uses mosquitoes from both trap types, and gravid-trap mosquitoes test positive far more often (they have already fed), so a site's trap mix affects its numbers (CRA is the clearest case).
+> 6. **Bird counts.** About every three months, an observer stood at each odd-numbered station (100, 300, 500, 700, 900) for an 8-minute count and recorded every bird seen or heard. "Per count" = birds recorded ÷ counts, including counts with no birds. It's a relative measure for comparing places, not a population count: a bird can be recorded twice and quiet birds are missed. **Honeycreepers** are the six honeycreeper species in the data (list them with Hawaiian names); **non-native birds** are all introduced species. Other native birds (e.g. ʻŌmaʻo, ʻElepaio, ʻIo) are in neither figure. Even-numbered stations had no bird counts, so those lines don't appear there.
+> 7. **Reading a tooltip.** Walk through one real station's tooltip line by line (e.g. PUU station 700, transect 400), using its actual values from `station_summary.json`.
+> 8. **Limits to keep in mind.** A short list: all-seasons totals only; small samples at many stations; infection sample not chosen by a documented method and weighted by month; trap-mix effect on infection; bird figures are detections, not individuals.
+>
+> No new dependencies.
+
+**Done when:**
+- [ ] The top bar shows the title and an "About the station data" tab, and the map, side panel, toggle, and map controls all sit fully below it
+- [ ] Clicking the tab opens the overlay; the X, Escape, and a click outside all close it, and the map is unchanged afterward (same camera, focused site, and panel)
+- [ ] Escape with the overlay open closes only the overlay and doesn't reset the map
+- [ ] Focus moves into the overlay, stays inside while it's open, and returns to the tab button on close
+- [ ] The legend's "What do these numbers mean?" link opens the same page
+- [ ] The page covers all eight sections; every number in it matches the data files, reports, or metadata, and the worked example matches that station's tooltip
+- [ ] Adding a second tab only needs a new config entry and content file
+- [ ] **You** read the page and approve the wording
+
+---
+
+# Phase 3: Environment layers
+
+### Step 3.1: Process land cover
+**Prompt:**
+> Read PLAN.md. Do Step 3.1 only. Write `scripts/05_landcover.py`. From the Carbon Assessment of Hawaiʻi land cover raster, clip to Hawaiʻi Island, regroup classes into the small set in the Data contract (document the mapping in the script), convert to polygons, simplify geometry so the output is under ~5 MB, and save `public/data/landcover.geojson`. If it can't get under ~5 MB without losing the shape, save PMTiles instead and explain how to load it.
+
+**Done when:**
+- [ ] File is a reasonable size and looks right in geojson.io (forest belts on the windward slopes, bare areas near the summits)
+
+### Step 3.2: Show land cover
+**Prompt:**
+> Read PLAN.md. Do Step 3.2 only. Add the land cover layer draped on the terrain with semi-transparent fills, a legend, and an on/off toggle in the right panel. Put colors in `src/config/colors.js`.
+
+**Done when:**
+- [ ] Layer drapes correctly on the 3D terrain and toggles on and off
+
+### Step 3.3: Process malaria zones
+**Prompt:**
+> Read PLAN.md. Do Step 3.3 only. Write `scripts/06_malaria_zones.py`. Using the Climate of Hawaiʻi air temperature raster (use summer months if monthly layers exist, otherwise mean annual, and note which in the script), clip to Hawaiʻi Island and classify into three zones: `high_risk` (>21°C), `episodic` (13–21°C), `refuge` (<13°C), based on LaPointe et al. 2010. Convert to simplified polygons and save `public/data/malaria_zones.geojson`. Print the area in km² of each zone, and the area of refuge zone that overlaps forest classes from the land cover data.
+
+**Done when:**
+- [ ] Refuge zone sits at high elevation on the mountains
+- [ ] Area numbers are printed and recorded in the Decisions log
+
+### Step 3.4: Show malaria zones
+**Prompt:**
+> Read PLAN.md. Do Step 3.4 only. Add the malaria zones as a semi-transparent tint on the terrain (warm colors for risk, cool for refuge) with softened edges, a legend, and a toggle. Show the "safe forest remaining" area figure in the right panel. Add a short note that zones are modeled from temperature.
+
+**Done when:**
+- [ ] Zones and land cover can be shown together or separately
+- [ ] Site markers remain visible on top
+
+---
+
+# Phase 4: Site data on the map
+
+### Step 4.1: Layer selector
+**Prompt:**
+> Read PLAN.md. Do Step 4.1 only. Load `site_summary.json`. Add a selector in the side panel's "Layers" section with four measures: mosquito abundance (`mosquito_per_trap_night`), infectious mosquitoes (`mosq_salivary_pct`), bird malaria prevalence (`bird_prevalence_pct`), and native bird abundance, which means honeycreepers only (`honeycreepers_per_count`; label it "Honeycreeper abundance" in the app). Color and size site markers by the selected measure using the `all` period for now (Step 4.2 adds the other periods). Add the selected measure's value and its sample size to each site's popup (the Step 2.3 popup, which stays the only place site information is shown). Sites with no data for a measure appear as grey outlines, not zero; percentages below the 20-sample minimum show "too few samples" in the popup. Keep the Step 2.5 highlight and dimming working on top of the measure styling.
+
+**Done when:**
+- [ ] Switching measures updates markers correctly
+- [ ] No-data sites are visually distinct
+- [ ] Each site's popup shows the selected measure's value and sample size, or "too few samples"
+- [ ] Native bird abundance uses honeycreepers only and is labeled "Honeycreeper abundance"
+
+### Step 4.2: Season buttons
+**Goal:** let users switch between the five survey seasons, plus combined views, with smooth animated transitions.
+
+**Prompt:**
+> Read PLAN.md. Do Step 4.2 only. Add a row of season buttons along the bottom of the map, in time order: Dry 2002, Wet 2002–03, Dry 2003, Wet 2003–04, Dry 2004 (matching the `period` values in site_summary.json). Also add:
+> - an "All seasons" button (period `all`), selected by default;
+> - a "Wet vs. Dry" toggle that switches between the combined `wet` and `dry` periods;
+> - a play button that steps through the five seasons in order, pausing about 2 seconds on each, with a pause/stop control.
+>
+> When a button is pressed, site markers animate smoothly (size and color) from their current values to the new period's values rather than jumping. The selected button is clearly highlighted, and a label shows the season's months (e.g. "Wet season: Nov 2003 – Apr 2004").
+>
+> Site-periods with no data show as grey outlines. Percentages below the minimum sample size show "too few samples" in the popup; SOL and CJR mosquito infection shows "too few mosquitoes to test." Respect reduced-motion preferences by switching instantly instead of animating.
+>
+> Station data does not change with these buttons (stations show all-seasons totals only; see Step 2.6). When any period other than "All seasons" is selected, add a note to the station tooltip: "Station totals don't change by season." Station values, the station coloring, and the site averages in the station tooltip stay on the `all` period.
+
+**Done when:**
+- [ ] Each button shows the right period's values, and markers animate between them
+- [ ] "All seasons" is selected on load
+- [ ] Wet vs. Dry toggle switches between the two combined views
+- [ ] Play steps through all five seasons and can be paused
+- [ ] No-data and too-few-samples cases display correctly
+- [ ] With a single season or wet/dry selected, station tooltips show "Station totals don't change by season", and station values and coloring stay the same
+
+---
+
+# Phase 5: Flat comparison view
+
+### Step 5.1: Flat bar chart
+**Prompt:**
+> Read PLAN.md. Do Step 5.1 only. Create a `FlatChart` component with D3: one bar per site for the selected measure and period, sorted by elevation, with light background bands for elevation zones, bar labels showing site, elevation, and sample size, and no-data sites shown as empty outlines. Same measure selector and season buttons as the map.
+
+**Done when:**
+- [ ] Chart matches the map for the same measure and period
+
+### Step 5.2: Terrain / flat toggle
+**Prompt:**
+> Read PLAN.md. Do Step 5.2 only. Add a "Terrain / Flat" toggle that switches the main view between the 3D map and `FlatChart` with a simple crossfade. Measure and period selections carry over between views.
+
+**Done when:**
+- [ ] Switching keeps selections and works both ways
+
+### Step 5.3 (optional): Animated morph
+**Prompt:**
+> Read PLAN.md. Do Step 5.3 only. Replace the crossfade with an animation where each site's marker moves from its screen position on the map into its bar position in the flat chart, and back. Keep the crossfade as a fallback if reduced motion is preferred.
+
+---
+
+# Phase 6: Scroll story
+
+### Step 6.1: Story layout and chapter config
+**Prompt:**
+> Read PLAN.md. Do Step 6.1 only. Add Scrollama. Create a layout where story text scrolls in a column while the map stays fixed. Define chapters in `src/config/chapters.js`, each with: title, text, camera (center, zoom, pitch, bearing), visible layers, selected measure, and period. Create three placeholder chapters to test that scrolling moves the camera and switches layers.
+
+**Done when:**
+- [ ] Scrolling triggers smooth camera moves and layer changes
+
+### Step 6.2: Write the core chapters
+Suggested chapters (edit the text yourself):
+1. **The mountain:** terrain only, wide view of the island.
+2. **Where the forest is:** land cover on.
+3. **Where malaria can spread:** malaria zones on; explain the temperature limits.
+4. **The refuge:** highlight refuge zone overlapping forest; show remaining area.
+5. **Evidence from the field:** sites on; mosquito abundance, then infectious mosquitoes.
+6. **The birds:** bird prevalence, then native bird abundance.
+7. **Compare directly:** switch to flat view.
+8. **Explore:** hand full control to the user.
+
+**Prompt:**
+> Read PLAN.md. Do Step 6.2 only. Replace the placeholder chapters with the eight chapters listed in PLAN.md Step 6.2, using the camera positions and layer settings that best show each point. Use placeholder text I will edit later. In the final chapter, unlock all controls.
+
+---
+
+# Phase 7: Polish and deploy
+
+### Step 7.1: Mobile and accessibility
+**Prompt:**
+> Read PLAN.md. Do Step 7.1 only. Make the layout work on phones: the side panel becomes a bottom sheet, story text overlays the map. Respect reduced-motion preferences. Make sure controls are keyboard accessible, colors pass contrast checks, and color is never the only way information is shown.
+
+### Step 7.2: Data sources and credits
+**Prompt:**
+> Read PLAN.md. Do Step 7.2 only. Add an "About the data" panel listing every dataset with citation and link, the temperature thresholds and their source, and caveats: zones are modeled; prevalence reflects surviving birds only; site data covers 2001–2005.
+
+### Step 7.3: Deploy
+**Prompt:**
+> Read PLAN.md. Do Step 7.3 only. Set up deployment to GitHub Pages with a GitHub Actions workflow that builds the Vite app on every push to `main`. Configure the Vite base path for the repository name. Update README.md with the live link and how teammates deploy.
+
+**Done when:**
+- [ ] Public link works for teammates
+
+---
+
+# Later phases (after the core story works)
+
+- **Future chapter:** Fortini et al. 2015 species range projections (range lost / kept / gained per species) with a species picker; climate scenario toggle using the 2098–2100 risk projections.
+- **Self-hosted terrain:** generate terrain tiles from the USGS 10 m DEM for higher accuracy.
+- **Temperature over time:** daily 250 m temperature maps (1990–2021) to show the 13°C line moving.
+- **Explore mode upgrades:** filters plus the linked summary panel.
+- **Additional context:** statewide 2018–2021 prevalence data as an opening overview, Hakalau refuge bird trends.
+
+---
+
+## Decisions log
+
+Record choices here as you make them so every session and teammate stays in sync.
+
+| Date | Decision | Reason |
+|---|---|---|
+| | Stack: React + Vite, MapLibre GL, D3, Python pipeline, GitHub Pages | Free, shareable, no API keys |
+| | Scope: core story first | Build incrementally |
+| 2026-11-04 | Time period: Hawaiian season (wet Nov–Apr, dry May–Oct) | Every site-season gets two bird count rounds, and it has the most samples per cell short of whole years (`reports/coverage.md`) |
+| 2026-11-04 | Start date: 2002, five full seasons only (`2002-dry` to `2004-dry`); Jan–Apr 2002 and Nov–Dec 2004 dropped | Mosquito trapping and bird counts start in early 2002, and partial seasons aren't comparable to full ones |
+| 2026-11-04 | Minimum sample size: 20 for percentages only; below 20 the value is `null` and the app shows "too few samples". Abundance shown whenever n > 0 | At n = 20 one sample moves a percentage by 5 points; abundance doesn't swing the same way |
+| 2026-11-04 | Mosquito abundance uses CO2 traps only; gravid traps are ignored for abundance. Infection uses all dissected mosquitoes | CO2 traps catch host-seeking females (the ones that bite birds) at ~4.5× the gravid rate, and the gravid/CO2 ratio varies a lot by site, so pooling would mix two methods |
+| 2026-11-04 | Mosquito infection keeps both trap types (reviewed after Step 1.5) | Keeps sample sizes up (CO2-only would blank CJR entirely and most CRA seasons). Trap-mix caveat, which inflates CRA, goes in the About panel; see data_notes.md |
+| 2026-11-04 | Time steps in the app are season buttons: one per season plus `all`, `wet` and `dry` | Five seasons plus three combined periods suit a small set of labeled buttons |
+| 2026-11-05 | Station hover shows all-seasons totals, with infection as counts not percentages | Station sample sizes are small |
+| 2026-11-05 | Station data stays fixed at all seasons and is labeled as such: tooltip heading "All seasons combined (May 2002 – Oct 2004)", "all seasons" labels on site averages and the legend, and a "Station totals don't change by season" note when another period is selected (Steps 2.6, 4.2) | Site markers change by season but stations can't (too little data per station per season). Clear labels stop users from reading station values as belonging to the selected season, while keeping the within-site detail |
+| 2026-11-10 | Reference pages live in a top bar of tabs that open a large overlay over the map (Step 2.7). First tab: "About the station data"; Step 7.2 adds data sources as another tab. The station legend links to the explainer; the tooltip stays unclickable | Gives the station numbers a full plain-language explanation without crowding the tooltip or side panel, and keeps the map state intact while reading |
+| | Malaria zone temperature source: _(Step 3.3)_ | |
+| | Refuge area figures: _(Step 3.3)_ | |

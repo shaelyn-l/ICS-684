@@ -1,0 +1,17 @@
+# Node
+node_modules/
+dist/
+
+# Python
+.venv/
+venv/
+env/
+__pycache__/
+*.pyc
+
+# Raw source data: download locally, don't commit (see data-pipeline/raw/README.md)
+data-pipeline/raw/*
+!data-pipeline/raw/README.md
+
+# OS / editor
+.DS_Store

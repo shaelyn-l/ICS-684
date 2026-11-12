@@ -1,0 +1,167 @@
+{
+ "type": "FeatureCollection",
+ "features": [
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.8674975,
+     19.4448876
+    ]
+   },
+   "properties": {
+    "site": "MAL",
+    "site_name": "Malama Ki Forest Reserve",
+    "elevation_m": 40.9,
+    "elevation_min_m": 28.3,
+    "elevation_max_m": 56.3,
+    "n_stations": 45
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.8922373,
+     19.5371472
+    ]
+   },
+   "properties": {
+    "site": "NAN",
+    "site_name": "Nanawale Forest Reserve",
+    "elevation_m": 65.0,
+    "elevation_min_m": 54.7,
+    "elevation_max_m": 75.2,
+    "n_stations": 45
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -154.9301592,
+     19.4504331
+    ]
+   },
+   "properties": {
+    "site": "BRY",
+    "site_name": "Bryson’s Cinder Cone, Puu Kaliu, Leilani Estates",
+    "elevation_m": 290.8,
+    "elevation_min_m": 265.4,
+    "elevation_max_m": 314.6,
+    "n_stations": 45
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2265968,
+     19.611201
+    ]
+   },
+   "properties": {
+    "site": "WAI",
+    "site_name": "Waiakea Forest Reserve",
+    "elevation_m": 965.8,
+    "elevation_min_m": 929.4,
+    "elevation_max_m": 1010.8,
+    "n_stations": 45
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2276257,
+     19.441373
+    ]
+   },
+   "properties": {
+    "site": "COO",
+    "site_name": "Cooper Center, Volcano Village",
+    "elevation_m": 1101.1,
+    "elevation_min_m": 1076.5,
+    "elevation_max_m": 1128.8,
+    "n_stations": 45
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2410943,
+     19.4032861
+    ]
+   },
+   "properties": {
+    "site": "CRA",
+    "site_name": "Crater Rim, Hawaii Volcanoes National Park",
+    "elevation_m": 1142.0,
+    "elevation_min_m": 1115.0,
+    "elevation_max_m": 1175.2,
+    "n_stations": 45
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.2637606,
+     19.4969155
+    ]
+   },
+   "properties": {
+    "site": "PUU",
+    "site_name": "Pu'u Unit, Ola'a Tract of Hawaii Volcanoes National Park",
+    "elevation_m": 1306.6,
+    "elevation_min_m": 1282.9,
+    "elevation_max_m": 1332.2,
+    "n_stations": 45
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.3287406,
+     19.5151895
+    ]
+   },
+   "properties": {
+    "site": "CJR",
+    "site_name": "CJ Ralph, Kamehameha Schools Bishop Estates, Keauhou",
+    "elevation_m": 1727.6,
+    "elevation_min_m": 1677.5,
+    "elevation_max_m": 1775.1,
+    "n_stations": 45
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     -155.3291009,
+     19.5389475
+    ]
+   },
+   "properties": {
+    "site": "SOL",
+    "site_name": "Solomon’s Watering Hole, Kamehameha Schools Bishop Estates, Keauhou",
+    "elevation_m": 1786.0,
+    "elevation_min_m": 1741.6,
+    "elevation_max_m": 1836.1,
+    "n_stations": 45
+   }
+  }
+ ]
+}
