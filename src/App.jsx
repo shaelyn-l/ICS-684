@@ -4,6 +4,7 @@ import SidePanel from './components/SidePanel.jsx'
 import SitePicker from './components/SitePicker.jsx'
 import TopBar from './components/TopBar.jsx'
 import InfoOverlay from './components/InfoOverlay.jsx'
+import SiteLegend from './components/SiteLegend.jsx'
 import { SITES_URL } from './config/map.js'
 import { TABS } from './config/tabs.js'
 
@@ -18,6 +19,11 @@ export default function App() {
   // gets a new id, so asking for the same site again still moves the camera.
   const [focus, setFocus] = useState({ site: null, id: 0 })
   const focusSite = useCallback((site) => setFocus((f) => ({ site, id: f.id + 1 })), [])
+
+  // Selected season period (season buttons on the map) and whether station dots
+  // are shown (Layers checkbox). Held here so the map and side panel share them.
+  const [period, setPeriod] = useState('all')
+  const [showStations, setShowStations] = useState(true)
 
   // Top bar page open in the overlay (tab id or null), and the control that opened
   // it, so focus can go back there on close.
@@ -43,7 +49,15 @@ export default function App() {
     <>
       <TopBar activeTab={activeTab} onOpenTab={openTab} />
       <div className="app-body">
-        <Map sites={sites} focus={focus} onFocusSite={focusSite} hoverDisabled={!!activeTab} />
+        <Map
+          sites={sites}
+          focus={focus}
+          onFocusSite={focusSite}
+          hoverDisabled={!!activeTab}
+          period={period}
+          onPeriodChange={setPeriod}
+          showStations={showStations}
+        />
         <SidePanel
           sitesContent={
             <SitePicker
@@ -51,7 +65,11 @@ export default function App() {
               focusedSite={focus.site}
               onFocusSite={focusSite}
               onExplainStations={(opener) => openTab('station-data', opener)}
+              showStationLegend={showStations}
             />
+          }
+          layersContent={
+            <SiteLegend period={period} showStations={showStations} onToggleStations={setShowStations} />
           }
         />
       </div>
