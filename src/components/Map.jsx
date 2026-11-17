@@ -313,7 +313,7 @@ export default function Map({ sites, focus, onFocusSite, stationNote, hoverDisab
   const onFocusRef = useRef(onFocusSite)
   const [mapLoaded, setMapLoaded] = useState(false)
   const [ready, setReady] = useState(false)
-  const [hover, setHover] = useState(null) // { station, siteAverage, x, y } while hovering a station
+  const [hover, setHover] = useState(null) // { station, x, y } while hovering a station
   const periodRef = useRef(period)
   periodRef.current = period
 
@@ -346,7 +346,7 @@ export default function Map({ sites, focus, onFocusSite, stationNote, hoverDisab
 
   // Once the basemap and the site data are both in, fit the starting view and add
   // the markers. Sites come from App (loaded once); stations, their all-seasons
-  // totals, and the site averages are loaded here.
+  // totals, and the site summaries (for the site popups) are loaded here.
   useEffect(() => {
     if (!mapLoaded || !sites) return
     const map = mapRef.current
@@ -361,8 +361,6 @@ export default function Map({ sites, focus, onFocusSite, stationNote, hoverDisab
         periods[row.period][row.site] = row
         return periods
       }, {})
-      const siteAverages = Object.fromEntries(
-        siteSummary.filter((r) => r.period === 'all').map((r) => [r.site, r]))
       stationsRef.current = stations
       startCameraRef.current = fitToSites(map, sites)
       addSitesAndStations(map, sites, stations)
@@ -379,7 +377,6 @@ export default function Map({ sites, focus, onFocusSite, stationNote, hoverDisab
         map.getCanvas().style.cursor = 'pointer'
         setHover({
           station: feature.properties,
-          siteAverage: siteAverages[feature.properties.site],
           x: e.originalEvent.clientX,
           y: e.originalEvent.clientY,
         })
