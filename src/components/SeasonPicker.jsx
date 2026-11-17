@@ -1,4 +1,4 @@
-import { PERIOD_GROUPS, PERIOD_HEADINGS } from '../config/periods.js'
+import { PERIOD_GROUPS } from '../config/periods.js'
 import './SeasonPicker.css'
 
 // Chooses which period the site popups show. Station values stay all seasons.
@@ -31,12 +31,6 @@ export default function SeasonPicker({ period, onChangePeriod }) {
           </div>
         </div>
       ))}
-      <p className="season-picker__current" aria-live="polite">
-        Showing: {PERIOD_HEADINGS[period]}
-      </p>
-      <p className="season-picker__note">
-        Changes the numbers in site popups. Station values stay all seasons.
-      </p>
     </div>
   )
 }
