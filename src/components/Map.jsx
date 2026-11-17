@@ -214,6 +214,32 @@ function siteCamera(map, site, stations) {
 
 const prefersReducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
+const PERIOD_LABELS = {
+  all: 'All seasons',
+  wet: 'Rainy (wet) seasons · Nov–Apr',
+  dry: 'Dry seasons · May–Oct',
+}
+
+const SITE_SUMMARY_METRICS = [
+  { key: 'mosquito_per_trap_night', label: 'Mosquitoes per trap night', sample: 'mosquito_trap_nights', digits: 3 },
+  { key: 'mosq_salivary_pct', label: 'Mosquito infection (salivary glands)', sample: 'mosq_salivary_n', digits: 1, unit: '%', percentage: true },
+  { key: 'bird_prevalence_pct', label: 'Bird malaria prevalence', sample: 'bird_sampled_n', digits: 1, unit: '%', percentage: true },
+  { key: 'honeycreepers_per_count', label: 'Honeycreepers per count', sample: 'bird_counts_n', digits: 2 },
+]
+
+function siteMetricValue(site, summary, metric) {
+  const n = summary[metric.sample] ?? 0
+  const value = summary[metric.key]
+  if (value == null) {
+    if (metric.key === 'mosq_salivary_pct' && ['SOL', 'CJR'].includes(site)) {
+      return 'Too few mosquitoes to test.'
+    }
+    if (metric.percentage && n > 0) return `Too few samples (n=${n})`
+    return 'No data'
+  }
+  return `${value.toLocaleString('en-US', { maximumFractionDigits: metric.digits })}${metric.unit ?? ''} (n=${n})`
+}
+
 function moveCamera(map, camera) {
   if (prefersReducedMotion()) map.jumpTo(camera)
   else map.flyTo({ ...camera, duration: SITE_FOCUS.duration, essential: false })
@@ -245,7 +271,7 @@ const number = (m) => Math.round(m).toLocaleString('en-US')
 const metres = (m) => `${number(m)} m`
 
 // Popup content built as DOM nodes (site names come from data, so no innerHTML).
-function sitePopup(p) {
+function sitePopup(p, summary, period) {
   const root = document.createElement('div')
   const lines = [
     ['strong', p.site],
@@ -258,6 +284,22 @@ function sitePopup(p) {
     el.textContent = text
     root.appendChild(el)
   }
+
+  const periodHeading = document.createElement('div')
+  periodHeading.className = 'site-popup__period'
+  periodHeading.textContent = PERIOD_LABELS[period]
+  root.appendChild(periodHeading)
+
+  const data = document.createElement('dl')
+  data.className = 'site-popup__data'
+  for (const metric of SITE_SUMMARY_METRICS) {
+    const label = document.createElement('dt')
+    label.textContent = metric.label
+    const value = document.createElement('dd')
+    value.textContent = summary ? siteMetricValue(p.site, summary, metric) : 'No data'
+    data.append(label, value)
+  }
+  root.appendChild(data)
   return root
 }
 
@@ -270,11 +312,15 @@ export default function Map({ sites, focus, onFocusSite, stationNote, hoverDisab
   const mapRef = useRef(null)
   const startCameraRef = useRef(null)
   const stationsRef = useRef(null)
-  const popupRef = useRef(null) // { popup, site }
+  const popupRef = useRef(null) // { popup, site, properties }
+  const siteSummariesRef = useRef({})
   const onFocusRef = useRef(onFocusSite)
   const [mapLoaded, setMapLoaded] = useState(false)
   const [ready, setReady] = useState(false)
   const [hover, setHover] = useState(null) // { station, siteAverage, x, y } while hovering a station
+  const [period, setPeriod] = useState('all')
+  const periodRef = useRef(period)
+  periodRef.current = period
 
   useEffect(() => { onFocusRef.current = onFocusSite }, [onFocusSite])
 
@@ -315,6 +361,11 @@ export default function Map({ sites, focus, onFocusSite, stationNote, hoverDisab
       .then(([stationPoints, stationSummary, siteSummary]) => {
       if (cancelled || map.getSource('sites')) return
       const stations = joinStationSummary(stationPoints, stationSummary)
+      siteSummariesRef.current = siteSummary.reduce((periods, row) => {
+        periods[row.period] ??= {}
+        periods[row.period][row.site] = row
+        return periods
+      }, {})
       const siteAverages = Object.fromEntries(
         siteSummary.filter((r) => r.period === 'all').map((r) => [r.site, r]))
       stationsRef.current = stations
@@ -347,11 +398,19 @@ export default function Map({ sites, focus, onFocusSite, stationNote, hoverDisab
         const site = e.features[0].properties.site
         onFocusRef.current(site)
         popupRef.current?.popup.remove()
+        const selectedPeriod = periodRef.current
         const popup = new Popup({ maxWidth: '280px' })
           .setLngLat(e.features[0].geometry.coordinates)
-          .setDOMContent(sitePopup(e.features[0].properties))
-          .addTo(map)
-        popupRef.current = { popup, site }
+          .setDOMContent(sitePopup(
+            e.features[0].properties,
+            siteSummariesRef.current[selectedPeriod]?.[site],
+            selectedPeriod,
+          ))
+          popup.on('close', () => {
+            if (popupRef.current?.popup === popup) popupRef.current = null
+          })
+          popup.addTo(map)
+        popupRef.current = { popup, site, properties: e.features[0].properties }
       })
       setReady(true)
       })
@@ -372,10 +431,42 @@ export default function Map({ sites, focus, onFocusSite, stationNote, hoverDisab
     moveCamera(map, focus.site ? siteCamera(map, focus.site, stationsRef.current) : startCameraRef.current)
   }, [focus, ready])
 
+  useEffect(() => {
+    const currentPopup = popupRef.current
+    if (!ready || !currentPopup) return
+    currentPopup.popup.setDOMContent(sitePopup(
+      currentPopup.properties,
+      siteSummariesRef.current[period]?.[currentPopup.site],
+      period,
+    ))
+  }, [period, ready])
+
+  const activeStationNote = period === 'all'
+    ? stationNote
+    : "Station totals don't change by season."
+
   return (
     <>
       <div ref={containerRef} className="map" />
-      {hover && !hoverDisabled && <StationTooltip {...hover} note={stationNote} />}
+      <div className="season-controls">
+        <div className="season-controls__buttons" role="group" aria-label="Filter site data by season">
+          {Object.entries(PERIOD_LABELS).map(([id, label]) => (
+            <button
+              key={id}
+              type="button"
+              className="season-controls__button"
+              aria-pressed={period === id}
+              onClick={() => setPeriod(id)}
+            >
+              {id === 'wet' ? 'Rainy (wet)' : id === 'dry' ? 'Dry' : label}
+            </button>
+          ))}
+        </div>
+        <div className="season-controls__label" aria-live="polite">
+          Site popup data: {PERIOD_LABELS[period]}
+        </div>
+      </div>
+      {hover && !hoverDisabled && <StationTooltip {...hover} note={activeStationNote} />}
     </>
   )
 }
