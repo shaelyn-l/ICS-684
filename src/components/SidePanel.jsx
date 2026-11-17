@@ -20,7 +20,8 @@ const clampWidth = (w) =>
 
 // Open/closed state and width live in component state, so they last while the
 // page is open (not across reloads).
-export default function SidePanel({ sitesContent, layersContent }) {
+// stationsContent: shown in its own Stations section; pass null to hide the section.
+export default function SidePanel({ sitesContent, stationsContent }) {
   const isMobile = useIsMobile()
   const [open, setOpen] = useState(true)
   const [width, setWidth] = useState(() => clampWidth(PANEL.defaultWidth))
@@ -100,10 +101,12 @@ export default function SidePanel({ sitesContent, layersContent }) {
           <h2 id="panel-sites">Sites</h2>
           {sitesContent}
         </section>
-        <section className="side-panel__section" aria-labelledby="panel-layers">
-          <h2 id="panel-layers">Layers</h2>
-          {layersContent}
-        </section>
+        {stationsContent && (
+          <section className="side-panel__section" aria-labelledby="panel-stations">
+            <h2 id="panel-stations">Stations</h2>
+            {stationsContent}
+          </section>
+        )}
       </div>
     </aside>
   )

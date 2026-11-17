@@ -3,6 +3,7 @@ import Map from './components/Map.jsx'
 import SidePanel from './components/SidePanel.jsx'
 import SitePicker from './components/SitePicker.jsx'
 import SeasonPicker from './components/SeasonPicker.jsx'
+import StationLegend from './components/StationLegend.jsx'
 import TopBar from './components/TopBar.jsx'
 import InfoOverlay from './components/InfoOverlay.jsx'
 import { SITES_URL } from './config/map.js'
@@ -22,7 +23,7 @@ export default function App() {
   const focusSite = useCallback((site) => setFocus((f) => ({ site, id: f.id + 1 })), [])
 
   // Period shown in the site popups (a site_summary.json period id), chosen in the
-  // side panel's Layers section.
+  // side panel's Sites section.
   const [period, setPeriod] = useState(DEFAULT_PERIOD)
 
   // Top bar page open in the overlay (tab id or null), and the control that opened
@@ -58,14 +59,16 @@ export default function App() {
         />
         <SidePanel
           sitesContent={
-            <SitePicker
-              sites={sites}
-              focusedSite={focus.site}
-              onFocusSite={focusSite}
-              onExplainStations={(opener) => openTab('station-data', opener)}
-            />
+            <>
+              <SitePicker sites={sites} focusedSite={focus.site} onFocusSite={focusSite} />
+              <SeasonPicker period={period} onChangePeriod={setPeriod} />
+            </>
           }
-          layersContent={<SeasonPicker period={period} onChangePeriod={setPeriod} />}
+          // Station dots only show for a focused site, so the Stations section
+          // (the station color key) only appears then.
+          stationsContent={focus.site && (
+            <StationLegend onExplain={(opener) => openTab('station-data', opener)} />
+          )}
         />
       </div>
       {tab && (
