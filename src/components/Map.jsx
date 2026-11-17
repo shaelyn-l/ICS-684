@@ -9,6 +9,7 @@ import {
   SITE_FOCUS, SITE_MARKER, SITE_SUMMARY_URL, SKY, START_CAMERA, STATION_MARKER, STATION_SUMMARY_URL,
   STATIONS_URL, TERRAIN,
 } from '../config/map.js'
+import { PERIOD_HEADINGS } from '../config/periods.js'
 import StationTooltip from './StationTooltip.jsx'
 
 // MapLibre 6 finds its worker relative to its own file, which Vite moves when
@@ -214,12 +215,6 @@ function siteCamera(map, site, stations) {
 
 const prefersReducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
-const PERIOD_LABELS = {
-  all: 'All seasons',
-  wet: 'Rainy (wet) seasons · Nov–Apr',
-  dry: 'Dry seasons · May–Oct',
-}
-
 const SITE_SUMMARY_METRICS = [
   { key: 'mosquito_per_trap_night', label: 'Mosquitoes per trap night', sample: 'mosquito_trap_nights', digits: 3 },
   { key: 'mosq_salivary_pct', label: 'Mosquito infection (salivary glands)', sample: 'mosq_salivary_n', digits: 1, unit: '%', percentage: true },
@@ -287,7 +282,7 @@ function sitePopup(p, summary, period) {
 
   const periodHeading = document.createElement('div')
   periodHeading.className = 'site-popup__period'
-  periodHeading.textContent = PERIOD_LABELS[period]
+  periodHeading.textContent = PERIOD_HEADINGS[period]
   root.appendChild(periodHeading)
 
   const data = document.createElement('dl')
@@ -307,7 +302,8 @@ function sitePopup(p, summary, period) {
 // A new id means a new request, so re-clicking the same site flies there again.
 // stationNote: optional extra line for the station tooltip (Step 4.2 uses it).
 // hoverDisabled: true while the info overlay is open; no station tooltip shows.
-export default function Map({ sites, focus, onFocusSite, stationNote, hoverDisabled }) {
+// period: which site_summary.json period the site popup shows (chosen in the side panel).
+export default function Map({ sites, focus, onFocusSite, stationNote, hoverDisabled, period }) {
   const containerRef = useRef(null)
   const mapRef = useRef(null)
   const startCameraRef = useRef(null)
@@ -318,7 +314,6 @@ export default function Map({ sites, focus, onFocusSite, stationNote, hoverDisab
   const [mapLoaded, setMapLoaded] = useState(false)
   const [ready, setReady] = useState(false)
   const [hover, setHover] = useState(null) // { station, siteAverage, x, y } while hovering a station
-  const [period, setPeriod] = useState('all')
   const periodRef = useRef(period)
   periodRef.current = period
 
@@ -448,24 +443,6 @@ export default function Map({ sites, focus, onFocusSite, stationNote, hoverDisab
   return (
     <>
       <div ref={containerRef} className="map" />
-      <div className="season-controls">
-        <div className="season-controls__buttons" role="group" aria-label="Filter site data by season">
-          {Object.entries(PERIOD_LABELS).map(([id, label]) => (
-            <button
-              key={id}
-              type="button"
-              className="season-controls__button"
-              aria-pressed={period === id}
-              onClick={() => setPeriod(id)}
-            >
-              {id === 'wet' ? 'Rainy (wet)' : id === 'dry' ? 'Dry' : label}
-            </button>
-          ))}
-        </div>
-        <div className="season-controls__label" aria-live="polite">
-          Site popup data: {PERIOD_LABELS[period]}
-        </div>
-      </div>
       {hover && !hoverDisabled && <StationTooltip {...hover} note={activeStationNote} />}
     </>
   )
