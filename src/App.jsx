@@ -4,8 +4,10 @@ import SidePanel from './components/SidePanel.jsx'
 import SitePicker from './components/SitePicker.jsx'
 import SeasonPicker from './components/SeasonPicker.jsx'
 import StationLegend from './components/StationLegend.jsx'
+import StationToggle from './components/StationToggle.jsx'
 import TopBar from './components/TopBar.jsx'
 import InfoOverlay from './components/InfoOverlay.jsx'
+import SiteLegend from './components/SiteLegend.jsx'
 import { SITES_URL } from './config/map.js'
 import { TABS } from './config/tabs.js'
 import { DEFAULT_PERIOD } from './config/periods.js'
@@ -22,9 +24,11 @@ export default function App() {
   const [focus, setFocus] = useState({ site: null, id: 0 })
   const focusSite = useCallback((site) => setFocus((f) => ({ site, id: f.id + 1 })), [])
 
-  // Period shown in the site popups (a site_summary.json period id), chosen in the
-  // side panel's Sites section.
+  // Selected season period (a site_summary.json period id, chosen with the season
+  // buttons in the side panel's Sites section) and whether station dots are shown
+  // (checkbox in the Stations section). Held here so the map and side panel share them.
   const [period, setPeriod] = useState(DEFAULT_PERIOD)
+  const [showStations, setShowStations] = useState(true)
 
   // Top bar page open in the overlay (tab id or null), and the control that opened
   // it, so focus can go back there on close.
@@ -56,19 +60,27 @@ export default function App() {
           onFocusSite={focusSite}
           hoverDisabled={!!activeTab}
           period={period}
+          showStations={showStations}
         />
         <SidePanel
           sitesContent={
             <>
               <SitePicker sites={sites} focusedSite={focus.site} onFocusSite={focusSite} />
               <SeasonPicker period={period} onChangePeriod={setPeriod} />
+              <SiteLegend period={period} />
             </>
           }
-          // Station dots only show for a focused site, so the Stations section
-          // (the station color key) only appears then.
-          stationsContent={focus.site && (
-            <StationLegend onExplain={(opener) => openTab('station-data', opener)} />
-          )}
+          // Stations section: the show/hide checkbox is always there; the station
+          // color key only appears for a focused site while stations are shown,
+          // since station dots are only drawn then.
+          stationsContent={
+            <>
+              <StationToggle checked={showStations} onChange={setShowStations} />
+              {focus.site && showStations && (
+                <StationLegend onExplain={(opener) => openTab('station-data', opener)} />
+              )}
+            </>
+          }
         />
       </div>
       {tab && (

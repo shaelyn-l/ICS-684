@@ -1,0 +1,18 @@
+.station-toggle {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.station-toggle input {
+  margin: 0;
+}
+
+/* Space between the checkbox and the station color key below it. */
+.station-toggle + .station-legend {
+  margin-top: 12px;
+}

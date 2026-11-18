@@ -14,7 +14,7 @@ function infectionLine(label, infected, n) {
 }
 
 // Station values only: all-seasons totals for this one station (station_summary.json).
-export default function StationTooltip({ station: s, x, y, note }) {
+export default function StationTooltip({ station: s, x, y }) {
   const ref = useRef(null)
   const [pos, setPos] = useState({ left: x + OFFSET, top: y + OFFSET })
 
@@ -67,8 +67,6 @@ export default function StationTooltip({ station: s, x, y, note }) {
           </>
         )}
       </dl>
-
-      {note && <div className="station-tooltip__note">{note}</div>}
     </div>
   )
 }

@@ -68,11 +68,22 @@ export const START_CAMERA = {
   maxZoom: 11,
 }
 // Site and station markers, drawn above all basemap layers.
+// Step 4.1: site circles encode two measures for the selected period.
+//   size  = honeycreepers per count (circle area proportional to the value)
+//   color = Culex per CO2 trap night, on the shared CULEX_SCALE below
 export const SITE_MARKER = {
-  radius: 9,
-  color: '#1f4e79',
-  strokeColor: '#ffffff',
-  strokeWidth: 2,
+  // Size scale, the same for every period so sizes compare across periods.
+  // Radii are screen pixels: circles stay the same size at any zoom or distance.
+  size: {
+    domainMax: 16, // honeycreepers per count; largest value in any period is 15.6 (SOL, wet)
+    maxRadius: 20, // px at domainMax
+    minRadius: 6, // px floor so the smallest sites (WAI, ~1.2–1.7) stay easy to see and click
+    legendValues: [2, 6, 12], // reference circles in the side panel legend
+  },
+  // Thin dark outline so the palest colors (CJR, SOL, CRA) show on the light terrain tint.
+  strokeColor: '#333333',
+  strokeWidth: 1.25,
+  labelGap: 4, // px between a circle's edge and its label
   labelFont: ['Noto Sans Bold'],
   labelSize: 13,
   labelColor: '#1a1a1a',
@@ -81,9 +92,18 @@ export const SITE_MARKER = {
   // Labels sit to the right of each circle, except where sites are close
   // together (CJR is just west of SOL, CRA just west of COO).
   labelSide: { CJR: 'left', CRA: 'left' },
-  // Focused site (Step 2.5): larger, with a gold outline. Other sites dim.
-  selected: { radius: 12, strokeColor: '#f5b700', strokeWidth: 3.5 },
+  // Focused site (Step 2.5): gold outline, keeping its data size. Other sites dim.
+  selected: { strokeColor: '#f5b700', strokeWidth: 3.5 },
   dimmedOpacity: 0.35,
+}
+
+// Circle radius for a honeycreepers-per-count value: area proportional to the
+// value (radius ∝ √value), with a minimum so small values stay visible. Used by
+// the map and the legend so both draw the same sizes.
+export function siteRadius(value) {
+  const { domainMax, maxRadius, minRadius } = SITE_MARKER.size
+  if (value == null) return minRadius
+  return Math.max(minRadius, maxRadius * Math.sqrt(Math.min(value, domainMax) / domainMax))
 }
 
 // Camera when a site is focused (Step 2.5). The zoom is fitted to the site's 45

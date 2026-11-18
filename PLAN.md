@@ -534,15 +534,35 @@ Each script reads from `raw/`, writes to `public/data/` (and a CSV copy to `proc
 
 # Phase 4: Site data on the map
 
-### Step 4.1: Layer selector
+### Step 4.1: Site markers encode birds and mosquitoes; station toggle
+> **Revised (2026-11-18):** built as below, but its controls moved when merged with the side-panel regrouping: the season buttons and the site-circle key are in the **Sites** section, and the "Show sampling stations" checkbox (with the station key) is in the **Stations** section. There is no "Layers" section for now. See the Decisions log.
+
+**Goal:** in the overview, each site circle shows two measures at once: its size is honeycreeper abundance and its color is mosquito density. A toggle hides the station dots to reduce clutter. (This replaces the original single-measure selector; see the Decisions log, 2026-11-17.)
+
 **Prompt:**
-> Read PLAN.md. Do Step 4.1 only. Load `site_summary.json`. Add a selector in the side panel's "Layers" section with four measures: mosquito abundance (`mosquito_per_trap_night`), infectious mosquitoes (`mosq_salivary_pct`), bird malaria prevalence (`bird_prevalence_pct`), and native bird abundance, which means honeycreepers only (`honeycreepers_per_count`; label it "Honeycreeper abundance" in the app). Color and size site markers by the selected measure using the `all` period for now (Step 4.2 adds the other periods). Add the selected measure's value and its sample size to each site's popup (the Step 2.3 popup, which stays the only place site information is shown). Sites with no data for a measure appear as grey outlines, not zero; percentages below the 20-sample minimum show "too few samples" in the popup. Keep the Step 2.5 highlight and dimming working on top of the measure styling.
+> Read PLAN.md. Do Step 4.1 only. Use the site summaries already loaded in `Map.jsx` (`site_summary.json`) and the selected period from the existing All / Rainy (wet) / Dry season buttons (added 2026-11-16), so markers update when the period changes. Don't add new data files.
+>
+> - **Size = honeycreeper abundance** (`honeycreepers_per_count`). Make the circle's *area* proportional to the value: radius grows with the square root of the value. Use one fixed scale for every period, so sizes can be compared across periods. Set its domain to cover the largest value in any period (about 15.6, SOL wet) and its radius range so the smallest site (WAI, about 1.2–1.7) stays easy to see and click (about 6 px minimum, about 20 px maximum, both tunable). The radius is in screen pixels and must stay the same at every zoom level and camera distance: don't interpolate it on zoom, and keep `circle-pitch-scale: 'viewport'`.
+> - **Color = mosquito density** (`mosquito_per_trap_night`, *Culex* per CO2 trap night). Reuse `CULEX_SCALE` from `src/config/map.js`, so a site and its stations share one color key. Give site circles a thin dark outline so the palest colors (CJR, SOL, CRA) stay visible on the light terrain tint.
+> - **No data:** a site-period whose abundance or mosquito value is `null` is drawn as a grey outline with no fill, at the minimum radius, never as a zero. With the current data every site-period has values, so check this by temporarily setting one value to `null`.
+> - **Drawing order:** draw larger circles beneath smaller ones (`circle-sort-key`), so close pairs (CJR/SOL, CRA/COO) don't hide each other.
+> - **Focus and dimming:** keep the Step 2.5 behavior working on top of the new styling: the focused site gets a gold outline and other sites dim. The focused site keeps its data size; it no longer jumps to a fixed larger radius.
+> - **Legend:** in the side panel's "Layers" section (replacing its placeholder), show a size key with three reference circles (e.g. 2, 6 and 12 honeycreepers per count) and a color key for *Culex* per trap night. Label both with the selected period (e.g. "Dry seasons · May–Oct").
+> - **Station toggle:** a "Show sampling stations" checkbox in the "Layers" section, on by default. When it's off, hide both the visible station dots and the invisible hover layer (`stations-hit`), so no tooltip appears over empty map, and hide the station legend (Step 2.6). Turning it back on restores the current focus styling.
+> - **Popups:** leave the site popup's four measures (added with the season buttons) as they are; they already give each value with its sample size.
+>
+> Put the radius range, size domain, legend reference values and outline color in `src/config/map.js`, not in the component.
 
 **Done when:**
-- [ ] Switching measures updates markers correctly
-- [ ] No-data sites are visually distinct
-- [ ] Each site's popup shows the selected measure's value and sample size, or "too few samples"
-- [ ] Native bird abundance uses honeycreepers only and is labeled "Honeycreeper abundance"
+- [ ] In the overview, all nine sites show a size and color, and larger circles mean more honeycreepers per count
+- [ ] Circle sizes stay the same on screen while zooming in and out and tilting the camera
+- [ ] Colors match `CULEX_SCALE`: PUU, WAI and COO are darkest; CJR, SOL and CRA are palest but still visible
+- [ ] Switching All / Rainy / Dry updates both size and color (e.g. CJR and SOL grow in the wet season)
+- [ ] A site with a `null` value shows as a grey outline (tested by temporarily nulling one value)
+- [ ] No circle completely hides another in the overview
+- [ ] The legend shows the size and color keys, labeled with the selected period
+- [ ] Focusing a site still adds the gold outline and dims the others
+- [ ] The station checkbox hides and shows the station dots, their tooltips and the station legend
 
 ### Step 4.2: Season buttons
 **Goal:** let users switch between the five survey seasons, plus combined views, with smooth animated transitions.
@@ -664,9 +684,12 @@ Record choices here as you make them so every session and teammate stays in sync
 | 2026-11-10 | Reference pages live in a top bar of tabs that open a large overlay over the map (Step 2.7). First tab: "About the station data"; Step 7.2 adds data sources as another tab. The station legend links to the explainer; the tooltip stays unclickable | Gives the station numbers a full plain-language explanation without crowding the tooltip or side panel, and keeps the map state intact while reading |
 | 2026-11-12 | Pipeline revision: scripts rewritten as plain top-to-bottom pandas steps; findings printed instead of written to markdown reports (old reports deleted, kept in git history); metadata cross-references hardcoded; `04_coverage.py` removed; `05`/`05b` renamed `04_site_summary.py`/`04b_station_summary.py`; CSV copies of the summaries in `data-pipeline/processed/` (committed). `public/data/` files are byte-for-byte unchanged | Easier to read and explain each processing step. One-time investigations (station 200, metadata, period coverage) were done; their conclusions are kept in data_notes.md and this log |
 | 2026-11-16 | Initial season controls use combined periods only: all seasons, rainy/wet, and dry | Add the requested wet/dry filtering without the individual-season and playback controls |
+| 2026-11-17 | Step 4.1 rewritten: instead of a selector showing one measure at a time, site circles show two fixed measures: size = honeycreepers per count (area-proportional, fixed screen-pixel radius), color = *Culex* per CO2 trap night on the shared `CULEX_SCALE`. A checkbox shows or hides the station dots. Mosquito infection and bird malaria prevalence stay in the site popups | The overview shows the bird–mosquito pattern at a glance without switching measures. Size and color can be read separately. Honeycreepers only (not all birds) because non-native birds dominate the lowlands and would hide the pattern. Trap-night rate (not raw counts) because trapping effort differs by site. Sharing the station color scale means one color key for sites and stations |
 | 2026-11-17 | Season controls moved from the map corner into the side panel's Layers section ("Site data season"), in two labeled groups: Combined seasons (All, Rainy (wet), Dry) and By season (Dry 2002, Wet 2002, Dry 2003, Wet 2003, Dry 2004). Wet seasons are named by their start year (Wet 2002 = Nov 2002 – Apr 2003); there is no Wet 2004 because the data ends Oct 2004. Labels live in `src/config/periods.js` | Keeps all controls in one place and exposes the single seasons already in `site_summary.json`. Start-year names match the data's period ids; the full months show in the popup heading and on hover |
 | 2026-11-17 | Station tooltip shows only that station's values: the grey site-wide/site-average comparison lines are removed (also from the "About the station data" explainer) | A station tooltip should describe the station alone; site figures stay in the site popup |
 | 2026-11-17 | Station tooltip: "All seasons combined" heading removed; labels renamed to "*Culex* caught per trap night", "Honeycreepers observed per count session", "Non-native birds observed per count session", with sample sizes in "count sessions" (explainer wording matched) | Labels say what the numbers measure, so the tooltip reads on its own |
 | 2026-11-17 | Side panel regrouped: **Sites** (site buttons + Site data season) and **Stations** (the *Culex* color key with a note that it is station data, not the site as a whole). The Stations section only appears when a site is focused. The Layers section is removed until Phase 3 adds real layer controls | Keeps site controls together and station keys together, and makes clear the color key describes individual stations |
+| 2026-11-18 | Merged Step 4.1 (site circles: size = honeycreepers, color = *Culex*; station checkbox) with the side-panel regrouping. **Sites**: site buttons, Site data season (all eight periods), then the site-circle key, labeled with the selected period. **Stations**: always shown, with the "Show sampling stations" checkbox; the station *Culex* key and its station-data note appear under it when a site is focused and stations are shown. No Layers section; the season buttons are no longer on the map | Keeps site controls and keys together and station controls and keys together. Circles now also change with the single seasons (e.g. Wet 2002), since they read the same period as the popup |
+| 2026-11-18 | Removed the station tooltip's "Station totals don't change by season" note, the checkbox hint "(visible when zoomed in to a site)", and the site key's "CO2 traps only. Same color scale as the stations." line. Supersedes the note in the 2026-11-05 decision and Step 4.2's "Done when" item about it | Shorter tooltip and side panel; the "About the station data" page explains that station values cover all seasons |
 | | Malaria zone temperature source: _(Step 3.3)_ | |
 | | Refuge area figures: _(Step 3.3)_ | |

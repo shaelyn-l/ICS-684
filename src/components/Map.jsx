@@ -7,7 +7,7 @@ import 'maplibre-gl/dist/maplibre-gl.css'
 import {
   BASEMAP_STYLE, CULEX_SCALE, DRAPE_BEFORE_LAYER, ELEVATION_TINT, HILLSHADE, INITIAL_VIEW, MAX_PITCH,
   SITE_FOCUS, SITE_MARKER, SITE_SUMMARY_URL, SKY, START_CAMERA, STATION_MARKER, STATION_SUMMARY_URL,
-  STATIONS_URL, TERRAIN,
+  STATIONS_URL, TERRAIN, siteRadius,
 } from '../config/map.js'
 import { PERIOD_HEADINGS } from '../config/periods.js'
 import StationTooltip from './StationTooltip.jsx'
@@ -69,8 +69,54 @@ function fitToSites(map, sites) {
   return { center: map.getCenter(), zoom: map.getZoom(), pitch: map.getPitch(), bearing: map.getBearing() }
 }
 
+// Site features for one period (Step 4.1): each site's honeycreepers per count and
+// Culex per trap night from site_summary.json, plus the circle radius. A site with
+// either value missing has has_data = false and is drawn as a grey outline at the
+// minimum radius, never as a zero.
+function siteFeatures(sites, periodSummary) {
+  return {
+    ...sites,
+    features: sites.features.map((f) => {
+      const row = periodSummary?.[f.properties.site]
+      const honeycreepers = row?.honeycreepers_per_count ?? null
+      const culex = row?.mosquito_per_trap_night ?? null
+      const hasData = honeycreepers != null && culex != null
+      return {
+        ...f,
+        properties: {
+          ...f.properties,
+          honeycreepers_per_count: honeycreepers,
+          mosquito_per_trap_night: culex,
+          has_data: hasData,
+          marker_radius: hasData ? siteRadius(honeycreepers) : SITE_MARKER.size.minRadius,
+        },
+      }
+    }),
+  }
+}
+
+// Site labels sit beside each circle, so their offset depends on the circle's size.
+// Text anchored on the right sits to the left of the circle.
+function siteLabelLayout(data) {
+  const { labelSide, labelSize, labelGap, strokeWidth } = SITE_MARKER
+  const isLeft = (site) => labelSide[site] === 'left'
+  return {
+    'text-anchor': ['match', ['get', 'site'],
+      ...Object.keys(labelSide).flatMap((site) => [site, isLeft(site) ? 'right' : 'left']),
+      'left'],
+    // text-offset is in ems of the label's font size.
+    'text-offset': ['match', ['get', 'site'],
+      ...data.features.flatMap(({ properties: p }) => {
+        const em = (p.marker_radius + strokeWidth + labelGap) / labelSize
+        return [p.site, ['literal', [isLeft(p.site) ? -em : em, 0]]]
+      }),
+      ['literal', [1, 0]]],
+  }
+}
+
 // Sites and stations are data-driven layers (not HTML markers) so later steps can
 // restyle and animate them. Added without a beforeId, so they sit above the basemap.
+// `sites` here is the output of siteFeatures for the selected period.
 function addSitesAndStations(map, sites, stations) {
   // generateId gives each station a feature id, used for the hover highlight.
   map.addSource('stations', { type: 'geojson', data: stations, generateId: true })
@@ -103,20 +149,22 @@ function addSitesAndStations(map, sites, stations) {
     id: 'sites',
     type: 'circle',
     source: 'sites',
+    layout: {
+      // Higher sort keys draw on top, so negating the radius puts smaller circles
+      // above larger ones and close pairs (CJR/SOL, CRA/COO) don't hide each other.
+      'circle-sort-key': ['-', ['get', 'marker_radius']],
+    },
     paint: {
-      'circle-color': SITE_MARKER.color,
-      // Same size at any distance from the camera, so size can encode data later.
+      // Radius in screen pixels, not tied to zoom; 'viewport' keeps it the same
+      // at any distance from the camera, so size reads as data.
+      'circle-radius': ['get', 'marker_radius'],
+      'circle-color': ['case', ['get', 'has_data'],
+        ['interpolate', ['linear'], ['get', 'mosquito_per_trap_night'], ...CULEX_SCALE.stops.flat()],
+        'rgba(0, 0, 0, 0)'], // no data: outline only
       'circle-pitch-scale': 'viewport',
       ...sitePaint(null),
     },
   })
-  // Label side per site: text anchored on the right sits to the left of the circle.
-  const labelAnchor = ['match', ['get', 'site'],
-    ...Object.entries(SITE_MARKER.labelSide).flatMap(([site, side]) => [site, side === 'left' ? 'right' : 'left']),
-    'left']
-  const labelOffset = ['match', ['get', 'site'],
-    ...Object.entries(SITE_MARKER.labelSide).flatMap(([site, side]) => [site, ['literal', side === 'left' ? [-1, 0] : [1, 0]]]),
-    ['literal', [1, 0]]]
   map.addLayer({
     id: 'site-labels',
     type: 'symbol',
@@ -125,8 +173,7 @@ function addSitesAndStations(map, sites, stations) {
       'text-field': ['get', 'site'],
       'text-font': SITE_MARKER.labelFont,
       'text-size': SITE_MARKER.labelSize,
-      'text-anchor': labelAnchor,
-      'text-offset': labelOffset,
+      ...siteLabelLayout(sites),
       'text-allow-overlap': true, // always show all nine site codes
     },
     paint: {
@@ -154,15 +201,15 @@ function joinStationSummary(stationPoints, stationSummary) {
   }
 }
 
-// Site marker paint for the focused site (or none): focused site larger with a
-// gold outline, other sites dimmed.
+// Site marker paint for the focused site (or none): focused site gets a gold
+// outline (keeping its data size), other sites dim. No-data sites have a grey outline.
 function sitePaint(focused) {
   // (focused site's value, other sites' value, value when no site is focused)
   const pick = (yes, no, none) => (focused ? ['case', ['==', ['get', 'site'], focused], yes, no] : none)
   const { selected, dimmedOpacity } = SITE_MARKER
+  const stroke = ['case', ['get', 'has_data'], SITE_MARKER.strokeColor, CULEX_SCALE.noDataColor]
   return {
-    'circle-radius': pick(selected.radius, SITE_MARKER.radius, SITE_MARKER.radius),
-    'circle-stroke-color': pick(selected.strokeColor, SITE_MARKER.strokeColor, SITE_MARKER.strokeColor),
+    'circle-stroke-color': pick(selected.strokeColor, stroke, stroke),
     'circle-stroke-width': pick(selected.strokeWidth, SITE_MARKER.strokeWidth, SITE_MARKER.strokeWidth),
     'circle-opacity': pick(1, dimmedOpacity, 1),
     'circle-stroke-opacity': pick(1, dimmedOpacity, 1),
@@ -188,6 +235,15 @@ function stationPaint(focused) {
     'circle-stroke-width': ['case', hovered, STATION_MARKER.hoverStrokeWidth,
       focused ? ['case', inFocus, 1, STATION_MARKER.strokeWidth] : STATION_MARKER.strokeWidth],
   }
+}
+
+// Moves the station hover outline to feature `id` (or clears it with null).
+function setStationHover(map, hoveredIdRef, id) {
+  if (hoveredIdRef.current !== null) {
+    map.setFeatureState({ source: 'stations', id: hoveredIdRef.current }, { hover: false })
+  }
+  hoveredIdRef.current = id
+  if (id !== null) map.setFeatureState({ source: 'stations', id }, { hover: true })
 }
 
 function applyFocusStyle(map, focused) {
@@ -300,16 +356,20 @@ function sitePopup(p, summary, period) {
 
 // focus: { site, id } — a request to focus a site (site = null for the overview).
 // A new id means a new request, so re-clicking the same site flies there again.
-// stationNote: optional extra line for the station tooltip (Step 4.2 uses it).
 // hoverDisabled: true while the info overlay is open; no station tooltip shows.
-// period: which site_summary.json period the site popup shows (chosen in the side panel).
-export default function Map({ sites, focus, onFocusSite, stationNote, hoverDisabled, period }) {
+// period: the selected site_summary.json period (chosen with the season buttons in
+// the side panel): sets the site circles and the popup. showStations: false hides
+// the station dots (Step 4.1).
+export default function Map({
+  sites, focus, onFocusSite, hoverDisabled, period, showStations,
+}) {
   const containerRef = useRef(null)
   const mapRef = useRef(null)
   const startCameraRef = useRef(null)
   const stationsRef = useRef(null)
   const popupRef = useRef(null) // { popup, site, properties }
   const siteSummariesRef = useRef({})
+  const hoveredIdRef = useRef(null) // station feature with the hover outline
   const onFocusRef = useRef(onFocusSite)
   const [mapLoaded, setMapLoaded] = useState(false)
   const [ready, setReady] = useState(false)
@@ -363,14 +423,9 @@ export default function Map({ sites, focus, onFocusSite, stationNote, hoverDisab
       }, {})
       stationsRef.current = stations
       startCameraRef.current = fitToSites(map, sites)
-      addSitesAndStations(map, sites, stations)
+      addSitesAndStations(map, siteFeatures(sites, siteSummariesRef.current[periodRef.current]), stations)
 
-      let hoveredId = null
-      const setHoverState = (id) => {
-        if (hoveredId !== null) map.setFeatureState({ source: 'stations', id: hoveredId }, { hover: false })
-        hoveredId = id
-        if (id !== null) map.setFeatureState({ source: 'stations', id }, { hover: true })
-      }
+      const setHoverState = (id) => setStationHover(map, hoveredIdRef, id)
       map.on('mousemove', 'stations-hit', (e) => {
         const feature = e.features[0]
         setHoverState(feature.id)
@@ -423,24 +478,42 @@ export default function Map({ sites, focus, onFocusSite, stationNote, hoverDisab
     moveCamera(map, focus.site ? siteCamera(map, focus.site, stationsRef.current) : startCameraRef.current)
   }, [focus, ready])
 
+  // Each period change: resize and recolor the site circles (and move their labels
+  // to match), and refresh any open popup.
   useEffect(() => {
+    if (!ready) return
+    const map = mapRef.current
+    const data = siteFeatures(sites, siteSummariesRef.current[period])
+    map.getSource('sites').setData(data)
+    map.setLayoutProperty('site-labels', 'text-offset', siteLabelLayout(data)['text-offset'])
     const currentPopup = popupRef.current
-    if (!ready || !currentPopup) return
+    if (!currentPopup) return
     currentPopup.popup.setDOMContent(sitePopup(
       currentPopup.properties,
       siteSummariesRef.current[period]?.[currentPopup.site],
       period,
     ))
-  }, [period, ready])
+  }, [period, ready, sites])
 
-  const activeStationNote = period === 'all'
-    ? stationNote
-    : "Station totals don't change by season."
+  // Station toggle: hide the dots and their invisible hover targets together, so
+  // no tooltip appears over empty map. Clear any hover so it can't linger.
+  useEffect(() => {
+    if (!ready) return
+    const map = mapRef.current
+    const visibility = showStations ? 'visible' : 'none'
+    map.setLayoutProperty('stations', 'visibility', visibility)
+    map.setLayoutProperty('stations-hit', 'visibility', visibility)
+    if (!showStations) {
+      setStationHover(map, hoveredIdRef, null)
+      map.getCanvas().style.cursor = ''
+      setHover(null)
+    }
+  }, [showStations, ready])
 
   return (
     <>
       <div ref={containerRef} className="map" />
-      {hover && !hoverDisabled && <StationTooltip {...hover} note={activeStationNote} />}
+      {hover && !hoverDisabled && <StationTooltip {...hover} />}
     </>
   )
 }
