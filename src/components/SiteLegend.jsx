@@ -21,7 +21,7 @@ export default function SiteLegend({ period }) {
   })
   const width = x - gap + pad
 
-  const { stops, noDataColor } = CULEX_SCALE
+  const { stops } = CULEX_SCALE
   const gradient = `linear-gradient(to right, ${stops.map(([, c], i) => `${c} ${(i / (stops.length - 1)) * 100}%`).join(', ')})`
 
   return (
@@ -51,16 +51,12 @@ export default function SiteLegend({ period }) {
         ))}
       </svg>
 
-      <div className="site-legend__title">Color: <i>Culex</i> per trap night</div>
+      <div className="site-legend__title"><i>Culex</i> per trap night</div>
       <div className="site-legend__bar" style={{ background: gradient }} />
       <div className="site-legend__labels">
         {stops.map(([v], i) => (
           <span key={v}>{i === stops.length - 1 ? `${v}+` : v}</span>
         ))}
-      </div>
-      <div className="site-legend__note">
-        CO2 traps only. Same color scale as the stations.
-        <span className="site-legend__nodata" style={{ borderColor: noDataColor }} /> no data
       </div>
     </div>
   )

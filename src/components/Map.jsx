@@ -356,13 +356,12 @@ function sitePopup(p, summary, period) {
 
 // focus: { site, id } — a request to focus a site (site = null for the overview).
 // A new id means a new request, so re-clicking the same site flies there again.
-// stationNote: optional extra line for the station tooltip (Step 4.2 uses it).
 // hoverDisabled: true while the info overlay is open; no station tooltip shows.
 // period: the selected site_summary.json period (chosen with the season buttons in
 // the side panel): sets the site circles and the popup. showStations: false hides
 // the station dots (Step 4.1).
 export default function Map({
-  sites, focus, onFocusSite, stationNote, hoverDisabled, period, showStations,
+  sites, focus, onFocusSite, hoverDisabled, period, showStations,
 }) {
   const containerRef = useRef(null)
   const mapRef = useRef(null)
@@ -511,14 +510,10 @@ export default function Map({
     }
   }, [showStations, ready])
 
-  const activeStationNote = period === 'all'
-    ? stationNote
-    : "Station totals don't change by season."
-
   return (
     <>
       <div ref={containerRef} className="map" />
-      {hover && !hoverDisabled && <StationTooltip {...hover} note={activeStationNote} />}
+      {hover && !hoverDisabled && <StationTooltip {...hover} />}
     </>
   )
 }

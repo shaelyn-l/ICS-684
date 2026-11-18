@@ -34,19 +34,3 @@
   margin-top: 2px;
   color: #444444;
 }
-
-.site-legend__note {
-  margin-top: 6px;
-  color: #666666;
-}
-
-/* Matches a no-data site: grey outline, no fill. */
-.site-legend__nodata {
-  display: inline-block;
-  width: 8px;
-  height: 8px;
-  margin: 0 3px 0 6px;
-  border: 1.5px solid;
-  border-radius: 50%;
-  vertical-align: -1px;
-}
