@@ -100,14 +100,6 @@ export default function StationExplainer() {
         trap types catch at very different rates (CO2 traps averaged about 4.5 times the gravid
         catch, and the gap varies a lot by site). Mixing them would mix two different methods.
       </p>
-      <p>
-        <strong>The site-wide figure</strong> in the tooltip pools the whole site: every{' '}
-        <i>Culex</i> caught at its 45 stations ÷ every trap night at those stations. Trap nights
-        at different stations on the same night all count, because each is a separate trap
-        catching different mosquitoes. That is why a site's total is far larger than the number
-        of calendar days in the study: NAN, for example, has 2,823 trap nights from about 900
-        days, roughly 63 per station.
-      </p>
       <p className="note">
         It is a relative measure for comparing places, not a count of mosquitoes per area.
       </p>
@@ -199,17 +191,16 @@ export default function StationExplainer() {
       <p>
         About every three months, an observer stood at each odd-numbered station (100, 300, 500,
         700 and 900; 25 per site) for an <dfn>8-minute count</dfn> and recorded every bird they
-        saw or heard. Each visit is one <dfn>count</dfn>. Most of these stations had 10 counts
+        saw or heard. Each visit is one <dfn>count session</dfn>. Most of these stations had 10 count sessions
         over the five seasons (3 to 11).
       </p>
       <div className="formula">
-        Birds per count = birds recorded ÷ number of counts (including counts with no birds)
+        Birds observed per count session = birds recorded ÷ number of count sessions (including sessions with no birds)
       </div>
       <p>
         It is a relative measure for comparing places, not a population count: a bird can be
         recorded twice, and quiet or hidden birds are missed. Because the method is the same
-        everywhere, a higher number means more birds. The site figure pools all of the site's
-        counts in the same way as the <i>Culex</i> figure.
+        everywhere, a higher number means more birds.
       </p>
       <ul>
         <li>
@@ -232,13 +223,9 @@ export default function StationExplainer() {
       <h2>7. Reading a tooltip: an example</h2>
       <p>PUU, station 700 on transect 400, at about 1,300 m:</p>
       <div className="example">
-        <div className="example__line"><i>Culex</i> per trap night: 4.544 (68 trap nights)</div>
+        <div className="example__line"><i>Culex</i> caught per trap night: 4.544 (68 trap nights)</div>
         <div className="example__meaning">
           Over 68 nights of CO2 trapping, a trap here caught about 4.5 <i>Culex</i> a night.
-        </div>
-        <div className="example__line">Site-wide: 2.018 per trap night (2,962 trap nights across 45 stations)</div>
-        <div className="example__meaning">
-          Across all of PUU, about 2 a night, so this station had more than twice the site's rate.
         </div>
         <div className="example__line">Malaria in the gut: 5 of 50 mosquitoes</div>
         <div className="example__meaning">50 <i>Culex</i> from here were dissected; 5 were infected.</div>
@@ -246,10 +233,10 @@ export default function StationExplainer() {
         <div className="example__meaning">
           4 could pass malaria to birds. One mosquito's salivary-gland slide had no result, so 49.
         </div>
-        <div className="example__line">Honeycreepers per count: 4 (10 counts)</div>
-        <div className="example__meaning">About 4 honeycreepers recorded per 8-minute count; the site's figure is 3.76.</div>
-        <div className="example__line">Non-native birds per count: 3.4 (10 counts)</div>
-        <div className="example__meaning">About 3.4 introduced birds per count; the site's figure is 3.39.</div>
+        <div className="example__line">Honeycreepers observed per count session: 4 (10 count sessions)</div>
+        <div className="example__meaning">About 4 honeycreepers recorded per 8-minute count.</div>
+        <div className="example__line">Non-native birds observed per count session: 3.4 (10 count sessions)</div>
+        <div className="example__meaning">About 3.4 introduced birds recorded per 8-minute count.</div>
       </div>
 
       <h2>8. Limits to keep in mind</h2>
@@ -262,7 +249,7 @@ export default function StationExplainer() {
           catch.
         </li>
         <li>Infection numbers depend partly on each site's mix of trap types.</li>
-        <li>Bird figures are birds seen or heard per count, not numbers of individual birds.</li>
+        <li>Bird figures are birds seen or heard per count session, not numbers of individual birds.</li>
       </ul> */}
     </>
   )

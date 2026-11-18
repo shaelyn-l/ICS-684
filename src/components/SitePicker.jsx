@@ -1,11 +1,7 @@
-import StationLegend from './StationLegend.jsx'
 import './SitePicker.css'
 
 // Navigation only: buttons move the camera; site information stays in the map popup.
-// showStationLegend: false while the station dots are hidden (Step 4.1 toggle).
-export default function SitePicker({
-  sites, focusedSite, onFocusSite, onExplainStations, showStationLegend = true,
-}) {
+export default function SitePicker({ sites, focusedSite, onFocusSite }) {
   if (!sites) return <p className="site-picker__loading">Loading sites…</p>
 
   const ordered = [...sites.features]
@@ -34,8 +30,6 @@ export default function SitePicker({
           </button>
         ))}
       </div>
-      {/* Station colors only apply to a focused site, so the legend only shows then. */}
-      {focusedSite && showStationLegend && <StationLegend onExplain={onExplainStations} />}
     </div>
   )
 }

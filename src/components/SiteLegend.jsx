@@ -1,11 +1,11 @@
 import { CULEX_SCALE, SITE_MARKER, siteRadius } from '../config/map.js'
-import { PERIOD_LABELS } from '../config/periods.js'
+import { PERIOD_HEADINGS } from '../config/periods.js'
 import './SiteLegend.css'
 
 // Legend for the site circles (Step 4.1): size = honeycreepers per count, color =
-// Culex per trap night, both for the selected period. Also holds the checkbox
-// that shows or hides the station dots.
-export default function SiteLegend({ period, showStations, onToggleStations }) {
+// Culex per trap night, both for the selected period. (The station show/hide
+// checkbox is in the Stations section: StationToggle.)
+export default function SiteLegend({ period }) {
   const { legendValues } = SITE_MARKER.size
   const radii = legendValues.map(siteRadius)
   const pad = 2 // room for the outline
@@ -26,7 +26,7 @@ export default function SiteLegend({ period, showStations, onToggleStations }) {
 
   return (
     <div className="site-legend">
-      <div className="site-legend__period">Site circles · {PERIOD_LABELS[period]}</div>
+      <div className="site-legend__period">Site circles · {PERIOD_HEADINGS[period]}</div>
 
       <div className="site-legend__title">Size: honeycreepers per count</div>
       <svg
@@ -62,16 +62,6 @@ export default function SiteLegend({ period, showStations, onToggleStations }) {
         CO2 traps only. Same color scale as the stations.
         <span className="site-legend__nodata" style={{ borderColor: noDataColor }} /> no data
       </div>
-
-      <label className="site-legend__toggle">
-        <input
-          type="checkbox"
-          checked={showStations}
-          onChange={(e) => onToggleStations(e.target.checked)}
-        />
-        Show sampling stations
-        <span className="site-legend__hint">(visible when zoomed in)</span>
-      </label>
     </div>
   )
 }

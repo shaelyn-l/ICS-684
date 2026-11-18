@@ -9,7 +9,7 @@ import {
   SITE_FOCUS, SITE_MARKER, SITE_SUMMARY_URL, SKY, START_CAMERA, STATION_MARKER, STATION_SUMMARY_URL,
   STATIONS_URL, TERRAIN, siteRadius,
 } from '../config/map.js'
-import { PERIOD_LABELS } from '../config/periods.js'
+import { PERIOD_HEADINGS } from '../config/periods.js'
 import StationTooltip from './StationTooltip.jsx'
 
 // MapLibre 6 finds its worker relative to its own file, which Vite moves when
@@ -338,7 +338,7 @@ function sitePopup(p, summary, period) {
 
   const periodHeading = document.createElement('div')
   periodHeading.className = 'site-popup__period'
-  periodHeading.textContent = PERIOD_LABELS[period]
+  periodHeading.textContent = PERIOD_HEADINGS[period]
   root.appendChild(periodHeading)
 
   const data = document.createElement('dl')
@@ -358,10 +358,11 @@ function sitePopup(p, summary, period) {
 // A new id means a new request, so re-clicking the same site flies there again.
 // stationNote: optional extra line for the station tooltip (Step 4.2 uses it).
 // hoverDisabled: true while the info overlay is open; no station tooltip shows.
-// period / onPeriodChange: the selected season period (held in App so the side
-// panel legend can show it). showStations: false hides the station dots (Step 4.1).
+// period: the selected site_summary.json period (chosen with the season buttons in
+// the side panel): sets the site circles and the popup. showStations: false hides
+// the station dots (Step 4.1).
 export default function Map({
-  sites, focus, onFocusSite, stationNote, hoverDisabled, period, onPeriodChange, showStations,
+  sites, focus, onFocusSite, stationNote, hoverDisabled, period, showStations,
 }) {
   const containerRef = useRef(null)
   const mapRef = useRef(null)
@@ -373,7 +374,7 @@ export default function Map({
   const onFocusRef = useRef(onFocusSite)
   const [mapLoaded, setMapLoaded] = useState(false)
   const [ready, setReady] = useState(false)
-  const [hover, setHover] = useState(null) // { station, siteAverage, x, y } while hovering a station
+  const [hover, setHover] = useState(null) // { station, x, y } while hovering a station
   const periodRef = useRef(period)
   periodRef.current = period
 
@@ -406,7 +407,7 @@ export default function Map({
 
   // Once the basemap and the site data are both in, fit the starting view and add
   // the markers. Sites come from App (loaded once); stations, their all-seasons
-  // totals, and the site averages are loaded here.
+  // totals, and the site summaries (for the site popups) are loaded here.
   useEffect(() => {
     if (!mapLoaded || !sites) return
     const map = mapRef.current
@@ -421,8 +422,6 @@ export default function Map({
         periods[row.period][row.site] = row
         return periods
       }, {})
-      const siteAverages = Object.fromEntries(
-        siteSummary.filter((r) => r.period === 'all').map((r) => [r.site, r]))
       stationsRef.current = stations
       startCameraRef.current = fitToSites(map, sites)
       addSitesAndStations(map, siteFeatures(sites, siteSummariesRef.current[periodRef.current]), stations)
@@ -434,7 +433,6 @@ export default function Map({
         map.getCanvas().style.cursor = 'pointer'
         setHover({
           station: feature.properties,
-          siteAverage: siteAverages[feature.properties.site],
           x: e.originalEvent.clientX,
           y: e.originalEvent.clientY,
         })
@@ -520,24 +518,6 @@ export default function Map({
   return (
     <>
       <div ref={containerRef} className="map" />
-      <div className="season-controls">
-        <div className="season-controls__buttons" role="group" aria-label="Filter site data by season">
-          {Object.entries(PERIOD_LABELS).map(([id, label]) => (
-            <button
-              key={id}
-              type="button"
-              className="season-controls__button"
-              aria-pressed={period === id}
-              onClick={() => onPeriodChange(id)}
-            >
-              {id === 'wet' ? 'Rainy (wet)' : id === 'dry' ? 'Dry' : label}
-            </button>
-          ))}
-        </div>
-        <div className="season-controls__label" aria-live="polite">
-          Site data: {PERIOD_LABELS[period]}
-        </div>
-      </div>
       {hover && !hoverDisabled && <StationTooltip {...hover} note={activeStationNote} />}
     </>
   )

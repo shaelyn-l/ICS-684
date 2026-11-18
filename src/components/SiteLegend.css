@@ -1,4 +1,5 @@
 .site-legend {
+  margin-top: 16px;
   font-size: 12.5px;
 }
 
@@ -48,23 +49,4 @@
   border: 1.5px solid;
   border-radius: 50%;
   vertical-align: -1px;
-}
-
-.site-legend__toggle {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 4px 6px;
-  margin-top: 14px;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.site-legend__toggle input {
-  margin: 0;
-}
-
-.site-legend__hint {
-  color: #666666;
-  font-weight: 400;
 }
