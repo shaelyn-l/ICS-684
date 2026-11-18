@@ -1,12 +1,3 @@
-"""Step 1.1: inspect the raw field-data CSVs before any processing.
-
-Basic exploratory look at each raw file using pandas: size, columns, types,
-empty cells, summary statistics, site/station values, date ranges, species
-values, and the first rows. Read-only: nothing is changed or saved.
-
-Run from anywhere:  python data-pipeline/scripts/01_inspect.py
-"""
-
 from pathlib import Path
 
 import pandas as pd
