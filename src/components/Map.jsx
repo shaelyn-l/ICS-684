@@ -6,12 +6,14 @@ import workerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?url'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import {
   BASEMAP_STYLE, CULEX_SCALE, DRAPE_BEFORE_LAYER, ELEVATION_TINT, HILLSHADE, INITIAL_VIEW, MAX_PITCH,
-  SITE_FOCUS, SITE_MARKER, SITE_SUMMARY_URL, SKY, START_CAMERA, STATION_MARKER, STATION_SUMMARY_URL,
+  SITE_CARD, SITE_FOCUS, SITE_MARKER, SITE_SUMMARY_URL, SKY, START_CAMERA, STATION_MARKER, STATION_SUMMARY_URL,
   STATIONS_URL, TERRAIN, siteRadius,
 } from '../config/map.js'
 import { PERIOD_HEADINGS } from '../config/periods.js'
 import { PROFILE } from '../config/profile.js'
 import StationTooltip from './StationTooltip.jsx'
+import SiteCard from './SiteCard.jsx'
+import { SITE_SUMMARY_METRICS, metres, number, siteMetricValue } from './siteSummary.js'
 
 // MapLibre 6 finds its worker relative to its own file, which Vite moves when
 // bundling. Point it at the worker explicitly so dev and build both work.
@@ -281,33 +283,18 @@ function siteCamera(map, site, stations) {
   const panel = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--panel-offset')) || 0
   const { padding, pitch, bearing } = SITE_FOCUS
   const fitted = map.cameraForBounds(bounds, {
-    padding: { ...padding, right: padding.right + panel, bottom: padding.bottom + profileOffset() },
+    padding: {
+      ...padding,
+      left: padding.left + SITE_CARD.width + SITE_CARD.inset, // clear of the site card
+      right: padding.right + panel,
+      bottom: padding.bottom + profileOffset(),
+    },
     pitch, bearing,
   })
   return { ...fitted, pitch, bearing, ...SITE_FOCUS.overrides[site] }
 }
 
 const prefersReducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches
-
-const SITE_SUMMARY_METRICS = [
-  { key: 'mosquito_per_trap_night', label: 'Mosquitoes per trap night', sample: 'mosquito_trap_nights', digits: 3 },
-  { key: 'mosq_salivary_pct', label: 'Mosquito infection (salivary glands)', sample: 'mosq_salivary_n', digits: 1, unit: '%', percentage: true },
-  { key: 'bird_prevalence_pct', label: 'Bird malaria prevalence', sample: 'bird_sampled_n', digits: 1, unit: '%', percentage: true },
-  { key: 'honeycreepers_per_count', label: 'Honeycreepers per count', sample: 'bird_counts_n', digits: 2 },
-]
-
-function siteMetricValue(site, summary, metric) {
-  const n = summary[metric.sample] ?? 0
-  const value = summary[metric.key]
-  if (value == null) {
-    if (metric.key === 'mosq_salivary_pct' && ['SOL', 'CJR'].includes(site)) {
-      return 'Too few mosquitoes to test.'
-    }
-    if (metric.percentage && n > 0) return `Too few samples (n=${n})`
-    return 'No data'
-  }
-  return `${value.toLocaleString('en-US', { maximumFractionDigits: metric.digits })}${metric.unit ?? ''} (n=${n})`
-}
 
 function moveCamera(map, camera) {
   if (prefersReducedMotion()) map.jumpTo(camera)
@@ -335,9 +322,6 @@ class HomeControl {
 
   onRemove() { this.container.remove() }
 }
-
-const number = (m) => Math.round(m).toLocaleString('en-US')
-const metres = (m) => `${number(m)} m`
 
 // Popup content built as DOM nodes (site names come from data, so no innerHTML).
 function sitePopup(p, summary, period) {
@@ -541,6 +525,7 @@ export default function Map({
   useEffect(() => {
     if (!ready) return
     const map = mapRef.current
+    if (focus.site) closePopupRef.current?.() // the site card replaces the popup
     if (focus.id === 0) return // initial state: stay on the starting view
     moveCamera(map, focus.site ? siteCamera(map, focus.site, stationsRef.current) : startCameraRef.current)
   }, [focus, ready])
@@ -578,12 +563,19 @@ export default function Map({
   }, [showStations, ready])
 
   // Marker styling for the focused site and the hovered one (hovered here or in the
-  // profile): the hovered site grows and gets a ring, the other sites dim.
+  // profile): the hovered site grows and gets a ring, the other sites dim. The focused
+  // site's own circle, label and ring are hidden while zoomed in, so they don't cover
+  // its stations; its summary is in the site card instead.
   useEffect(() => {
     if (!ready) return
     const map = mapRef.current
     applyFocusStyle(map, focus.site, hoveredSite)
-    map.setFilter('site-highlight', ['==', ['get', 'site'], hoveredSite ?? ''])
+    const notFocused = focus.site ? ['!=', ['get', 'site'], focus.site] : null
+    map.setFilter('sites', notFocused)
+    map.setFilter('site-labels', notFocused)
+    map.setFilter('site-highlight', ['all',
+      ['==', ['get', 'site'], hoveredSite ?? ''],
+      ['!=', ['get', 'site'], focus.site ?? '']])
   }, [focus.site, hoveredSite, ready])
 
   // Profile line (where the mountain profile slice was taken): a thin dashed line
@@ -611,9 +603,21 @@ export default function Map({
     map.setLayoutProperty('profile-line', 'visibility', showProfileLine ? 'visible' : 'none')
   }, [profileLine, showProfileLine, ready])
 
+  const focusedSiteProps = focus.site
+    ? sites?.features.find((f) => f.properties.site === focus.site)?.properties
+    : null
+
   return (
     <>
       <div ref={containerRef} className="map" />
+      {ready && focusedSiteProps && (
+        <SiteCard
+          site={focusedSiteProps}
+          summary={siteSummariesRef.current[period]?.[focus.site]}
+          period={period}
+          onBack={() => onFocusSite(null)}
+        />
+      )}
       {hover && !hoverDisabled && <StationTooltip {...hover} />}
     </>
   )

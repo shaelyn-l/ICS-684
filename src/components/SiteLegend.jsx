@@ -1,11 +1,9 @@
 import { CULEX_SCALE, SITE_MARKER, siteRadius } from '../config/map.js'
-import { PERIOD_HEADINGS } from '../config/periods.js'
 import './SiteLegend.css'
 
 // Legend for the site circles (Step 4.1): size = honeycreepers per count, color =
-// Culex per trap night, both for the selected period. (The station show/hide
-// checkbox is in the Stations section: StationToggle.)
-export default function SiteLegend({ period }) {
+// Culex per trap night, both for the selected period (named in MapKey's heading).
+export default function SiteLegend() {
   const { legendValues } = SITE_MARKER.size
   const radii = legendValues.map(siteRadius)
   const pad = 2 // room for the outline
@@ -26,7 +24,6 @@ export default function SiteLegend({ period }) {
 
   return (
     <div className="site-legend">
-      <div className="site-legend__period">Site circles · {PERIOD_HEADINGS[period]}</div>
 
       <div className="site-legend__title">Size: honeycreepers per count</div>
       <svg

@@ -3,11 +3,10 @@ import Map from './components/Map.jsx'
 import SidePanel from './components/SidePanel.jsx'
 import SitePicker from './components/SitePicker.jsx'
 import SeasonPicker from './components/SeasonPicker.jsx'
-import StationLegend from './components/StationLegend.jsx'
 import StationToggle from './components/StationToggle.jsx'
 import TopBar from './components/TopBar.jsx'
 import InfoOverlay from './components/InfoOverlay.jsx'
-import SiteLegend from './components/SiteLegend.jsx'
+import MapKey from './components/MapKey.jsx'
 import ProfileView from './components/ProfileView.jsx'
 import { SITES_URL } from './config/map.js'
 import { TABS } from './config/tabs.js'
@@ -94,19 +93,19 @@ export default function App() {
             <>
               <SitePicker sites={sites} focusedSite={focus.site} onFocusSite={focusSite} />
               <SeasonPicker period={period} onChangePeriod={setPeriod} />
-              <SiteLegend period={period} />
+              <StationToggle checked={showStations} onChange={setShowStations} />
             </>
           }
-          // Stations section: the show/hide checkbox is always there; the station
-          // color key only appears for a focused site while stations are shown,
-          // since station dots are only drawn then.
-          stationsContent={
-            <>
-              <StationToggle checked={showStations} onChange={setShowStations} />
-              {focus.site && showStations && (
-                <StationLegend onExplain={(opener) => openTab('station-data', opener)} />
-              )}
-            </>
+          // Key section: explains what the map is showing right now, as set by the
+          // controls above (station key when zoomed in with stations shown, otherwise
+          // the site-circle key).
+          keyContent={
+            <MapKey
+              focusedSite={focus.site}
+              showStations={showStations}
+              period={period}
+              onExplainStations={(opener) => openTab('station-data', opener)}
+            />
           }
         />
       </div>

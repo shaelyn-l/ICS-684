@@ -121,6 +121,13 @@ export const SITE_FOCUS = {
   overrides: {},
 }
 
+// Card at the top-left of the map with the focused site's summary (replaces its
+// circle while zoomed in). The site camera leaves this much extra room on the left.
+export const SITE_CARD = {
+  width: 270, // px
+  inset: 12, // px from the map's top and left edges
+}
+
 export const STATION_MARKER = {
   // Each site's 45 stations fit in about 1 km², so they only appear zoomed in.
   minZoom: 11,

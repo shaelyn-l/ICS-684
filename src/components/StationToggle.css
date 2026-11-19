@@ -1,5 +1,6 @@
 .station-toggle {
   display: flex;
+  margin-top: 16px;
   flex-wrap: wrap;
   align-items: center;
   gap: 4px 6px;
@@ -10,9 +11,4 @@
 
 .station-toggle input {
   margin: 0;
-}
-
-/* Space between the checkbox and the station color key below it. */
-.station-toggle + .station-legend {
-  margin-top: 12px;
 }
