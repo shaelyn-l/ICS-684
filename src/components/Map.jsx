@@ -10,6 +10,7 @@ import {
   STATIONS_URL, TERRAIN, siteRadius,
 } from '../config/map.js'
 import { PERIOD_HEADINGS } from '../config/periods.js'
+import { PROFILE } from '../config/profile.js'
 import StationTooltip from './StationTooltip.jsx'
 
 // MapLibre 6 finds its worker relative to its own file, which Vite moves when
@@ -62,10 +63,17 @@ function addTerrain(map) {
 
 // Fits the starting view to the sites and returns it, so Overview can return to
 // exactly this camera.
+// px of the map covered at the bottom by the mountain profile strip (ProfileView).
+const profileOffset = () =>
+  parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--profile-offset')) || 0
+
 function fitToSites(map, sites) {
   const bounds = new LngLatBounds()
   sites.features.forEach((f) => bounds.extend(f.geometry.coordinates))
-  map.fitBounds(bounds, { ...START_CAMERA, duration: 0 })
+  const { padding } = START_CAMERA
+  map.fitBounds(bounds, {
+    ...START_CAMERA, padding: { ...padding, bottom: padding.bottom + profileOffset() }, duration: 0,
+  })
   return { center: map.getCenter(), zoom: map.getZoom(), pitch: map.getPitch(), bearing: map.getBearing() }
 }
 
@@ -203,16 +211,24 @@ function joinStationSummary(stationPoints, stationSummary) {
 
 // Site marker paint for the focused site (or none): focused site gets a gold
 // outline (keeping its data size), other sites dim. No-data sites have a grey outline.
-function sitePaint(focused) {
+// hovered: site hovered on the map or in the mountain profile (or null). While a site
+// is hovered it grows and every other site dims, even the focused one (which keeps its
+// gold outline); when nothing is hovered, the focused site is the one left undimmed.
+function sitePaint(focused, hovered = null) {
   // (focused site's value, other sites' value, value when no site is focused)
   const pick = (yes, no, none) => (focused ? ['case', ['==', ['get', 'site'], focused], yes, no] : none)
-  const { selected, dimmedOpacity } = SITE_MARKER
+  const spotlight = hovered ?? focused
+  const lit = (yes, no) => (spotlight ? ['case', ['==', ['get', 'site'], spotlight], yes, no] : yes)
+  const { selected, dimmedOpacity, hoverGrow } = SITE_MARKER
   const stroke = ['case', ['get', 'has_data'], SITE_MARKER.strokeColor, CULEX_SCALE.noDataColor]
+  const radius = ['get', 'marker_radius']
   return {
+    'circle-radius': hovered
+      ? ['case', ['==', ['get', 'site'], hovered], ['+', radius, hoverGrow], radius] : radius,
     'circle-stroke-color': pick(selected.strokeColor, stroke, stroke),
     'circle-stroke-width': pick(selected.strokeWidth, SITE_MARKER.strokeWidth, SITE_MARKER.strokeWidth),
-    'circle-opacity': pick(1, dimmedOpacity, 1),
-    'circle-stroke-opacity': pick(1, dimmedOpacity, 1),
+    'circle-opacity': lit(1, dimmedOpacity),
+    'circle-stroke-opacity': lit(1, dimmedOpacity),
   }
 }
 
@@ -246,14 +262,15 @@ function setStationHover(map, hoveredIdRef, id) {
   if (id !== null) map.setFeatureState({ source: 'stations', id }, { hover: true })
 }
 
-function applyFocusStyle(map, focused) {
+function applyFocusStyle(map, focused, hovered = null) {
   if (!map.getLayer('sites')) return
-  for (const [prop, value] of Object.entries(sitePaint(focused))) map.setPaintProperty('sites', prop, value)
+  for (const [prop, value] of Object.entries(sitePaint(focused, hovered))) map.setPaintProperty('sites', prop, value)
   for (const [prop, value] of Object.entries(stationPaint(focused))) map.setPaintProperty('stations', prop, value)
   map.setPaintProperty('stations', 'circle-opacity', focused
     ? ['case', ['==', ['get', 'site'], focused], 1, STATION_MARKER.opacity] : STATION_MARKER.opacity)
+  const spotlight = hovered ?? focused
   map.setPaintProperty('site-labels', 'text-opacity',
-    focused ? ['case', ['==', ['get', 'site'], focused], 1, SITE_MARKER.dimmedOpacity] : 1)
+    spotlight ? ['case', ['==', ['get', 'site'], spotlight], 1, SITE_MARKER.dimmedOpacity] : 1)
 }
 
 // Camera for a focused site: fitted to its stations, clear of the side panel.
@@ -264,7 +281,8 @@ function siteCamera(map, site, stations) {
   const panel = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--panel-offset')) || 0
   const { padding, pitch, bearing } = SITE_FOCUS
   const fitted = map.cameraForBounds(bounds, {
-    padding: { ...padding, right: padding.right + panel }, pitch, bearing,
+    padding: { ...padding, right: padding.right + panel, bottom: padding.bottom + profileOffset() },
+    pitch, bearing,
   })
   return { ...fitted, pitch, bearing, ...SITE_FOCUS.overrides[site] }
 }
@@ -356,12 +374,16 @@ function sitePopup(p, summary, period) {
 
 // focus: { site, id } — a request to focus a site (site = null for the overview).
 // A new id means a new request, so re-clicking the same site flies there again.
-// hoverDisabled: true while the info overlay is open; no station tooltip shows.
+// hoverDisabled: true while the info overlay is open; no station tooltip or site popup shows.
 // period: the selected site_summary.json period (chosen with the season buttons in
 // the side panel): sets the site circles and the popup. showStations: false hides
 // the station dots (Step 4.1).
+// hoveredSite / onHoverSite: site hovered here or in the mountain profile; the map
+// rings it. profileLine: [[lon, lat], ...] from profile.json, drawn dashed while
+// showProfileLine is true.
 export default function Map({
   sites, focus, onFocusSite, hoverDisabled, period, showStations,
+  hoveredSite, onHoverSite, profileLine, showProfileLine,
 }) {
   const containerRef = useRef(null)
   const mapRef = useRef(null)
@@ -371,6 +393,10 @@ export default function Map({
   const siteSummariesRef = useRef({})
   const hoveredIdRef = useRef(null) // station feature with the hover outline
   const onFocusRef = useRef(onFocusSite)
+  const onHoverSiteRef = useRef(onHoverSite)
+  const closePopupRef = useRef(null) // hides the site popup; set once the sites layer exists
+  const hoverDisabledRef = useRef(hoverDisabled)
+  hoverDisabledRef.current = hoverDisabled
   const [mapLoaded, setMapLoaded] = useState(false)
   const [ready, setReady] = useState(false)
   const [hover, setHover] = useState(null) // { station, x, y } while hovering a station
@@ -378,9 +404,14 @@ export default function Map({
   periodRef.current = period
 
   useEffect(() => { onFocusRef.current = onFocusSite }, [onFocusSite])
+  useEffect(() => { onHoverSiteRef.current = onHoverSite }, [onHoverSite])
 
   // Opening the overlay drops any tooltip, so a stale one can't reappear on close.
-  useEffect(() => { if (hoverDisabled) setHover(null) }, [hoverDisabled])
+  useEffect(() => {
+    if (!hoverDisabled) return
+    setHover(null)
+    closePopupRef.current?.()
+  }, [hoverDisabled])
 
   useEffect(() => {
     // MapLibre tracks window resizes itself (trackResize defaults to true).
@@ -441,39 +472,75 @@ export default function Map({
         map.getCanvas().style.cursor = ''
         setHover(null)
       })
-      map.on('click', 'sites', (e) => {
-        const site = e.features[0].properties.site
-        onFocusRef.current(site)
+      // Site info popup, shown while the pointer is over a site circle. No close button:
+      // it goes away when the pointer leaves. Offset clears the (hover-enlarged) circle.
+      const closePopup = () => {
+        popupRef.current?.popup.remove()
+        popupRef.current = null
+      }
+      const openPopup = (feature) => {
+        const site = feature.properties.site
         popupRef.current?.popup.remove()
         const selectedPeriod = periodRef.current
-        const popup = new Popup({ maxWidth: '280px' })
-          .setLngLat(e.features[0].geometry.coordinates)
+        const popup = new Popup({
+          maxWidth: '280px',
+          closeButton: false,
+          closeOnClick: false,
+          className: 'site-hover-popup',
+          offset: feature.properties.marker_radius + SITE_MARKER.hoverGrow + 6,
+        })
+          .setLngLat(feature.geometry.coordinates)
           .setDOMContent(sitePopup(
-            e.features[0].properties,
+            feature.properties,
             siteSummariesRef.current[selectedPeriod]?.[site],
             selectedPeriod,
           ))
-          popup.on('close', () => {
-            if (popupRef.current?.popup === popup) popupRef.current = null
-          })
-          popup.addTo(map)
-        popupRef.current = { popup, site, properties: e.features[0].properties }
+        popup.on('close', () => {
+          if (popupRef.current?.popup === popup) popupRef.current = null
+        })
+        popup.addTo(map)
+        popupRef.current = { popup, site, properties: feature.properties }
+      }
+      closePopupRef.current = closePopup
+      // Clicking a site flies to it (Step 2.5); its info shows on hover, not on click.
+      map.on('click', 'sites', (e) => onFocusRef.current(e.features[0].properties.site))
+
+      // Hovering a site circle shows its popup and highlights it here and in the
+      // mountain profile; leaving hides the popup.
+      map.on('mousemove', 'sites', (e) => {
+        const feature = e.features[0]
+        onHoverSiteRef.current?.(feature.properties.site)
+        if (hoverDisabledRef.current) return
+        if (popupRef.current?.site !== feature.properties.site) openPopup(feature)
       })
+      map.on('mouseleave', 'sites', () => {
+        onHoverSiteRef.current?.(null)
+        closePopup()
+      })
+      // Ring under the hovered site's circle (filter set by the hoveredSite effect).
+      map.addLayer({
+        id: 'site-highlight',
+        type: 'circle',
+        source: 'sites',
+        filter: ['==', ['get', 'site'], ''],
+        paint: {
+          'circle-radius': ['+', ['get', 'marker_radius'], SITE_MARKER.hoverGrow + 5],
+          'circle-color': 'rgba(0, 0, 0, 0)',
+          'circle-stroke-color': '#1a1a1a',
+          'circle-stroke-width': 2.5,
+          'circle-pitch-scale': 'viewport',
+        },
+      }, 'sites')
       setReady(true)
       })
     return () => { cancelled = true }
   }, [mapLoaded, sites])
 
-  // Each focus request: restyle the markers, close any popup for another site,
-  // and move the camera to the site or back to the starting view.
+  // Each focus request: move the camera to the site or back to the starting view.
+  // (Marker styling is in the effect below, with the hovered site.)
   useEffect(() => {
     if (!ready) return
     const map = mapRef.current
-    applyFocusStyle(map, focus.site)
-    if (popupRef.current && popupRef.current.site !== focus.site) {
-      popupRef.current.popup.remove()
-      popupRef.current = null
-    }
     if (focus.id === 0) return // initial state: stay on the starting view
     moveCamera(map, focus.site ? siteCamera(map, focus.site, stationsRef.current) : startCameraRef.current)
   }, [focus, ready])
@@ -509,6 +576,40 @@ export default function Map({
       setHover(null)
     }
   }, [showStations, ready])
+
+  // Marker styling for the focused site and the hovered one (hovered here or in the
+  // profile): the hovered site grows and gets a ring, the other sites dim.
+  useEffect(() => {
+    if (!ready) return
+    const map = mapRef.current
+    applyFocusStyle(map, focus.site, hoveredSite)
+    map.setFilter('site-highlight', ['==', ['get', 'site'], hoveredSite ?? ''])
+  }, [focus.site, hoveredSite, ready])
+
+  // Profile line (where the mountain profile slice was taken): a thin dashed line
+  // under the markers, shown while showProfileLine is true.
+  useEffect(() => {
+    if (!ready || !profileLine) return
+    const map = mapRef.current
+    if (!map.getSource('profile-line')) {
+      map.addSource('profile-line', {
+        type: 'geojson',
+        data: { type: 'Feature', geometry: { type: 'LineString', coordinates: profileLine } },
+      })
+      map.addLayer({
+        id: 'profile-line',
+        type: 'line',
+        source: 'profile-line',
+        layout: { 'line-cap': 'round' },
+        paint: {
+          'line-color': PROFILE.mapLine.color,
+          'line-width': PROFILE.mapLine.width,
+          'line-dasharray': PROFILE.mapLine.dash,
+        },
+      }, 'stations')
+    }
+    map.setLayoutProperty('profile-line', 'visibility', showProfileLine ? 'visible' : 'none')
+  }, [profileLine, showProfileLine, ready])
 
   return (
     <>
