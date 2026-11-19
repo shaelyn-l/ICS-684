@@ -94,6 +94,9 @@ export const SITE_MARKER = {
   labelSide: { CJR: 'left', CRA: 'left' },
   // Focused site (Step 2.5): gold outline, keeping its data size. Other sites dim.
   selected: { strokeColor: '#f5b700', strokeWidth: 3.5 },
+  // Hovered site (on the map or in the mountain profile): grows by this many px and
+  // the other sites dim, until the pointer leaves.
+  hoverGrow: 4,
   dimmedOpacity: 0.35,
 }
 

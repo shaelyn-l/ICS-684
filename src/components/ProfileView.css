@@ -1,0 +1,231 @@
+/* Strip along the bottom of the map, left of the side panel. ProfileView sets
+   --profile-offset so the map's bottom controls and camera stay clear of it. */
+.profile-view {
+  position: absolute;
+  z-index: 1; /* above the map, below the side panel */
+  left: 0;
+  right: var(--panel-offset, 0px);
+  bottom: var(--sheet-offset, 0px);
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid rgba(0, 0, 0, 0.15);
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.12);
+  color: #1a1a1a;
+  font: 12px/1.4 system-ui, -apple-system, 'Segoe UI', sans-serif;
+  transition: transform 250ms ease, var(--panel-transition, right 250ms ease, bottom 250ms ease);
+}
+
+/* Collapsed: slide fully down; only the toggle tab (above the top edge) shows. */
+.profile-view.is-closed {
+  transform: translateY(100%);
+}
+
+/* Toggle tab centered on the top edge: same look as the side panel's toggle. */
+.profile-view__toggle {
+  position: absolute;
+  top: -28px; /* PROFILE.tabHeight */
+  left: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 28px; /* PROFILE.tabHeight */
+  transform: translateX(-50%);
+  border: 0;
+  border-radius: 8px 8px 0 0;
+  background: #ffffff;
+  color: #1a1a1a;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.18);
+}
+
+/* Title bar above the chart: title, map-line checkbox, info button. */
+.profile-view__header {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 14px;
+  padding: 0 12px;
+  border-bottom: 1px solid #e3e3e3;
+}
+
+.profile-view__title {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.profile-view__line-toggle {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: #444444;
+  cursor: pointer;
+}
+
+.profile-view__line-toggle input {
+  margin: 0;
+}
+
+/* Small "i" button; hovering or focusing it shows the tooltip below it, over the
+   chart (inside the strip, so the map's controls can't cover it). */
+.profile-view__info {
+  position: relative;
+  display: inline-flex;
+  margin-left: -8px;
+}
+
+.profile-view__info-button {
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  border: 1px solid #6b7c8c;
+  border-radius: 50%;
+  background: #ffffff;
+  color: #1f4e79;
+  font: italic 700 11px/1 Georgia, 'Times New Roman', serif;
+  cursor: help;
+}
+
+.profile-view__tooltip {
+  position: absolute;
+  z-index: 3;
+  top: calc(100% + 8px);
+  left: -12px;
+  display: none;
+  width: 280px;
+  padding: 8px 10px;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 6px;
+  background: #ffffff;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+  color: #1a1a1a;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.45;
+}
+
+.profile-view__tooltip.is-open {
+  display: block;
+}
+
+/* Title bar + chart, stacked. */
+.profile-view__body {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-height: 0;
+}
+
+/* The chart area below the title bar. */
+.profile-view__chart {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.profile-view__svg {
+  display: block;
+}
+
+.profile-view__tick line {
+  stroke: rgba(0, 0, 0, 0.12);
+}
+
+.profile-view__tick text,
+.profile-view__axis-title {
+  fill: #555555;
+  font-size: 10.5px;
+}
+
+.profile-view__end-label {
+  fill: #333333;
+  font-size: 11px;
+  font-weight: 600;
+  paint-order: stroke;
+  stroke: rgba(255, 255, 255, 0.85);
+  stroke-width: 3px;
+}
+
+/* Risk band key: a white box so it reads apart from the bands behind it. */
+.profile-view__key-box {
+  fill: rgba(255, 255, 255, 0.92);
+  stroke: rgba(0, 0, 0, 0.18);
+}
+
+.profile-view__key-title {
+  font-weight: 600;
+}
+
+.profile-view__key text {
+  fill: #333333;
+  font-size: 11px;
+}
+
+.profile-view__site {
+  cursor: pointer;
+  outline: none;
+}
+
+.profile-view__site {
+  transition: opacity 150ms ease;
+}
+
+.profile-view__site circle {
+  stroke: #1a1a1a;
+  stroke-width: 1.25;
+  transition: r 150ms ease;
+}
+
+/* While a site is hovered (here or on the map), the other sites dim. */
+.profile-view__sites.has-hover .profile-view__site:not(.is-hovered) {
+  opacity: 0.35;
+}
+
+.profile-view__site text {
+  fill: #1a1a1a;
+  font-size: 11px;
+  font-weight: 600;
+  paint-order: stroke;
+  stroke: rgba(255, 255, 255, 0.9);
+  stroke-width: 3px;
+}
+
+.profile-view__leader {
+  stroke: #555555;
+  stroke-width: 0.75;
+}
+
+.profile-view__site.is-highlighted text {
+  font-size: 12px;
+}
+
+/* Focused site: gold outline, matching its marker on the map (Step 2.5). */
+.profile-view__site.is-focused circle {
+  stroke: #f5b700;
+  stroke-width: 3;
+}
+
+/* Keyboard focus ring around the marker. */
+.profile-view__site:focus-visible circle {
+  stroke: #1f4e79;
+  stroke-width: 3;
+}
+
+.profile-view__info-button:focus-visible,
+.profile-view__toggle:focus-visible,
+.profile-view__line-toggle input:focus-visible {
+  outline: 2px solid #1f4e79;
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .profile-view,
+  .profile-view__site,
+  .profile-view__site circle {
+    transition: none;
+  }
+}

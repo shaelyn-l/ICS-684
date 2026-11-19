@@ -34,8 +34,10 @@ body,
 }
 
 /* Keep the map's controls clear of the side panel (desktop) or bottom sheet
-   (narrow screens). SidePanel sets these variables. */
+   (narrow screens), and of the mountain profile strip. SidePanel sets
+   --panel-offset and --sheet-offset; ProfileView sets --profile-offset. */
 .maplibregl-ctrl-top-right,
+.maplibregl-ctrl-bottom-left,
 .maplibregl-ctrl-bottom-right {
   /* SidePanel sets --panel-transition to none while the panel is being dragged. */
   transition: var(--panel-transition, right 250ms ease, bottom 250ms ease);
@@ -47,11 +49,16 @@ body,
 
 .maplibregl-ctrl-bottom-right {
   right: var(--panel-offset, 0px);
-  bottom: var(--sheet-offset, 0px);
+  bottom: calc(var(--sheet-offset, 0px) + var(--profile-offset, 0px));
+}
+
+.maplibregl-ctrl-bottom-left {
+  bottom: calc(var(--sheet-offset, 0px) + var(--profile-offset, 0px));
 }
 
 @media (prefers-reduced-motion: reduce) {
   .maplibregl-ctrl-top-right,
+  .maplibregl-ctrl-bottom-left,
   .maplibregl-ctrl-bottom-right {
     transition: none;
   }
@@ -62,6 +69,18 @@ body,
   align-items: center;
   justify-content: center;
   color: #333333;
+}
+
+/* Site popups sit above the mountain profile strip (z-index 1) so they're never
+   cut off by it; the side panel (z-index 2, later in the page) stays on top. */
+.maplibregl-popup {
+  z-index: 2;
+}
+
+/* Hover popups ignore the pointer, so moving onto one doesn't count as leaving
+   the site circle (no flicker). */
+.site-hover-popup {
+  pointer-events: none;
 }
 
 .maplibregl-popup-content {
